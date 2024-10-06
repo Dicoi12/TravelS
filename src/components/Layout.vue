@@ -1,9 +1,9 @@
 <template>
   <div class="w-full h-full">
+    <Toast />
     <NavBar />
     <div class="bg-image">
-      <Toast />
-      <LoginPage />
+      <router-view />
     </div>
   </div>
 </template>

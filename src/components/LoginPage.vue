@@ -1,12 +1,17 @@
 <template>
   <div class="login-page">
     <div class="login-card">
-      <h2 class="login-title">{{ isRegistering ? 'Creează un cont nou' : 'Conectează-te' }}</h2>
-      <form @submit.prevent="isRegistering ? handleRegister : handleLogin">
+      <h2 class="login-title">
+        {{ isRegistering ? "Creează un cont nou" : "Conectează-te" }}
+      </h2>
+      <form @submit.prevent="isRegistering ? handleRegister() : handleLogin()">
         <div v-if="!isRegistering">
           <div class="input-group">
             <label for="email">Utilizator</label>
-            <InputText v-model="username" placeholder="Introdu utilizatorul tău" />
+            <InputText
+              v-model="username"
+              placeholder="Introdu utilizatorul tău"
+            />
           </div>
           <div class="input-group">
             <label for="password">Parolă</label>
@@ -18,7 +23,10 @@
             />
           </div>
           <button type="submit" class="login-button">Login</button>
-          <label class="my-2 text-white font-xl cursor-pointer" @click="toggleForm">
+          <label
+            class="my-2 text-white font-xl cursor-pointer"
+            @click="toggleForm"
+          >
             Crează un cont nou...
           </label>
         </div>
@@ -26,11 +34,20 @@
         <div v-else>
           <div class="input-group">
             <label for="username">Utilizator</label>
-            <InputText v-model="newUsername" required placeholder="Alege un utilizator" />
+            <InputText
+              v-model="newUsername"
+              required
+              placeholder="Alege un utilizator"
+            />
           </div>
           <div class="input-group">
             <label for="email">Email</label>
-            <InputText v-model="email" type="email" required placeholder="Introdu email-ul tău" />
+            <InputText
+              v-model="email"
+              type="email"
+              required
+              placeholder="Introdu email-ul tău"
+            />
           </div>
           <div class="input-group">
             <label for="password">Parolă</label>
@@ -51,7 +68,10 @@
             />
           </div>
           <button type="submit" class="login-button">Înregistrează-te</button>
-          <label class="my-2 text-white font-xl cursor-pointer" @click="toggleForm">
+          <label
+            class="my-2 text-white font-xl cursor-pointer"
+            @click="toggleForm"
+          >
             Ai deja un cont? Conectează-te aici.
           </label>
         </div>
@@ -64,6 +84,7 @@
 import InputText from "primevue/inputtext";
 import { ref } from "vue";
 import { useUserStore } from "../stores/userStore";
+import router from "../router";
 
 const username = ref("");
 const password = ref("");
@@ -78,13 +99,26 @@ const userStore = useUserStore();
 async function handleLogin() {
   console.log("Logging in with:", username.value, password.value);
   let resp = await userStore.login(username.value, password.value);
-  console.log(resp);
+  if (resp == true) {
+    router.push("/");
+  }
 }
 
 async function handleRegister() {
-  console.log("Registering with:", newUsername.value, email.value, newPassword.value, phone.value);
-  // let resp = await userStore.signup(newUsername.value, email.value, newPassword.value, phone.value);
-  // console.log(resp);
+  console.log(
+    "Registering with:",
+    newUsername.value,
+    email.value,
+    newPassword.value,
+    phone.value
+  );
+  let resp = await userStore.signup(
+    newUsername.value,
+    newPassword.value,
+    email.value,
+    phone.value
+  );
+  console.log(resp);
 }
 
 function toggleForm() {
@@ -109,7 +143,7 @@ function toggleForm() {
   padding: 2rem;
   border-radius: 12px;
   box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
-  backdrop-filter: blur(10px); 
+  backdrop-filter: blur(10px);
   width: 350px;
   max-width: 100%;
 }

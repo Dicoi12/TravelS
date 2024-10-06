@@ -48,16 +48,23 @@ export const useUserStore = defineStore("userStore", {
         console.error("Error adding objective:", error);
       }
     },
-    async signup(userName: string, password?: string) {
+    async signup(
+      userName: string,
+      password?: string,
+      email?: string,
+      phone?: string
+    ) {
       const payload = {
         UserName: userName,
         Password: password,
+        email: email,
+        phone: phone,
       };
       try {
-        const data = await fetchApi("User/Login", "POST", payload);
+        const data = await fetchApi("User/SignUp", "POST", payload);
         return data;
       } catch (error) {
-        console.error("Error adding objective:", error);
+        console.error("Error creating user:", error);
       }
     },
   },
