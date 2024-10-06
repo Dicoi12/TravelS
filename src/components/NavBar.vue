@@ -1,9 +1,9 @@
 <template>
-  <div>
+  <div class="bg-primary-300">
     <div
-      class="flex justify-content-around align-items-center bg-bluegray-300 z-5"
+      class="flex justify-content-around align-items-center z-5"
     >
-      <div class="text-4xl text-black-alpha-90 cursor-pointer">TravelS</div>
+      <div class="text-4xl text-black-alpha-90 cursor-pointer ">TravelS</div>
       <div class="text-2xl text-black-alpha-90">Despre</div>
       <div class="text-2xl text-black-alpha-90">Obiective populare</div>
       <div class="text-2xl text-black-alpha-90">Experiente</div>

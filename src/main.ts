@@ -9,17 +9,17 @@ import InputGroup from "primevue/inputgroup";
 import InputGroupAddon from "primevue/inputgroupaddon";
 import ToastService from "primevue/toastservice";
 import router from "./router";
+import '/node_modules/primeflex/primeflex.css'
+import 'primeflex/primeflex.css';
 
 import App from "./App.vue";
 
 const app = createApp(App);
 
-// Pinia
 const pinia = createPinia();
 pinia.use(piniaPluginPersistedstate);
 app.use(pinia);
 
-// PrimeVue components and directives
 app.use(router);
 app.use(PrimeVue);
 app.use(ToastService);
@@ -28,5 +28,4 @@ app.directive("badge", BadgeDirective);
 app.component("InputGroup", InputGroup);
 app.component("InputGroupAddon", InputGroupAddon);
 
-// Mount the app to #app (adjust HTML to have this element)
 app.mount("#app");
