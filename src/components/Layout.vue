@@ -1,14 +1,17 @@
 <template>
   <div class="w-full h-full">
     <Toast />
-    <NavBar />
     <div class="bg-image">
+      <NavBar />
       <router-view />
     </div>
   </div>
 </template>
+<script setup lang="ts">
+import { useRoute } from "vue-router";
 
-<script setup lang="ts"></script>
+const route = useRoute();
+</script>
 <style scoped>
 .bg-image {
   background-image: url("../assets/local/transfagarasan-2544947_1920.jpg");

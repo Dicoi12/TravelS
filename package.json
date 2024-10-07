@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@primevue/themes": "^4.0.7",
+    "esbuild": "^0.24.0",
     "pinia": "^2.2.2",
     "pinia-plugin-persistedstate": "^4.0.2",
     "primeflex": "^3.3.1",
