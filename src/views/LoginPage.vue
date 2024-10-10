@@ -85,7 +85,6 @@ import InputText from "primevue/inputtext";
 import { ref } from "vue";
 import { useUserStore } from "../stores/userStore";
 import router from "../router";
-import { useRoute } from "vue-router";
 
 const username = ref("");
 const password = ref("");
@@ -94,7 +93,6 @@ const newUsername = ref("");
 const newPassword = ref("");
 const phone = ref("");
 const isRegistering = ref(false);
-const route = useRoute();
 
 const userStore = useUserStore();
 

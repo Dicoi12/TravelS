@@ -21,3 +21,8 @@ export interface IObjectivesStore{
   selectedObjective:IObjective;
   objectives:IObjective[];
 }
+export interface IServiceResult{
+  isSuccesful:boolean;
+  result:any;
+  
+}

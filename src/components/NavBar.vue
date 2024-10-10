@@ -8,7 +8,7 @@
         TravelS
       </div>
       <div class="text-2xl text-black-alpha-90">Despre</div>
-      <div class="text-2xl text-black-alpha-90">Obiective populare</div>
+      <div class="text-2xl text-black-alpha-90" @click="router.push('/objectives')">Obiective populare</div>
       <div class="text-2xl text-black-alpha-90">Experiente</div>
       <div class="text-2xl text-black-alpha-90">Itinerarii</div>
       <div

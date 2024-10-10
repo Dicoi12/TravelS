@@ -1,5 +1,5 @@
 <template>
-  <NavBar />
+  <!-- <NavBar /> -->
   <main class="bg-image">
     <router-view v-slot="{ Component }">
       <transition name="fade" mode="out-in">
@@ -16,7 +16,7 @@ const route = useRoute();
 <style scoped>
 .bg-image {
   background-image: url("../assets/local/transfagarasan-2544947_1920.jpg");
-  background-size: cover;
+  background-size:auto;
   background-position: center;
   background-repeat: no-repeat;
   height: 100vh;

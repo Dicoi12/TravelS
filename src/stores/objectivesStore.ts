@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { IObjective, IObjectivesStore } from "../Interfaces";
+import { IObjective, IServiceResult } from "../Interfaces";
 import fetchApi from "../stores/fetch";
 export const useObjectivesStore = defineStore("objectivesStore", {
   state: (): {
@@ -34,6 +34,15 @@ export const useObjectivesStore = defineStore("objectivesStore", {
       try {
         const data = await fetchApi("ObjectiveImage/getimage/1", "get");
         console.log("Added objective:", data);
+      } catch (error) {
+        console.error("Error adding objective:", error);
+      }
+    },
+    async getObjectives() {
+      try {
+        const data = await fetchApi("Objectives/GetObjectivesAsync", "get");
+       let response=data as IServiceResult;
+       this.objectives=response.result;
       } catch (error) {
         console.error("Error adding objective:", error);
       }
