@@ -1,11 +1,12 @@
 <template>
-  <div class="w-full h-full">
-    <Toast />
-    <div class="bg-image">
-      <NavBar />
-      <router-view />
-    </div>
-  </div>
+  <NavBar />
+  <main class="bg-image">
+    <router-view v-slot="{ Component }">
+      <transition name="fade" mode="out-in">
+        <component :is="Component" />
+      </transition>
+    </router-view>
+  </main>
 </template>
 <script setup lang="ts">
 import { useRoute } from "vue-router";

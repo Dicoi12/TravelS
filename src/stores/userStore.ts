@@ -6,7 +6,7 @@ export const useUserStore = defineStore("userStore", {
     token?: string;
     userData?: UserModel;
   } => {
-    return {};
+    return {token:'',userData:{}};
   },
   actions: {
     // async addObjective() {
