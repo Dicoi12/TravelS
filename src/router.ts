@@ -8,7 +8,7 @@ import ObjectivesPage from "./views/ObjectivesPage.vue"
 const router = createRouter({
   history: createWebHistory(),
   routes: [
-    { path: "/", component: App },
+    // { path: "/", component: App },
     { path: "/login", component: LoginPage },
     { path: "/objectives", component: ObjectivesPage },
     //   { path: '/projects', component: ProjectsPage }

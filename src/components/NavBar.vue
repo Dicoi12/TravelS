@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-primary-300">
+  <div class="bg-transparent">
     <div class="flex justify-content-around align-items-center z-5">
       <div
         class="text-4xl text-black-alpha-90 cursor-pointer"
