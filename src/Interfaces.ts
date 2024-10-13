@@ -11,18 +11,18 @@ export interface BaseAuditEntity {
   updatedAt?: Date;
 }
 export interface IObjective extends BaseAuditEntity {
-    id: number;
-    name: string;
-    description: string | null;
-    latitude: number;
-    longitude: number;
+  id: number;
+  name: string;
+  description: string | null;
+  latitude: number;
+  longitude: number;
+  images: string[];
 }
-export interface IObjectivesStore{
-  selectedObjective:IObjective;
-  objectives:IObjective[];
+export interface IObjectivesStore {
+  selectedObjective: IObjective;
+  objectives: IObjective[];
 }
-export interface IServiceResult{
-  isSuccesful:boolean;
-  result:any;
-  
+export interface IServiceResult {
+  isSuccesful: boolean;
+  result: any;
 }

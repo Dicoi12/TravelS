@@ -13,6 +13,7 @@ export const useObjectivesStore = defineStore("objectivesStore", {
         description: null,
         latitude: 0,
         longitude: 0,
+        images:[]
       },
       objectives: [],
     };

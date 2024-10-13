@@ -1,24 +1,24 @@
 <template>
   <div class="bg-transparent">
-    <div class="flex justify-content-around align-items-center z-5">
+    <div class="flex justify-content-around align-items-center z-5 text-white">
       <div
-        class="text-4xl text-black-alpha-90 cursor-pointer"
-        @click="router.push('/')"
+        class="text-4xl text-white cursor-pointer navelement"
+        @click="router.push('/objectives')"
       >
         TravelS
       </div>
-      <div class="text-2xl text-black-alpha-90">Despre</div>
-      <div class="text-2xl text-black-alpha-90" @click="router.push('/objectives')">Obiective populare</div>
-      <div class="text-2xl text-black-alpha-90">Experiente</div>
-      <div class="text-2xl text-black-alpha-90">Itinerarii</div>
+      <div class="text-2xl text-white navelement">Despre</div>
+      <div class="text-2xl text-white navelement" @click="router.push('/objectives')">Obiective populare</div>
+      <div class="text-2xl text-white navelement">Experiente</div>
+      <div class="text-2xl text-white navelement">Itinerarii</div>
       <div
-        class="text-2xl text-black-alpha-90"
+        class="text-2xl text-white navelement"
         v-if="!userStore.userData?.id"
         @click="router.push('/login')"
       >
         Conecteaza-te
       </div>
-      <div class="text-2xl text-black-alpha-90" v-if="userStore.userData?.id">
+      <div class="text-2xl text-white navelement" v-if="userStore.userData?.id" @click="router.push('/profile')">
         {{ userStore.userData.userName }}
       </div>
     </div>
@@ -33,5 +33,8 @@ const router = useRouter();
 <style scoped>
 div {
   font-family: "Kaushan Script", cursive;
+}
+.navelement{
+  cursor: pointer;
 }
 </style>

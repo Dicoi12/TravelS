@@ -11,6 +11,7 @@ import ToastService from "primevue/toastservice";
 import router from "./router";
 import '/node_modules/primeflex/primeflex.css'
 import 'primeflex/primeflex.css';
+import 'primeicons/primeicons.css'
 
 import App from "./App.vue";
 
