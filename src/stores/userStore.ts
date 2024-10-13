@@ -1,12 +1,17 @@
 import { defineStore } from "pinia";
-import { UserModel } from "../Interfaces";
+import { IUserModel } from "../Interfaces";
 import fetchApi from "../stores/fetch";
 export const useUserStore = defineStore("userStore", {
   state: (): {
     token?: string;
-    userData?: UserModel;
+    userData: IUserModel;
   } => {
-    return {token:'',userData:{}};
+    return {token:'',userData:{id: 0,
+      userName: "",
+      email:  null,
+      phone:  null,
+      hash: "",
+      salt: ""}};
   },
   actions: {
     // async addObjective() {
@@ -39,15 +44,15 @@ export const useUserStore = defineStore("userStore", {
     async login(
       userName: string,
       password?: string
-    ): Promise<UserModel | undefined> {
+    ): Promise<IUserModel | undefined> {
       const payload = {
         UserName: userName,
         Password: password,
       };
       try {
         const data = await fetchApi("User/Login", "POST", payload);
-        this.userData = data as UserModel;
-        return data as UserModel;
+        this.userData = data as IUserModel;
+        return data as IUserModel;
       } catch (error) {
         console.error("Error adding objective:", error);
       }
