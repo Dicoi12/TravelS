@@ -3,6 +3,7 @@ import { createPinia } from "pinia";
 import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
 
 import PrimeVue from "primevue/config";
+import Aura from '@primevue/themes/aura';
 import Tooltip from "primevue/tooltip";
 import BadgeDirective from "primevue/badgedirective";
 import InputGroup from "primevue/inputgroup";
@@ -22,7 +23,16 @@ pinia.use(piniaPluginPersistedstate);
 app.use(pinia);
 
 app.use(router);
-app.use(PrimeVue);
+app.use(PrimeVue, {
+    theme: {
+        preset: Aura,
+        options: {
+            prefix: 'p',
+            cssLayer: false,
+            darkModeSelector: false || 'none',
+        }
+    }
+});
 app.use(ToastService);
 app.directive("tooltip", Tooltip);
 app.directive("badge", BadgeDirective);

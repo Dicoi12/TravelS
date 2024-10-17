@@ -1,8 +1,14 @@
 <template>
   <div>
-    <h1 class="text-white align-self-start ml-2">
-      Cele mai importante obiective turistice:
-    </h1>
+    <div class="flex justify-content-between">
+      <h1 class="text-white align-self-start ml-2">
+        Cele mai importante obiective turistice:
+      </h1>
+      <div class="flex align-items-center gap-2" v-if="!locationAccessGranted">
+        <i class="pi pi-map-marker text-white"></i>
+        <h2 class=" block md:hidden text-white mr-3" >Vezi obiectivele din jurul tău</h2>
+      </div>
+    </div>
     <div class="grid-container fadein animation-duration-1000">
       <div
         v-for="(item, index) in objectiveStore.objectives"
@@ -25,12 +31,39 @@
 </template>
 
 <script setup lang="ts">
+import { ref, onBeforeMount } from "vue";
 import { useObjectivesStore } from "../stores/objectivesStore";
-import { onBeforeMount } from "vue";
 
 const objectiveStore = useObjectivesStore();
+
+const latitude = ref<number | null>(null);
+const longitude = ref<number | null>(null);
+const locationAccessGranted = ref<boolean>(true); 
+
+const getUserLocation = () => {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        latitude.value = position.coords.latitude;
+        longitude.value = position.coords.longitude;
+        locationAccessGranted.value = true; 
+        console.log("Latitudine:", latitude.value);
+        console.log("Longitudine:", longitude.value);
+      },
+      (error) => {
+        locationAccessGranted.value = false;
+        console.error("Eroare la obținerea locației sau acces refuzat:", error);
+      }
+    );
+  } else {
+    console.error("Geolocația nu este suportată de acest browser.");
+    locationAccessGranted.value = false; 
+  }
+};
+
 onBeforeMount(async () => {
   await objectiveStore.getObjectives();
+  getUserLocation(); 
 });
 </script>
 
@@ -61,12 +94,12 @@ onBeforeMount(async () => {
   border-radius: 10px;
   overflow: hidden;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  background-color: #666666; /* Gri pe întregul card */
+  background-color: #666666; 
   transition: transform 0.3s ease-in-out;
 }
 
 .card-container:hover {
-  transform: scale(1.05); /* Zoom-in la hover */
+  transform: scale(1.05); 
 }
 
 .card-content {
@@ -77,16 +110,16 @@ onBeforeMount(async () => {
   width: 100%;
   height: 200px;
   object-fit: cover;
-  transition: transform 0.3s ease-in-out; /* Tranziție pentru zoom */
+  transition: transform 0.3s ease-in-out; 
 }
 
 .card-container:hover .image {
-  transform: scale(1.1); /* Zoom-in pe imagine la hover */
+  transform: scale(1.1); 
 }
 
 .card-details {
   padding: 0.5rem;
-  background-color: #666666; /* Gri translucid */
+  background-color: #666666;
   color: white;
 }
 

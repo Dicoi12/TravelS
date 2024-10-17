@@ -1,9 +1,9 @@
 <template>
-  <div class="bg-image">
+  <div class="layout">
     <!-- Include NavBar aici pentru a fi afișat pe toate paginile -->
     <NavBar />
 
-    <main >
+    <main class="content">
       <router-view v-slot="{ Component }">
         <transition name="fade" mode="out-in">
           <component :is="Component" />
@@ -18,13 +18,22 @@ import NavBar from '../components/NavBar.vue';
 </script>
 
 <style scoped>
-.bg-image {
-  /* background-image: url("../assets/local/transfagarasan-2544947_1920.jpg"); */
+/* Stilul principal pentru layout */
+.layout {
   background-color: #36453B;
   background-size: auto;
   background-position: center;
   background-repeat: no-repeat;
-  height: 100vh;
-  width: 100vw;
+  height: 100vh; /* Setează înălțimea la 100% din viewport */
+  width: 100vw;  /* Setează lățimea la 100% din viewport */
+  display: flex;
+  flex-direction: column; /* Aliniază NavBar și content pe verticală */
+  overflow: hidden; /* Elimină scroll-ul pentru întreaga pagină */
+}
+
+.content {
+  flex: 1; /* Face ca secțiunea main să ocupe restul ecranului */
+  overflow: auto; /* Permite scroll doar în secțiunea content dacă e nevoie */
+  height: 100%; /* Asigură-te că secțiunea main ocupă întregul spațiu disponibil */
 }
 </style>

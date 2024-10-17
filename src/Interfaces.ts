@@ -1,6 +1,11 @@
+export enum UserRoleEnum{
+  Simple,
+  Administrator
+}
 export interface IUserModel extends BaseAuditEntity {
   id: number;
   userName: string;
+  role:UserRoleEnum;
   email: string | null;
   phone: string | null;
   hash: string;
