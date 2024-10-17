@@ -11,7 +11,9 @@ export const useUserStore = defineStore("userStore", {
       email:  null,
       phone:  null,
       hash: "",
-      salt: ""}};
+      salt: "",
+      role:0
+      }};
   },
   actions: {
     // async addObjective() {
