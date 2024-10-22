@@ -10,10 +10,19 @@
     </div>
     <div class="w-full h-full bg-white mt-7 m-4 border-round-xl">
       <!-- <div v-if="currentSetting == 'Obiective'"> -->
-        <DataTable :value="objectiveStore.objectives">
-          <Column field="id" header="Id"></Column>
-          <Column field="name" header="Nume"></Column>
-          <Column field="description" header="Descriere"></Column>
+        <DataTable :value="objectiveStore.objectives" v-model:editingRows="editingRows" editMode="row" @row-edit-save="onRowEditSave">
+          <Column field="id" header="Id">
+          </Column>
+          <Column field="name" header="Nume">
+            <template #editor="{ data, field }">
+                    <InputText v-model="data[field]" fluid />
+                </template>
+          </Column>
+          <Column field="description" header="Descriere">
+            <template #editor="{ data, field }">
+                    <InputText v-model="data[field]" fluid />
+                </template></Column>
+          <Column :rowEditor="true" style="width: 10%; min-width: 8rem" bodyStyle="text-align:center"></Column>
         </DataTable>
       <!-- </div> -->
     </div>
@@ -26,6 +35,7 @@ import { useObjectivesStore } from "../stores/objectivesStore";
 const expandedKeys = ref();
 const currentSetting = ref("");
 const objectiveStore = useObjectivesStore();
+const editingRows=ref();
 const items = ref([
   {
     label: "Obiective",
@@ -94,4 +104,11 @@ const items = ref([
 onBeforeMount(async ()=>{
 await objectiveStore.getObjectives();
 })
+const onRowEditSave = (event:any) => {
+    console.log('====================================');
+    event.newData.image=""
+    console.log(event.newData);
+    console.log('====================================');
+    objectiveStore.updateObjective(event.newData) 
+};
 </script>

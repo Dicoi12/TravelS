@@ -48,6 +48,15 @@ export const useObjectivesStore = defineStore("objectivesStore", {
         console.error("Error adding objective:", error);
       }
     },
+    async updateObjective(model:IObjective){
+      try {
+        const data = await fetchApi("Objectives/UpdateObjective", "put",undefined,model);
+       let response=data as IServiceResult;
+       return response.result;
+      } catch (error) {
+        console.error("Error adding objective:", error);
+      }
+    }
   },
   getters: {},
   persist: true,
