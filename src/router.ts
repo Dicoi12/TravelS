@@ -7,7 +7,7 @@ import { defineAsyncComponent } from "vue";
 const router = createRouter({
   history: createWebHistory(),
   routes: [
-    // { path: "/", component: App },
+    { path: "/", component: defineAsyncComponent(()=>import("./views/MainPage.vue")) },
     {
       path: "/login",
       component: defineAsyncComponent(() => import("./views/LoginPage.vue")),

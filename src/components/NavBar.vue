@@ -3,11 +3,10 @@
     <div class="flex justify-content-around align-items-center z-5 text-white">
       <div
         class="text-4xl text-white cursor-pointer navelement"
-        @click="router.push('/objectives')"
+        @click="router.push('/')"
       >
         TravelS
       </div>
-      <div class="text-2xl text-white navelement">Despre</div>
       <div class="text-2xl text-white navelement" @click="router.push('/objectives')">Obiective populare</div>
       <div class="text-2xl text-white navelement">Experiente</div>
       <div class="text-2xl text-white navelement">Itinerarii</div>
