@@ -2,10 +2,13 @@
     <div class="main-page">
       <!-- Navbar-ul fix -->
       <nav class="navbar">
-        <h1 class="logo ">TravelS</h1>
+        <div class="ml-4 mt-2 logo ">TravelS</div>
         <div class="nav-links">
           <button class="nav-button" @click="goToObjectives">Obiective</button>
-          <button class="nav-button" @click="goToLogin">Conectează-te</button>
+          <button class="nav-button" @click="goToLogin"  v-if="!userStore.userData?.id">Devin-o membru</button>
+          <div class=" nav-button" v-if="userStore.userData?.id" @click="router.push('/profile')">
+        <div>{{ userStore.userData.userName }}</div>
+      </div>
         </div>
       </nav>
   
@@ -24,7 +27,9 @@
   import { useRouter } from "vue-router";
   import { onBeforeMount, onBeforeUnmount } from "vue";
   import { useApplicationStore } from "../stores/aplicationStateStore";
-  
+  import { useUserStore } from "../stores/userStore";
+
+  const userStore=useUserStore();
   const appStore = useApplicationStore();
   const router = useRouter();
   
@@ -88,10 +93,15 @@
     font-size: 1rem;
     cursor: pointer;
     transition: color 0.3s ease;
+    padding: 0.3rem;
+  }
+  .nav-button>div:hover{
+    background-color: rgb(0, 0, 0);
+    border-radius: 10px;
   }
   
   .nav-button:hover {
-    color: #28a745; /* Schimbă culoarea la hover */
+    color: #aac282; /* Schimbă culoarea la hover */
   }
   
   .overlay {
