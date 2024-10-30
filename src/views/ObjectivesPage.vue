@@ -40,12 +40,13 @@ const latitude = ref<number | null>(null);
 const longitude = ref<number | null>(null);
 const locationAccessGranted = ref<boolean>(true); 
 
-const getUserLocation = () => {
+const getUserLocation = async() => {
   if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(
+    await navigator.geolocation.getCurrentPosition(
       (position) => {
         latitude.value = position.coords.latitude;
         longitude.value = position.coords.longitude;
+        objectiveStore.getLocalObjectives(latitude.value??1,longitude.value??1);
         locationAccessGranted.value = true; 
         console.log("Latitudine:", latitude.value);
         console.log("Longitudine:", longitude.value);
@@ -62,8 +63,7 @@ const getUserLocation = () => {
 };
 
 onBeforeMount(async () => {
-  await objectiveStore.getObjectives();
-  getUserLocation(); 
+  await getUserLocation(); 
 });
 </script>
 

@@ -17,6 +17,9 @@
       >
         Conecteaza-te
       </div>
+      <div class="text-2xl text-white navelement" v-if="userStore.userData?.role==UserRoleEnum.Administrator" @click="router.push('/setup')">
+        Administrare
+      </div>
       <div class="text-2xl text-white navelement" v-if="userStore.userData?.id" @click="router.push('/profile')">
         {{ userStore.userData.userName }}
       </div>
@@ -26,6 +29,7 @@
 <script setup lang="ts">
 import { useRouter } from "vue-router";
 import { useUserStore } from "../stores/userStore";
+import { UserRoleEnum } from "../Interfaces";
 const userStore = useUserStore();
 const router = useRouter();
 </script>

@@ -10,6 +10,7 @@ export const useObjectivesStore = defineStore("objectivesStore", {
       selectedObjective: {
         id: 0,
         name: "",
+        city:"",
         description: null,
         latitude: 0,
         longitude: 0,
@@ -46,6 +47,19 @@ export const useObjectivesStore = defineStore("objectivesStore", {
        this.objectives=response.result;
       } catch (error) {
         console.error("Error adding objective:", error);
+      }
+    },
+    async getLocalObjectives(latitude:number,longitude:number) {
+      try {
+        const payload={
+          latitude:latitude,
+          longitude:longitude
+        }
+        const data = await fetchApi("Objectives/GetLocalObjectives", "get",undefined,payload);
+       let response=data as IServiceResult;
+       this.objectives=response.result;
+      } catch (error) {
+        console.error("Error fetch objective:", error);
       }
     },
     async updateObjective(model:IObjective){
