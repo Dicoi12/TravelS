@@ -32,3 +32,9 @@ export interface IServiceResult {
   isSuccesful: boolean;
   result: any;
 }
+export interface IPhotoGalleria{
+  itemImageSrc: string;
+  thumbnailImageSrc: string;
+  alt: string;
+  title: string;
+}

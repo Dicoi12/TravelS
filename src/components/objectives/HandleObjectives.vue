@@ -1,59 +1,74 @@
 <template>
   <div @click="dialogVisible = true">
-    <slot name="button">
-      
-    </slot>
+    <slot name="button"> </slot>
   </div>
   <Dialog
     v-model:visible="dialogVisible"
     maximizable
     modal
-    header="Header"
+    :header=" objectivesStore.selectedObjective.id == 0 ? 'Adaugă obiectiv nou' : `Editează obiectivul #${objectivesStore.selectedObjective.name}`"
     :style="{ width: '50rem' }"
     :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
     @hide="closeDialog()"
   >
-    <div class="flex justify-content-center flex-column">
-      <label for="name">Nume</label>
-      <InputText
-        v-model="objectivesStore.selectedObjective.name"
-        label="Nume"
+    <div>
+      <div class="flex justify-content-center flex-column">
+        <label for="name">Nume</label>
+        <InputText
+          v-model="objectivesStore.selectedObjective.name"
+          label="Nume"
+        />
+      </div>
+      <div class="flex justify-content-center flex-column">
+        <label for="city">Oraș</label>
+        <InputText
+          v-model="objectivesStore.selectedObjective.city"
+          label="Oraș"
+        />
+      </div>
+      <div class="flex justify-content-center flex-column">
+        <label for="description">Descriere</label>
+        <InputText
+          v-model="objectivesStore.selectedObjective.description"
+          label="Descriere"
+        />
+      </div>
+      <div class="flex justify-content-center flex-column">
+        <label for="description">Latitudine</label>
+        <InputNumber
+          v-model="objectivesStore.selectedObjective.latitude"
+          label="Latitudine"
+        />
+      </div>
+      <div class="flex justify-content-center flex-column">
+        <label for="description">Longitudine</label>
+        <InputNumber
+          v-model="objectivesStore.selectedObjective.longitude"
+          label="Longitudine"
+        />
+      </div>
+      <Map
+        :latitude="objectivesStore.selectedObjective.latitude"
+        :longitude="objectivesStore.selectedObjective.longitude"
+        popupText="Transfăgărășan"
+        class="my-2"
+        v-if="objectivesStore.selectedObjective.latitude != 0 && objectivesStore.selectedObjective.longitude != 0"
+      />
+      <div class="flex justify-content-end">
+      <Button
+        class="align-self-end"
+        icon="pi pi-plus"
+        :label="
+          objectivesStore.selectedObjective.id == 0 ? 'Adaugă' : 'Editează'
+        "
+        @click="
+          objectivesStore.selectedObjective.id == 0
+            ? addObjective()
+            : updateObjective()
+        "
       />
     </div>
-    <div class="flex justify-content-center flex-column">
-      <label for="city">Oraș</label>
-      <InputText
-        v-model="objectivesStore.selectedObjective.city"
-        label="Oraș"
-      />
     </div>
-    <div class="flex justify-content-center flex-column">
-      <label for="description">Descriere</label>
-      <InputText
-        v-model="objectivesStore.selectedObjective.description"
-        label="Descriere"
-      />
-    </div>
-    <div class="flex justify-content-center flex-column">
-      <label for="description">Latitudine</label>
-      <InputNumber
-        v-model="objectivesStore.selectedObjective.latitude"
-        label="Latitudine"
-      />
-    </div>
-    <div class="flex justify-content-center flex-column">
-      <label for="description">Longitudine</label>
-      <InputNumber
-        v-model="objectivesStore.selectedObjective.longitude"
-        label="Longitudine"
-      />
-    </div>
-    <Map :latitude="objectivesStore.selectedObjective.latitude" :longitude="objectivesStore.selectedObjective.longitude" popupText="Transfăgărășan" />
-    <Button
-      icon="pi pi-plus"
-      :label="objectivesStore.selectedObjective.id == 0 ? 'Adaugă' : 'Editează'"
-      @click="objectivesStore.selectedObjective.id == 0 ?addObjective():updateObjective()"
-    />
   </Dialog>
 </template>
 <script setup lang="ts">

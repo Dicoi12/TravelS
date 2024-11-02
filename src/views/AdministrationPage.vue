@@ -66,6 +66,7 @@
                 @click="handleEditObjective(data.data)"
               ></i>
               <i class="pi pi-trash" @click="deleteObjective(data.data.id)"></i>
+              <i class="pi pi-image" @click="showGallery = true"></i>
             </div>
           </template>
         </Column>
@@ -73,79 +74,42 @@
       <!-- </div> -->
     </div>
   </div>
+  <Dialog
+    v-model:visible="showGallery"
+    maximizable
+    modal
+    :header="`Galeria obiectivului #${objectiveStore.selectedObjective.name}`"
+    :style="{ width: '50rem' }"
+    :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
+    @hide="showGallery = false"
+  >
+    <PhotoGalleria :images="getImageSrc()" />
+  </Dialog>
 </template>
 <script setup lang="ts">
 import { ref, onBeforeMount } from "vue";
 import PanelMenu from "primevue/panelmenu";
 import { useObjectivesStore } from "../stores/objectivesStore";
+import { IPhotoGalleria } from "../Interfaces";
+
 const expandedKeys = ref();
-const currentSetting = ref("");
+// const currentSetting = ref("");
 const objectiveStore = useObjectivesStore();
 const editingRows = ref();
 const showEditDialog = ref(false);
+const showGallery = ref(false);
 const items = ref([
   {
     label: "Obiective",
     icon: "pi pi-map-marker",
-    items: [
-      {
-        label: "Adaugă",
-        icon: "pi pi-plus",
-        shortcut: "⌘+N",
-        command: () => {
-          currentSetting.value = "Obiective";
-        },
-      },
-      {
-        label: "Editează",
-        icon: "pi pi-pencil",
-      },
-      {
-        label: "Șterge",
-        icon: "pi pi-trash",
-        shortcut: "⌘+S",
-      },
-    ],
   },
   {
     label: "Evenimente",
     icon: "pi pi-map",
-    items: [
-      {
-        label: "Adaugă",
-        icon: "pi pi-plus",
-        shortcut: "⌘+N",
-      },
-      {
-        label: "Editează",
-        icon: "pi pi-pencil",
-      },
-      {
-        label: "Șterge",
-        icon: "pi pi-trash",
-        shortcut: "⌘+S",
-      },
-    ],
   },
   {
     label: "Itinerarii",
     icon: "pi pi-directions-alt",
-    items: [
-      {
-        label: "Adaugă",
-        icon: "pi pi-plus",
-        shortcut: "⌘+N",
-      },
-      {
-        label: "Editează",
-        icon: "pi pi-pencil",
-      },
-      {
-        label: "Șterge",
-        icon: "pi pi-trash",
-        shortcut: "⌘+S",
-      },
-    ],
   },
 ]);
 onBeforeMount(async () => {
@@ -158,5 +122,13 @@ function handleEditObjective(data: any) {
 async function deleteObjective(id: number) {
   await objectiveStore.deleteObjective(id);
   await objectiveStore.getObjectives();
+}
+function getImageSrc(): IPhotoGalleria[] {
+  return objectiveStore.selectedObjective.images.map((image) => ({
+    itemImageSrc: image,
+    thumbnailImageSrc: '',
+    alt: "Description for Image 1",
+    title: "Title 1",
+  }));
 }
 </script>
