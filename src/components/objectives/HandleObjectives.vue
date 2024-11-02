@@ -1,7 +1,11 @@
 <template>
-  <Button icon="pi pi-plus" label="Adaugă" @click="dialogVisible = true" />
+  <div @click="dialogVisible = true">
+    <slot name="button">
+      
+    </slot>
+  </div>
   <Dialog
-    v-model:visible="props.showDialog"
+    v-model:visible="dialogVisible"
     maximizable
     modal
     header="Header"
@@ -30,15 +34,35 @@
         label="Descriere"
       />
     </div>
-    <Button icon="pi pi-plus" :label="objectivesStore.selectedObjective.id==0?'Adaugă':'Editează'" @click="addObjective()" />
+    <div class="flex justify-content-center flex-column">
+      <label for="description">Latitudine</label>
+      <InputNumber
+        v-model="objectivesStore.selectedObjective.latitude"
+        label="Latitudine"
+      />
+    </div>
+    <div class="flex justify-content-center flex-column">
+      <label for="description">Longitudine</label>
+      <InputNumber
+        v-model="objectivesStore.selectedObjective.longitude"
+        label="Longitudine"
+      />
+    </div>
+    <Map :latitude="objectivesStore.selectedObjective.latitude" :longitude="objectivesStore.selectedObjective.longitude" popupText="Transfăgărășan" />
+    <Button
+      icon="pi pi-plus"
+      :label="objectivesStore.selectedObjective.id == 0 ? 'Adaugă' : 'Editează'"
+      @click="objectivesStore.selectedObjective.id == 0 ?addObjective():updateObjective()"
+    />
   </Dialog>
 </template>
 <script setup lang="ts">
 import { ref } from "vue";
 import { useObjectivesStore } from "../../stores/objectivesStore";
-import { defineEmits } from "vue";
+import { defineEmits, watch } from "vue";
+import Map from "../map/Map.vue";
 
-const emits=defineEmits(['onClose']);
+const emits = defineEmits(["onClose"]);
 const props = defineProps({
   showDialog: { type: Boolean, default: false },
 });
@@ -47,8 +71,21 @@ const objectivesStore = useObjectivesStore();
 const addObjective = async () => {
   await objectivesStore.addObjective();
   dialogVisible.value = false;
+  await objectivesStore.getObjectives();
 };
-function closeDialog(){
-  emits('onClose');
+const updateObjective = async () => {
+  await objectivesStore.updateObjective();
+  dialogVisible.value = false;
+  await objectivesStore.getObjectives();
+};
+function closeDialog() {
+  emits("onClose");
 }
+
+watch(
+  () => props.showDialog,
+  (newVal: boolean) => {
+    dialogVisible.value = newVal;
+  }
+);
 </script>

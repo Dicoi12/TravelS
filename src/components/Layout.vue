@@ -16,7 +16,6 @@
 <script setup lang="ts">
 import { useApplicationStore } from "../stores/aplicationStateStore";
 import NavBar from "../components/NavBar.vue";
-import { onBeforeMount, onBeforeUnmount } from "vue";
 const appStore = useApplicationStore();
 </script>
 

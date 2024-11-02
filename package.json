@@ -9,8 +9,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@fawmi/vue-google-maps": "^0.9.79",
     "@primevue/themes": "^4.1.1",
     "esbuild": "^0.24.0",
+    "ol": "^10.2.1",
     "pinia": "^2.2.2",
     "pinia-plugin-persistedstate": "^4.0.2",
     "primeflex": "^3.3.1",

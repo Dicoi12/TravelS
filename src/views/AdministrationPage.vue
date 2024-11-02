@@ -16,15 +16,25 @@
         editMode="row"
         scrollable
         scrollHeight="45rem"
-        @row-edit-save="onRowEditSave"
       >
         <template #header>
           <div class="flex justify-content-between">
-          <div class="font-bold text-xl">Gestionează obiectivele</div>
-          <div class="flex justify-content-end">
-            <HandleObjectives :show-dialog="showEditDialog" @on-close="showEditDialog=false"/>
+            <div class="font-bold text-xl">Gestionează obiectivele</div>
+            <div class="flex justify-content-end">
+              <HandleObjectives
+                :show-dialog="showEditDialog"
+                @on-close="showEditDialog = false"
+              >
+                <template #button>
+                  <Button
+                    icon="pi pi-plus"
+                    label="Adaugă"
+                    @click="objectiveStore.resetSelectedObjective()"
+                  />
+                </template>
+              </HandleObjectives>
+            </div>
           </div>
-        </div>
         </template>
         <Column field="id" header="Id"> </Column>
         <Column field="name" header="Nume">
@@ -48,13 +58,13 @@
           <template #editor="{ data, field }">
             <InputNumber v-model="data[field]" fluid /> </template
         ></Column>
-        <Column
-          style="width: 10%; min-width: 8rem"
-          header="Acțiuni"
-        >
+        <Column style="width: 10%; min-width: 8rem" header="Acțiuni">
           <template #body="data">
             <div class="flex gap-3">
-              <i class="pi pi-pencil" @click="handleEditObjective(data.data)"></i>
+              <i
+                class="pi pi-pencil"
+                @click="handleEditObjective(data.data)"
+              ></i>
               <i class="pi pi-trash" @click="deleteObjective(data.data.id)"></i>
             </div>
           </template>
@@ -141,19 +151,11 @@ const items = ref([
 onBeforeMount(async () => {
   await objectiveStore.getObjectives();
 });
-const onRowEditSave = (event: any) => {
-  console.log("====================================");
-  event.newData.image = "";
-  console.log(event.newData);
-  console.log("====================================");
-  objectiveStore.updateObjective(event.newData);
-};
-function handleEditObjective(data:any) {
+function handleEditObjective(data: any) {
   objectiveStore.selectedObjective = data;
   showEditDialog.value = true;
-
 }
-async function deleteObjective(id:number) {
+async function deleteObjective(id: number) {
   await objectiveStore.deleteObjective(id);
   await objectiveStore.getObjectives();
 }
