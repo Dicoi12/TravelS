@@ -20,8 +20,11 @@
       >
         <template #header>
           <div class="flex justify-content-between">
-            <HandleObjectives :show-dialog="showEditDialog"/>
+          <div class="font-bold text-xl">Gestionează obiectivele</div>
+          <div class="flex justify-content-end">
+            <HandleObjectives :show-dialog="showEditDialog" @on-close="showEditDialog=false"/>
           </div>
+        </div>
         </template>
         <Column field="id" header="Id"> </Column>
         <Column field="name" header="Nume">
@@ -150,7 +153,8 @@ function handleEditObjective(data:any) {
   showEditDialog.value = true;
 
 }
-function deleteObjective(id:number) {
-  // objectiveStore.deleteObjective(id);
+async function deleteObjective(id:number) {
+  await objectiveStore.deleteObjective(id);
+  await objectiveStore.getObjectives();
 }
 </script>

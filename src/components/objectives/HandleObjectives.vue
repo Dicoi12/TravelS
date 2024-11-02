@@ -7,6 +7,7 @@
     header="Header"
     :style="{ width: '50rem' }"
     :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
+    @hide="closeDialog()"
   >
     <div class="flex justify-content-center flex-column">
       <label for="name">Nume</label>
@@ -35,7 +36,9 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useObjectivesStore } from "../../stores/objectivesStore";
+import { defineEmits } from "vue";
 
+const emits=defineEmits(['onClose']);
 const props = defineProps({
   showDialog: { type: Boolean, default: false },
 });
@@ -45,4 +48,7 @@ const addObjective = async () => {
   await objectivesStore.addObjective();
   dialogVisible.value = false;
 };
+function closeDialog(){
+  emits('onClose');
+}
 </script>

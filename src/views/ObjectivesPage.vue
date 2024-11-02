@@ -6,7 +6,9 @@
       </h1>
       <div class="flex align-items-center gap-2" v-if="!locationAccessGranted">
         <i class="pi pi-map-marker text-white"></i>
-        <h2 class=" block md:hidden text-white mr-3" >Vezi obiectivele din jurul tău</h2>
+        <h2 class=" block md:hidden text-white mr-3">
+          Vezi obiectivele din jurul tău
+        </h2>
       </div>
     </div>
     <div class="grid-container fadein animation-duration-1000">
@@ -19,10 +21,16 @@
           <img :src="item.images[0]" alt="objective image" class="image" />
           <div class="card-details">
             <h3 class="location">{{ item.name }}</h3>
+            <p>{{ item.city }}</p>
             <p>{{ item.description }}</p>
           </div>
-          <Button class="favorite-button">
-            <i class="pi pi-heart"></i>
+          <Button class="favorite-button" @click="toggleFavorite(item)">
+            <i
+              :class="{
+                'pi pi-heart': !isFavorite(item),
+                'pi pi-heart-fill': isFavorite(item),
+              }"
+            ></i>
           </Button>
         </div>
       </div>
@@ -38,16 +46,16 @@ const objectiveStore = useObjectivesStore();
 
 const latitude = ref<number | null>(null);
 const longitude = ref<number | null>(null);
-const locationAccessGranted = ref<boolean>(true); 
+const locationAccessGranted = ref<boolean>(true);
 
-const getUserLocation = async() => {
+const getUserLocation = async () => {
   if (navigator.geolocation) {
     await navigator.geolocation.getCurrentPosition(
       (position) => {
         latitude.value = position.coords.latitude;
         longitude.value = position.coords.longitude;
-        objectiveStore.getLocalObjectives(latitude.value??1,longitude.value??1);
-        locationAccessGranted.value = true; 
+        objectiveStore.getLocalObjectives(latitude.value ?? 1, longitude.value ?? 1);
+        locationAccessGranted.value = true;
         console.log("Latitudine:", latitude.value);
         console.log("Longitudine:", longitude.value);
       },
@@ -58,12 +66,26 @@ const getUserLocation = async() => {
     );
   } else {
     console.error("Geolocația nu este suportată de acest browser.");
-    locationAccessGranted.value = false; 
+    locationAccessGranted.value = false;
+  }
+};
+
+const isFavorite = (item: any) => {
+  return objectiveStore.favourites.some((favorite) => favorite.id === item.id);
+};
+
+const toggleFavorite = (item: any) => {
+  if (isFavorite(item)) {
+    objectiveStore.favourites = objectiveStore.favourites.filter(
+      (favorite) => favorite.id !== item.id
+    );
+  } else {
+    objectiveStore.favourites.push(item);
   }
 };
 
 onBeforeMount(async () => {
-  await getUserLocation(); 
+  await getUserLocation();
 });
 </script>
 
