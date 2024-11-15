@@ -23,6 +23,7 @@ export interface IObjective extends BaseAuditEntity {
   latitude: number;
   longitude: number;
   images: string[];
+  
 }
 export interface IObjectivesStore {
   selectedObjective: IObjective;
@@ -31,4 +32,17 @@ export interface IObjectivesStore {
 export interface IServiceResult {
   isSuccesful: boolean;
   result: any;
+}
+export interface IEvent extends BaseAuditEntity {
+  id: number;
+  name: string;
+  description?: string;
+  country?: string;
+  city?: string;
+  latitude?: number | null;
+  longitude?: number | null;
+  startDate: string;
+  endDate: string;
+  idObjective?: number | null;
+  objective?: IObjective | null;
 }

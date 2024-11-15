@@ -14,6 +14,7 @@
         Obiective populare
       </div>
       <div class="text-2xl text-white navelement">Experiente</div>
+      <div class="text-2xl text-white navelement"  @click="router.push('/events')">Evenimente</div>
       <div class="text-2xl text-white navelement">Itinerarii</div>
       <div
         class="text-2xl text-white navelement"
