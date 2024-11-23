@@ -11,7 +11,6 @@ declare module 'vue' {
     Column: typeof import('primevue/column')['default']
     DataTable: typeof import('primevue/datatable')['default']
     Dialog: typeof import('primevue/dialog')['default']
-    FileUpload: typeof import('primevue/fileupload')['default']
     Galleria: typeof import('primevue/galleria')['default']
     HandleObjectives: typeof import('./src/components/objectives/HandleObjectives.vue')['default']
     ImageUpload: typeof import('./src/components/ImageUpload.vue')['default']

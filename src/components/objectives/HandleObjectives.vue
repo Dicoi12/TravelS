@@ -48,7 +48,7 @@
         label="Longitudine"
       />
     </div>
-    <Map :latitude="objectivesStore.selectedObjective.latitude" :longitude="objectivesStore.selectedObjective.longitude" popupText="Transfăgărășan" />
+    <Map :latitude="objectivesStore.selectedObjective.latitude" :longitude="objectivesStore.selectedObjective.longitude" class="mt-2"/>
     <Button
       icon="pi pi-plus"
       :label="objectivesStore.selectedObjective.id == 0 ? 'Adaugă' : 'Editează'"

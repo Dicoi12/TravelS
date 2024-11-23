@@ -23,7 +23,7 @@ export interface IObjective extends BaseAuditEntity {
   latitude: number;
   longitude: number;
   images: string[];
-  
+  distance?:number;
 }
 export interface IObjectivesStore {
   selectedObjective: IObjective;

@@ -16,6 +16,7 @@ export const useObjectivesStore = defineStore("objectivesStore", {
         latitude: 0,
         longitude: 0,
         images: [],
+        distance: 0,
       },
       objectives: [],
       favourites: [],
@@ -53,7 +54,8 @@ export const useObjectivesStore = defineStore("objectivesStore", {
           {
             id: 1,
             name: "Castelul Bran",
-            description: "Cunoscut și sub numele de Castelul lui Dracula, este situat în apropierea orașului Brașov.",
+            description:
+              "Cunoscut și sub numele de Castelul lui Dracula, este situat în apropierea orașului Brașov.",
             latitude: 45.5155,
             longitude: 25.3674,
             city: "Bran",
@@ -62,7 +64,8 @@ export const useObjectivesStore = defineStore("objectivesStore", {
           {
             id: 2,
             name: "Biserica Neagră",
-            description: "Un simbol al orașului Brașov, aceasta este una dintre cele mai importante biserici gotice din România.",
+            description:
+              "Un simbol al orașului Brașov, aceasta este una dintre cele mai importante biserici gotice din România.",
             latitude: 45.5935,
             longitude: 25.5854,
             city: "Brașov",
@@ -71,7 +74,8 @@ export const useObjectivesStore = defineStore("objectivesStore", {
           {
             id: 3,
             name: "Delta Dunării",
-            description: "Un ecosistem unic în Europa, este o destinație populară pentru observarea păsărilor.",
+            description:
+              "Un ecosistem unic în Europa, este o destinație populară pentru observarea păsărilor.",
             latitude: 45.1354,
             longitude: 29.5743,
             city: "Tulcea",
@@ -80,7 +84,8 @@ export const useObjectivesStore = defineStore("objectivesStore", {
           {
             id: 4,
             name: "Transfăgărășan",
-            description: "Una dintre cele mai frumoase și spectaculoase drumuri din România, oferind priveliști uimitoare.",
+            description:
+              "Una dintre cele mai frumoase și spectaculoase drumuri din România, oferind priveliști uimitoare.",
             latitude: 45.5952,
             longitude: 24.6423,
             city: "Sebeș",
@@ -89,7 +94,8 @@ export const useObjectivesStore = defineStore("objectivesStore", {
           {
             id: 5,
             name: "Castelul Peleș",
-            description: "Un castel magnific situat în Sinaia, considerat unul dintre cele mai frumoase din Europa.",
+            description:
+              "Un castel magnific situat în Sinaia, considerat unul dintre cele mai frumoase din Europa.",
             latitude: 45.3535,
             longitude: 25.5402,
             city: "Sinaia",
@@ -118,16 +124,18 @@ export const useObjectivesStore = defineStore("objectivesStore", {
           {
             id: 1,
             name: "Castelul Bran",
-            description: "Cunoscut și sub numele de Castelul lui Dracula, este situat în apropierea orașului Brașov.",
+            description:
+              "Cunoscut și sub numele de Castelul lui Dracula, este situat în apropierea orașului Brașov.",
             latitude: 45.5155,
             longitude: 25.3674,
-            city: "Bran", 
+            city: "Bran",
             images: [],
           },
           {
             id: 2,
             name: "Biserica Neagră",
-            description: "Un simbol al orașului Brașov, aceasta este una dintre cele mai importante biserici gotice din România.",
+            description:
+              "Un simbol al orașului Brașov, aceasta este una dintre cele mai importante biserici gotice din România.",
             latitude: 45.5935,
             longitude: 25.5854,
             city: "Brașov",
@@ -136,7 +144,8 @@ export const useObjectivesStore = defineStore("objectivesStore", {
           {
             id: 3,
             name: "Delta Dunării",
-            description: "Un ecosistem unic în Europa, este o destinație populară pentru observarea păsărilor.",
+            description:
+              "Un ecosistem unic în Europa, este o destinație populară pentru observarea păsărilor.",
             latitude: 45.1354,
             longitude: 29.5743,
             city: "Tulcea",
@@ -145,7 +154,8 @@ export const useObjectivesStore = defineStore("objectivesStore", {
           {
             id: 4,
             name: "Transfăgărășan",
-            description: "Una dintre cele mai frumoase și spectaculoase drumuri din România, oferind priveliști uimitoare.",
+            description:
+              "Una dintre cele mai frumoase și spectaculoase drumuri din România, oferind priveliști uimitoare.",
             latitude: 45.5952,
             longitude: 24.6423,
             city: "Sebeș",
@@ -154,7 +164,8 @@ export const useObjectivesStore = defineStore("objectivesStore", {
           {
             id: 5,
             name: "Castelul Peleș",
-            description: "Un castel magnific situat în Sinaia, considerat unul dintre cele mai frumoase din Europa.",
+            description:
+              "Un castel magnific situat în Sinaia, considerat unul dintre cele mai frumoase din Europa.",
             latitude: 45.3535,
             longitude: 25.5402,
             city: "Sinaia",
@@ -187,13 +198,19 @@ export const useObjectivesStore = defineStore("objectivesStore", {
         console.error("Error deleting objective:", error);
       }
     },
-    async uploadFile  (file: File, objectiveId: number)  {
+    async uploadFile(file: File, objectiveId: number) {
       const formData = new FormData();
       formData.append("imageFile", file); // Numele trebuie să corespundă cu parametrul din API
       formData.append("objectiveId", String(objectiveId));
-    
+
       try {
-        const response = await fetchApi("ObjectiveImage/UploadImage", "POST", formData, undefined, true);
+        const response = await fetchApi(
+          "ObjectiveImage/UploadImage",
+          "POST",
+          formData,
+          undefined,
+          true
+        );
         console.log("File uploaded successfully:", response);
         return response;
       } catch (error) {
@@ -202,13 +219,17 @@ export const useObjectivesStore = defineStore("objectivesStore", {
       }
     },
     resetSelectedObjective() {
-      this.selectedObjective={  id: 0,
+      this.selectedObjective = {
+        id: 0,
         name: "",
         city: "",
         description: null,
         latitude: 0,
         longitude: 0,
-        images: [],}}
+        images: [],
+        distance: 0,
+      };
+    },
   },
   getters: {},
   persist: true,

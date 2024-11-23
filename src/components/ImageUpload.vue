@@ -8,43 +8,40 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-import { useObjectivesStore } from "../stores/objectivesStore";
 import fetchApi from "../stores/fetch";
 
 const selectedFile = ref(null);
 const uploadStatus = ref("");
-const objectivesStore=useObjectivesStore();
+const props = defineProps({
+  idObiectiv: { type: Number, required: false,default:null },
+});
 
 const handleFileChange = (event: any) => {
   const file = event.target.files[0];
   if (file) {
     selectedFile.value = file;
     uploadStatus.value = "";
-    console.log(file);
   }
 };
 const uploadFile = async () => {
-      if (!selectedFile.value) return;
-      console.log(selectedFile.value)
-      let formData = new FormData();
-      formData.append("imageFile", selectedFile.value);
+  if (!selectedFile.value) return;
+  let formData = new FormData();
+  formData.append("imageFile", selectedFile.value);
 
-      try {
-        const response = await fetchApi(
-          `ObjectiveImage/1/upload`,
-          "POST",
-          formData,
-          undefined,
-          true
-        );
-        uploadStatus.value = "File uploaded successfully!";
-        console.log(response);
-    } catch (error) {
-          console.log(formData)
-        uploadStatus.value = "Error uploading file.";
-        console.error(error);
-      }
-    };
+  try {
+    await fetchApi(
+      `ObjectiveImage/${props.idObiectiv}/upload`,
+      "POST",
+      formData,
+      undefined,
+      true
+    );
+    uploadStatus.value = "File uploaded successfully!";
+  } catch (error) {
+    console.log(formData);
+    uploadStatus.value = "Error uploading file.";
+  }
+};
 </script>
 <style scoped>
 input[type="file"] {

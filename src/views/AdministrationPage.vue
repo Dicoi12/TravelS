@@ -83,7 +83,7 @@
     :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
     @hide="showGallery = false"
   >
-  <ImageUpload />
+  <ImageUpload :id-obiectiv="objectiveStore.selectedObjective.id"/>
     <PhotoGalleria :images="getImageSrc()" />
   </Dialog>
 </template>
