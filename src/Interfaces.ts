@@ -46,3 +46,9 @@ export interface IEvent extends BaseAuditEntity {
   idObjective?: number | null;
   objective?: IObjective | null;
 }
+export interface IPhotoGalleria{
+  itemImageSrc: string;
+  thumbnailImageSrc: string;
+  alt: string;
+  title: string;
+}

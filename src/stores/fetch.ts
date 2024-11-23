@@ -33,41 +33,31 @@ const fetchApi = async (
   endpoint: string,
   method: string = "GET",
   body?: any,
-  query?: Record<string, any>
+  query?: Record<string, any>,
+  isFormData: boolean = false
 ) => {
-  // Construiește URL-ul complet cu query params
-  const queryString = buildQueryParams(query);
-  const url = `${BASE_URL}/${endpoint}${queryString}`;
+  const queryString = query
+    ? "?" + new URLSearchParams(query as Record<string, string>).toString()
+    : "";
 
-  // Pregătește opțiunile pentru fetch
+  const headers: Record<string, string> = {};
+  if (!isFormData) headers["Content-Type"] = "application/json";
+
   const options: RequestInit = {
     method,
-    headers: {
-      "Content-Type": "application/json",
-    },
-    credentials: "include",
+    headers,
+    body: isFormData ? body : JSON.stringify(body),
   };
 
-  // Adaugă corpul doar pentru metodele POST și PUT
-  if (body && (method === "POST" || method === "PUT")) {
-    options.body = JSON.stringify(body);
+  const url = `${BASE_URL}/${endpoint}${queryString}`;
+  const response = await fetch(url, options);
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw errorData;
   }
 
-  try {
-    const response = await fetch(url, options);
-
-    // Verifică dacă răspunsul a fost de succes
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    // Parsează răspunsul
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error("Error during fetch:", error);
-    throw error;
-  }
+  return response.json();
 };
 
 export default fetchApi;

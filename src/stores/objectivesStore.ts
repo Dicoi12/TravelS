@@ -187,6 +187,20 @@ export const useObjectivesStore = defineStore("objectivesStore", {
         console.error("Error deleting objective:", error);
       }
     },
+    async uploadFile  (file: File, objectiveId: number)  {
+      const formData = new FormData();
+      formData.append("imageFile", file); // Numele trebuie să corespundă cu parametrul din API
+      formData.append("objectiveId", String(objectiveId));
+    
+      try {
+        const response = await fetchApi("ObjectiveImage/UploadImage", "POST", formData, undefined, true);
+        console.log("File uploaded successfully:", response);
+        return response;
+      } catch (error) {
+        console.error("Error uploading file:", error);
+        throw error;
+      }
+    },
     resetSelectedObjective() {
       this.selectedObjective={  id: 0,
         name: "",
