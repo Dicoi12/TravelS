@@ -6,6 +6,7 @@ export const useEventsStore = defineStore("eventsStore", {
   state: (): {
     events: IEvent[];
     selectedEvent: IEvent;
+    search: string;
   } => ({
     events: [],
     selectedEvent: {
@@ -18,8 +19,22 @@ export const useEventsStore = defineStore("eventsStore", {
       startDate: "",
       endDate: "",
     },
+    search: "",
   }),
   actions: {
+    async getEvents() {
+      try {
+        const response = await fetchApi(`Event/GetAllEventsAsync`, "get");
+        const result = response as IServiceResult;
+    
+        if (result) {
+          this.events = result.result;
+        } 
+      } catch (error) {
+        console.error("Error fetching events:", error);
+      }
+    },
+    
     async fetchEventById(id: number) {
       try {
         const response = await fetchApi(`Event/${id}`, "get");

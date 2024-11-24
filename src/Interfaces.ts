@@ -32,6 +32,7 @@ export interface IObjectivesStore {
 export interface IServiceResult {
   isSuccesful: boolean;
   result: any;
+  validationMessage: string[];
 }
 export interface IEvent extends BaseAuditEntity {
   id: number;
@@ -41,8 +42,8 @@ export interface IEvent extends BaseAuditEntity {
   city?: string;
   latitude?: number | null;
   longitude?: number | null;
-  startDate: string;
-  endDate: string;
+  startDate: string|Date;
+  endDate: string|Date;
   idObjective?: number | null;
   objective?: IObjective | null;
 }

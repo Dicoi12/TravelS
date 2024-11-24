@@ -66,7 +66,7 @@
         (position) => {
           latitude.value = position.coords.latitude;
           longitude.value = position.coords.longitude;
-          eventStore.fetchEventsByCityOrCoords(undefined, latitude.value ?? 0, longitude.value ?? 0);
+          eventStore.getEvents();
           locationAccessGranted.value = true;
           console.log("Latitudine:", latitude.value);
           console.log("Longitudine:", longitude.value);
