@@ -1,8 +1,6 @@
 <template>
   <div @click="dialogVisible = true">
-    <slot name="button">
-      
-    </slot>
+    <slot name="button"> </slot>
   </div>
   <Dialog
     v-model:visible="dialogVisible"
@@ -48,12 +46,28 @@
         label="Longitudine"
       />
     </div>
-    <Map :latitude="objectivesStore.selectedObjective.latitude" :longitude="objectivesStore.selectedObjective.longitude" class="mt-2"/>
-    <Button
-      icon="pi pi-plus"
-      :label="objectivesStore.selectedObjective.id == 0 ? 'Adaugă' : 'Editează'"
-      @click="objectivesStore.selectedObjective.id == 0 ?addObjective():updateObjective()"
+    <Map
+      :latitude="objectivesStore.selectedObjective.latitude"
+      :longitude="objectivesStore.selectedObjective.longitude"
+      class="mt-2"
+      v-if="
+        objectivesStore.selectedObjective.latitude &&
+        objectivesStore.selectedObjective.longitude
+      "
     />
+    <div class="flex justify-content-end mt-2">
+      <Button
+        icon="pi pi-plus"
+        :label="
+          objectivesStore.selectedObjective.id == 0 ? 'Adaugă' : 'Editează'
+        "
+        @click="
+          objectivesStore.selectedObjective.id == 0
+            ? addObjective()
+            : updateObjective()
+        "
+      />
+    </div>
   </Dialog>
 </template>
 <script setup lang="ts">

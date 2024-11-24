@@ -10,10 +10,11 @@
 import { ref } from "vue";
 import fetchApi from "../stores/fetch";
 
+const emits = defineEmits(["uploaded"]);
 const selectedFile = ref(null);
 const uploadStatus = ref("");
 const props = defineProps({
-  idObiectiv: { type: Number, required: false,default:null },
+  idObiectiv: { type: Number, required: false, default: null },
 });
 
 const handleFileChange = (event: any) => {
@@ -29,16 +30,18 @@ const uploadFile = async () => {
   formData.append("imageFile", selectedFile.value);
 
   try {
-    await fetchApi(
-      `ObjectiveImage/${props.idObiectiv}/upload`,
+    const response = await fetchApi(
+      `ObjectiveImage/upload?objectiveId=${props.idObiectiv}`,
       "POST",
       formData,
       undefined,
       true
     );
     uploadStatus.value = "File uploaded successfully!";
+    if (response.isSuccessful) {
+      emits("uploaded");
+    }
   } catch (error) {
-    console.log(formData);
     uploadStatus.value = "Error uploading file.";
   }
 };

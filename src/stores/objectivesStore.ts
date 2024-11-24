@@ -6,6 +6,7 @@ export const useObjectivesStore = defineStore("objectivesStore", {
     selectedObjective: IObjective;
     objectives: IObjective[];
     favourites: IObjective[];
+    search: string;
   } => {
     return {
       selectedObjective: {
@@ -20,6 +21,7 @@ export const useObjectivesStore = defineStore("objectivesStore", {
       },
       objectives: [],
       favourites: [],
+      search: "",
     };
   },
   actions: {
@@ -45,11 +47,10 @@ export const useObjectivesStore = defineStore("objectivesStore", {
     },
     async getObjectives() {
       try {
-        const data = await fetchApi("Objectives/GetObjectivesAsync", "get");
+        const data = await fetchApi(`Objectives/GetObjectivesAsync?search=${this.search}`, "get");
         let response = data as IServiceResult;
         this.objectives = response.result;
       } catch (error) {
-        console.error("Error adding objective:", error);
         this.objectives = [
           {
             id: 1,

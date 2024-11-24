@@ -6,7 +6,7 @@ const BASE_URL = "https://localhost:7100/api"; // URL-ul de bază al API-ului
  * @param payload - obiectul cu parametrii query, ex: {id: '123', name: 'example'}
  * @returns stringul cu query params, ex: '?id=123&name=example'
  */
-const buildQueryParams = (payload?: Record<string, any>) => {
+export const buildQueryParams = (payload?: Record<string, any>) => {
   if (!payload) return '';
   
   const searchParams = new URLSearchParams();
