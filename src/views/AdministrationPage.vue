@@ -18,7 +18,10 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref } from "vue";
+import { onBeforeMount, ref } from "vue";
+onBeforeMount(() => {
+  currentSetting.value = "Obiective";
+});
 const currentSetting = ref("");
 const items = ref([
   {

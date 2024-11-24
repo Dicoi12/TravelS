@@ -42,10 +42,11 @@ export interface IEvent extends BaseAuditEntity {
   city?: string;
   latitude?: number | null;
   longitude?: number | null;
-  startDate: string|Date;
-  endDate: string|Date;
+  startDate: Date;
+  endDate: Date;
   idObjective?: number | null;
   objective?: IObjective | null;
+  images: string[];
 }
 export interface IPhotoGalleria{
   itemImageSrc: string;
