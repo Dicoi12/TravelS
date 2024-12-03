@@ -17,6 +17,7 @@ const router = createRouter({
     { path: "/setup", component: defineAsyncComponent(() => import("./views/AdministrationPage.vue")) },
     { path: "/favouriteObjectives", component: defineAsyncComponent(() => import("./views/FavouriteObjectivesPage.vue")) },
     { path: "/events", component: defineAsyncComponent(() => import("./views/EventsPage.vue")) },
+    { path: "/events/:id", component: defineAsyncComponent(() => import("./components/events/EventDetailPage.vue")) },
   ],
 });
 export default router;

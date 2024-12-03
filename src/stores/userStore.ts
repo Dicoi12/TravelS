@@ -93,6 +93,17 @@ export const useUserStore = defineStore("userStore", {
         console.error("Error creating user:", error);
       }
     },
+    logout() {
+      this.userData = {
+        id: 0,
+        userName: "",
+        email: null,
+        phone: null,
+        hash: "",
+        salt: "",
+        role: 0,
+      };
+    },
   },
   getters: {},
   persist: true,

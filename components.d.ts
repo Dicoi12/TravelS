@@ -8,9 +8,11 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     Button: typeof import('primevue/button')['default']
+    Calendar: typeof import('primevue/calendar')['default']
     Column: typeof import('primevue/column')['default']
     DataTable: typeof import('primevue/datatable')['default']
     Dialog: typeof import('primevue/dialog')['default']
+    EventDetailPage: typeof import('./src/components/events/EventDetailPage.vue')['default']
     EventsAdministration: typeof import('./src/components/events/EventsAdministration.vue')['default']
     Galleria: typeof import('primevue/galleria')['default']
     HandleEvents: typeof import('./src/components/events/HandleEvents.vue')['default']

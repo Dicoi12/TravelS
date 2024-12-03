@@ -32,7 +32,10 @@
                 {{ formatDate(item.startDate) }} - {{ formatDate(item.endDate) }}
               </p>
             </div>
-            <Button class="favorite-button">
+            <Button 
+              class="favorite-button"
+              @click="$router.push(`/event/${item.id}`)"
+            >
               <i class="pi pi-calendar-plus"></i>
             </Button>
           </div>

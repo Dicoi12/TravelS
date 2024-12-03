@@ -99,7 +99,7 @@ const userStore = useUserStore();
 async function handleLogin() {
   console.log("Logging in with:", username.value, password.value);
   await userStore.login(username.value, password.value);
-  if (userStore.userData && userStore.userData.id) {
+  if (userStore.userData.id) {
     router.push("/objectives");
   }
 }

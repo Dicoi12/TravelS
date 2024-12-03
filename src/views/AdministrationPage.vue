@@ -18,7 +18,8 @@
   </div>
 </template>
 <script setup lang="ts">
-import { onBeforeMount, ref } from "vue";
+import { ref } from "vue";
+import { onBeforeMount } from "vue";
 const currentSetting = ref("");
 onBeforeMount(() => {
   currentSetting.value = "Obiective";
