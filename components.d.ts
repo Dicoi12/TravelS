@@ -12,6 +12,7 @@ declare module 'vue' {
     Column: typeof import('primevue/column')['default']
     DataTable: typeof import('primevue/datatable')['default']
     Dialog: typeof import('primevue/dialog')['default']
+    EventDetailPage: typeof import('./src/components/events/EventDetailPage.vue')['default']
     EventsAdministration: typeof import('./src/components/events/EventsAdministration.vue')['default']
     Galleria: typeof import('primevue/galleria')['default']
     HandleEvents: typeof import('./src/components/events/HandleEvents.vue')['default']
