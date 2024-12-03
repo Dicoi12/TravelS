@@ -127,7 +127,7 @@ function getImageSrc() {
   return objectiveStore.selectedObjective.images.map((image) => ({
     itemImageSrc: image,
     thumbnailImageSrc: "",
-    alt: "Description for Image 1",
+    alt: '"Description for Image 1"',
     title: "Title 1",
   }));
 }

@@ -12,7 +12,7 @@
     <template #header>
       <div class="flex justify-content-between">
         <div class="flex w-full gap-3">
-          <div class="font-bold text-xl">Gestionează obiectivele</div>
+          <div class="font-bold text-xl">Gestionează evenimentele</div>
           <InputText
             v-model="eventStore.search"
             placeholder="Caută după nume"
