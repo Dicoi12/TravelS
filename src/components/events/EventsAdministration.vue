@@ -59,12 +59,14 @@
         <InputNumber v-model="data[field]" fluid /> </template></Column
     ><Column field="startDate" header="Data de începere">
       <template #body="{ data }">
-        {{ helperStore.formatDate(new Date(data.startDate)) }} </template
-    ></Column>
+        {{ helperStore.formatDate(new Date(data.startDate)) }}
+      </template></Column
+    >
     <Column field="endDate" header="Data de încheiere">
       <template #body="{ data }">
-        {{ helperStore.formatDate(new Date(data.endDate)) }} </template
-    ></Column>
+        {{ helperStore.formatDate(new Date(data.endDate)) }}
+      </template></Column
+    >
     <Column style="width: 10%; min-width: 8rem" header="Acțiuni">
       <template #body="slotProps">
         <div class="flex gap-3">
@@ -74,6 +76,7 @@
             class="pi pi-image"
             @click="
               eventStore.selectedEvent = slotProps.data;
+              console.log(eventStore.selectedEvent);
               showGallery = true;
             "
           ></i>
@@ -102,26 +105,19 @@
   </Dialog>
   <Dialog
     v-model:visible="showGallery"
-    :header="eventStore.selectedEvent.name"
-    :modal="true"
-    :closable="false"
-  >
-  </Dialog>
-  <Dialog
-      v-model:visible="showGallery"
-      maximizable
+    maximizable
     modal
     :header="`Galeria evenimentului #${eventStore.selectedEvent.name}`"
     :style="{ width: '50rem' }"
     :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
     @hide="showGallery = false"
-    >
-      <ImageUpload
-        :id-obiectiv="eventStore.selectedEvent.id"
-        @uploaded="
-          eventStore.getEvents();
-          showGallery = false;
-        "
+  >
+    <ImageUpload
+      :id-eveniment="eventStore.selectedEvent.id"
+      @uploaded="
+        eventStore.getEvents();
+        showGallery = false;
+      "
     />
     <PhotoGalleria :images="getImageSrc()" />
   </Dialog>
@@ -137,6 +133,7 @@ const eventStore = useEventsStore();
 const editingRows = ref();
 const showEditDialog = ref(false);
 const showGallery = ref(false);
+
 function handleEditEvent(event: IEvent) {
   eventStore.selectedEvent = event;
   showEditDialog.value = true;

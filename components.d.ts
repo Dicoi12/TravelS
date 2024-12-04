@@ -25,6 +25,7 @@ declare module 'vue' {
     Menu: typeof import('primevue/menu')['default']
     NavBar: typeof import('./src/components/NavBar.vue')['default']
     ObjectiveAdministration: typeof import('./src/components/objectives/ObjectiveAdministration.vue')['default']
+    ObjectiveDetailPage: typeof import('./src/components/objectives/ObjectiveDetailPage.vue')['default']
     PhotoGalleria: typeof import('./src/components/PhotoGalleria.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']

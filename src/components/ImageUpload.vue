@@ -15,6 +15,7 @@ const selectedFile = ref(null);
 const uploadStatus = ref("");
 const props = defineProps({
   idObiectiv: { type: Number, required: false, default: null },
+  idEveniment: { type: Number, required: false, default: null },
 });
 
 const handleFileChange = (event: any) => {
@@ -25,13 +26,28 @@ const handleFileChange = (event: any) => {
   }
 };
 const uploadFile = async () => {
+  console.log(props.idEveniment);
   if (!selectedFile.value) return;
   let formData = new FormData();
   formData.append("imageFile", selectedFile.value);
 
+  let url = 'ObjectiveImage/upload';
+  const params = new URLSearchParams();
+  
+  if (props.idObiectiv !== null) {
+    params.append('objectiveId', props.idObiectiv.toString());
+  }
+  if (props.idEveniment !== null) {
+    params.append('eventId', props.idEveniment.toString());
+  }
+
+  if (params.toString()) {
+    url += `?${params.toString()}`;
+  }
+
   try {
     const response = await fetchApi(
-      `ObjectiveImage/upload?objectiveId=${props.idObiectiv}`,
+      url,
       "POST",
       formData,
       undefined,

@@ -3,15 +3,15 @@
     <!-- Secțiunea de imagini -->
     <div class="images-section">
       <img 
-        :src="'https://via.placeholder.com/800x500?text=Event+Main+Image'" 
+        :src="event?.images?.[0] || 'https://via.placeholder.com/800x500?text=No+Image'" 
         alt="Imagine principală eveniment"
         class="main-image"
       />
       <div class="thumbnail-container">
         <img 
-          v-for="n in 3" 
-          :key="n"
-          :src="`https://via.placeholder.com/200x150?text=Image+${n}`"
+          v-for="(image, index) in event?.images?.slice(1)" 
+          :key="index"
+          :src="image"
           alt="Imagine eveniment"
           class="thumbnail"
         />
@@ -47,7 +47,7 @@
           style="border:0"
           loading="lazy"
           allowfullscreen
-          :src="`https://www.google.com/maps/embed/v1/place?key=YOUR_GOOGLE_MAPS_API_KEY&q=${encodeURIComponent(event?.city + ',' + event?.country)}`"
+          :src="`https://www.google.com/maps?q=${event?.latitude},${event?.longitude}&output=embed`"
         ></iframe>
       </div>
     </div>

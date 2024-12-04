@@ -18,6 +18,7 @@ const router = createRouter({
     { path: "/favouriteObjectives", component: defineAsyncComponent(() => import("./views/FavouriteObjectivesPage.vue")) },
     { path: "/events", component: defineAsyncComponent(() => import("./views/EventsPage.vue")) },
     { path: "/events/:id", component: defineAsyncComponent(() => import("./components/events/EventDetailPage.vue")) },
+    { path: "/objectives/:id", component: defineAsyncComponent(() => import("./components/objectives/ObjectiveDetailPage.vue")) },
   ],
 });
 export default router;

@@ -14,6 +14,7 @@
         v-for="(item, index) in objectiveStore.objectives"
         :key="index"
         class="card-container"
+        @click="$router.push(`/objectives/${item.id}`)"
       >
         <div class="card-content text-white">
           <img :src="item.images?item.images[0]:'https://iili.io/JhUNTSs.jpg'" alt="objective image" class="image"  />

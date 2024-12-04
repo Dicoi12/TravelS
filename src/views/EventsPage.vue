@@ -16,10 +16,11 @@
           v-for="(item, index) in eventStore.events"
           :key="index"
           class="card-container"
+          @click="$router.push(`/events/${item.id}`)"
         >
           <div class="card-content text-white">
             <img
-              :src="'https://via.placeholder.com/300x200?text=Event+' + item.id"
+              :src="item.images[0]"
               alt="event image"
               class="image"
             />
@@ -34,7 +35,6 @@
             </div>
             <Button 
               class="favorite-button"
-              @click="$router.push(`/event/${item.id}`)"
             >
               <i class="pi pi-calendar-plus"></i>
             </Button>

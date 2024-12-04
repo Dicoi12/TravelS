@@ -231,6 +231,17 @@ export const useObjectivesStore = defineStore("objectivesStore", {
         distance: 0,
       };
     },
+    async getById(id: number) {
+      try {
+        const data = await fetchApi(`Objectives/GetObjectiveById/${id}`, "get");
+        let response = data as IServiceResult;
+        return response.result;
+      } catch (error) {
+        console.error("Error fetching objective by id:", error);
+        // Returnăm null în caz de eroare
+        return null;
+      }
+    },
   },
   getters: {},
   persist: true,

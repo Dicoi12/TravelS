@@ -30,6 +30,7 @@ export const useEventsStore = defineStore("eventsStore", {
     
         if (result) {
           this.events = result.result;
+          console.log(this.events);
         } 
       } catch (error) {
         console.error("Error fetching events:", error);
