@@ -8,7 +8,7 @@
           style="width: 15rem"
         />
       </div>
-      <div class="w-full h-max bg-white mt-7 m-4 border-round-xl">
+      <div class=" h-max bg-white mt-7 m-4 border-round-xl" >
         <!-- <div v-if="currentSetting == 'Obiective'"> -->
         <ObjectiveAdministration v-if="currentSetting == 'Obiective'" />
         <EventsAdministration v-if="currentSetting == 'Evenimente'" />
@@ -18,11 +18,12 @@
   </div>
 </template>
 <script setup lang="ts">
-import { onBeforeMount, ref } from "vue";
+import { ref } from "vue";
+import { onBeforeMount } from "vue";
+const currentSetting = ref("");
 onBeforeMount(() => {
   currentSetting.value = "Obiective";
 });
-const currentSetting = ref("");
 const items = ref([
   {
     label: "Obiective",

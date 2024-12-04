@@ -13,7 +13,7 @@
         />
       </template>
       <template #thumbnail="slotProps">
-        <img :src="slotProps.item.thumbnailImageSrc" :alt="slotProps.item.alt" />
+        <img :src="slotProps.item.thumbnailImageSrc" :alt="slotProps.item.alt" width="100px" />
       </template>
     </Galleria>
   </template>
