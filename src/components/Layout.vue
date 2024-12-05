@@ -3,13 +3,13 @@
     <!-- Include NavBar aici pentru a fi afișat pe toate paginile -->
     <NavBar v-if="appStore.onMainPage == false" />
 
-    <main class="content">
+    <div class="content">
       <router-view v-slot="{ Component }">
         <transition name="fade" mode="out-in">
           <component :is="Component" />
         </transition>
       </router-view>
-    </main>
+    </div>
   </div>
 </template>
 
@@ -33,8 +33,7 @@ const appStore = useApplicationStore();
   overflow: hidden; /* Elimină scroll-ul pentru întreaga pagină */
 }
 
-.content {
-  flex: 1; /* Face ca secțiunea main să ocupe restul ecranului */
+.content {  
   overflow: auto; /* Permite scroll doar în secțiunea content dacă e nevoie */
   height: 100%; /* Asigură-te că secțiunea main ocupă întregul spațiu disponibil */
 }

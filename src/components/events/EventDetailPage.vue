@@ -2,20 +2,7 @@
   <div class="event-detail-container">
     <!-- Secțiunea de imagini -->
     <div class="images-section">
-      <img 
-        :src="event?.images?.[0] || 'https://via.placeholder.com/800x500?text=No+Image'" 
-        alt="Imagine principală eveniment"
-        class="main-image"
-      />
-      <div class="thumbnail-container">
-        <img 
-          v-for="(image, index) in event?.images?.slice(1)" 
-          :key="index"
-          :src="image"
-          alt="Imagine eveniment"
-          class="thumbnail"
-        />
-      </div>
+      <PhotoCarousel :photos="event?.images || []" />
     </div>
 
     <!-- Secțiunea de detalii -->
@@ -72,9 +59,9 @@ const formatDate = (date: string | Date) => {
   return new Date(date).toLocaleDateString("ro-RO", options);
 };
 
-onMounted(async () => {
+onMounted( () => {
   const eventId = route.params.id;
-  await eventStore.fetchEventById(parseInt(eventId as string));
+   eventStore.fetchEventById(parseInt(eventId as string));
   event.value = eventStore.selectedEvent;
 });
 </script>
@@ -82,7 +69,8 @@ onMounted(async () => {
 <style scoped>
 .event-detail-container {
   max-width: 1200px;
-  margin: 2rem auto;
+  max-height: 100px;
+    margin: 2rem auto;
   padding: 0 1rem;
   color: white;
 }
