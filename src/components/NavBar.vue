@@ -1,57 +1,96 @@
 <template>
   <div class="bg-transparent">
-    <!-- Buton hamburger pentru mobile -->
-    <div class="md:hidden flex justify-end p-4">
-      <i class="pi pi-bars text-white text-3xl cursor-pointer" @click="toggleMenu"></i>
-    </div>
-
-    <!-- Meniul principal -->
-    <div 
-      :class="[
-        'flex z-5 text-white',
-        'md:justify-content-around md:align-items-center',
-        'flex-column md:flex-row',
-        isMobileMenuOpen ? 'flex' : 'hidden md:flex',
-        'bg-black bg-opacity-80 md:bg-transparent'
-      ]"
-    >
+    <!-- Container principal pentru navbar -->
+    <div class="flex justify-between items-center p-4">
+      <!-- Logo-ul TravelS - mereu vizibil -->
+       <div class="flex align-items-center justify-content-between w-full">
       <div
-        class="text-4xl text-white cursor-pointer navelement p-3 md:p-0"
+        class="text-4xl text-white cursor-pointer"
         @click="router.push('/')"
       >
         TravelS
       </div>
+
+      <!-- Buton hamburger pentru mobile -->
+      <div class="md:hidden">
+        <i class="pi pi-bars text-white text-3xl cursor-pointer" @click="toggleMenu"></i>
+      </div>
+    </div>
+
+      <!-- Meniul pentru desktop - vizibil doar pe ecrane mari -->
+      <div class="hidden md:flex md:items-center md:gap-6">
+        <div
+          class="text-2xl text-white navelement"
+          @click="router.push('/objectives')"
+        >
+          Obiective populare
+        </div>
+        <div class="text-2xl text-white navelement">Experiente</div>
+        <div class="text-2xl text-white navelement" @click="router.push('/events')">Evenimente</div>
+        <div class="text-2xl text-white navelement">Itinerarii</div>
+        <div
+          v-if="!userStore.userData?.id"
+          class="text-2xl text-white navelement"
+          @click="router.push('/login')"
+        >
+          Conecteaza-te
+        </div>
+        <div
+          v-if="userStore.userData?.role == UserRoleEnum.Administrator"
+          class="text-2xl text-white navelement"
+          @click="router.push('/setup')"
+        >
+          Administrare
+        </div>
+        <div
+          v-if="userStore.userData?.id"
+          class="text-2xl text-white navelement flex gap-3"
+        >
+          <div @click="router.push('/profile')">{{ userStore.userData.userName }}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Meniul pentru mobile - vizibil doar când este deschis -->
+    <div 
+      v-if="isMobileMenuOpen"
+      class="md:hidden flex flex-col bg-black bg-opacity-80"
+    >
       <div
-        class="text-2xl text-white navelement p-3 md:p-0"
-        @click="router.push('/objectives')"
+        class="text-2xl text-white navelement p-3"
+        @click="() => { router.push('/objectives'); closeMenu(); }"
       >
         Obiective populare
       </div>
-      <div class="text-2xl text-white navelement p-3 md:p-0">Experiente</div>
-      <div class="text-2xl text-white navelement p-3 md:p-0"  @click="router.push('/events')">Evenimente</div>
-      <div class="text-2xl text-white navelement p-3 md:p-0">Itinerarii</div>
+      <div class="text-2xl text-white navelement p-3">Experiente</div>
+      <div 
+        class="text-2xl text-white navelement p-3"
+        @click="() => { router.push('/events'); closeMenu(); }"
+      >
+        Evenimente
+      </div>
+      <div class="text-2xl text-white navelement p-3">Itinerarii</div>
       <div
-        class="text-2xl text-white navelement p-3 md:p-0"
         v-if="!userStore.userData?.id"
-        @click="router.push('/login')"
+        class="text-2xl text-white navelement p-3"
+        @click="() => { router.push('/login'); closeMenu(); }"
       >
         Conecteaza-te
       </div>
       <div
-        class="text-2xl text-white navelement p-3 md:p-0"
         v-if="userStore.userData?.role == UserRoleEnum.Administrator"
-        @click="router.push('/setup')"
+        class="text-2xl text-white navelement p-3"
+        @click="() => { router.push('/setup'); closeMenu(); }"
       >
         Administrare
       </div>
       <div
-      class="text-2xl text-white navelement p-3 md:p-0 flex gap-3"
-      v-if="userStore.userData?.id"
+        v-if="userStore.userData?.id"
+        class="text-2xl text-white navelement p-3 flex gap-3"
       >
-      <OverlayBadge :value="objectiveStore.favourites.length" @click="router.push('/favouriteObjectives')">
-        <i class="pi pi-heart" style="font-size: 1.2rem" />
-      </OverlayBadge>
-        <div @click="router.push('/profile')">{{ userStore.userData.userName }}</div>
+        <div @click="() => { router.push('/profile'); closeMenu(); }">
+          {{ userStore.userData.userName }}
+        </div>
       </div>
     </div>
   </div>
@@ -60,17 +99,19 @@
 import { useRouter } from "vue-router";
 import { useUserStore } from "../stores/userStore";
 import { UserRoleEnum } from "../Interfaces";
-import { useObjectivesStore } from "../stores/objectivesStore";
 import { ref } from 'vue';
 
-const objectiveStore = useObjectivesStore();
 const userStore = useUserStore();
 const router = useRouter();
 
 const isMobileMenuOpen = ref(false);
-const toggleMenu = () => {
+function toggleMenu() {
+  console.log("toggleMenu");
   isMobileMenuOpen.value = !isMobileMenuOpen.value;
 };
+function closeMenu() {
+  isMobileMenuOpen.value = false;
+}
 </script>
 <style scoped>
 div {
