@@ -1,6 +1,22 @@
 import { defineStore } from "pinia";
 import { IUserModel, UserRoleEnum } from "../Interfaces";
 import fetchApi from "../stores/fetch";
+
+interface UserData {
+  id: string;
+  userName: string;
+  email: string;
+  fullName: string;
+  phone: string;
+  location: string;
+  birthDate: Date | null;
+  avatarUrl: string;
+  language: string;
+  theme: 'Light' | 'Dark';
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 export const useUserStore = defineStore("userStore", {
   state: (): {
     token?: string;

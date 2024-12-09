@@ -1,9 +1,10 @@
 import { defineStore } from 'pinia';
 import fetchApi from './fetch';
+import { IReview } from '../Interfaces';
 
 export const useReviewsStore = defineStore('reviews', {
   state: () => ({
-    reviews: [] as Array<any>,
+    reviews: [] as IReview[],
   }),
   actions: {
     async getByObjectiveId(objectiveId: number) {
@@ -16,7 +17,7 @@ export const useReviewsStore = defineStore('reviews', {
         return [];
       }
     },
-    async addReview(review: any) {
+    async addReview(review: IReview) {
       try {
         const response = await fetchApi('review', 'POST', review);
         this.reviews.push(response);

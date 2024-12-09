@@ -78,10 +78,10 @@
         <h2>Review-uri</h2>
         <div v-if="reviews.length">
           <div v-for="review in reviews" :key="review.id" class="review-item">
-            <strong>{{ review.user.name }}</strong>
-            <span>{{ review.datePosted | formatDate }}</span>
+            <strong>{{ review.user.userName }}</strong>
+            <span>{{ review.createdAt }}</span>
             <div>
-              <strong>Rating:</strong> {{ review.raiting }}/5
+              <strong>Rating:</strong> {{ review.rating }}/5
             </div>
             <p>{{ review.comment }}</p>
           </div>
@@ -99,12 +99,13 @@ import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { useObjectivesStore } from '../../stores/objectivesStore';
 import { useReviewsStore } from '../../stores/reviewsStore';
+import { IReview } from '../../Interfaces';
 
 const route = useRoute();
 const objectiveStore = useObjectivesStore();
 const reviewsStore = useReviewsStore();
 const objective = ref();
-const reviews = ref([]);
+const reviews = ref<IReview[]>([]);
 
 onMounted(async () => {
   const objectiveId = route.params.id;
