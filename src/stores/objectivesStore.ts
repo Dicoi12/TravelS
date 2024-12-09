@@ -130,7 +130,7 @@ export const useObjectivesStore = defineStore("objectivesStore", {
             latitude: 45.5155,
             longitude: 25.3674,
             city: "Bran",
-            images: [],
+            images: ["https://iili.io/JhUNTSs.jpg","https://iili.io/JhUNTSs.jpg","https://iili.io/JhUNTSs.jpg"],
           },
           {
             id: 2,
@@ -140,7 +140,7 @@ export const useObjectivesStore = defineStore("objectivesStore", {
             latitude: 45.5935,
             longitude: 25.5854,
             city: "Brașov",
-            images: [],
+            images: ["https://iili.io/JhUNTSs.jpg","https://iili.io/JhUNTSs.jpg","https://iili.io/JhUNTSs.jpg"],
           },
           {
             id: 3,
@@ -150,7 +150,7 @@ export const useObjectivesStore = defineStore("objectivesStore", {
             latitude: 45.1354,
             longitude: 29.5743,
             city: "Tulcea",
-            images: [],
+            images: ["https://iili.io/JhUNTSs.jpg","https://iili.io/JhUNTSs.jpg","https://iili.io/JhUNTSs.jpg"],
           },
           {
             id: 4,
@@ -160,7 +160,7 @@ export const useObjectivesStore = defineStore("objectivesStore", {
             latitude: 45.5952,
             longitude: 24.6423,
             city: "Sebeș",
-            images: [],
+            images: ["https://iili.io/JhUNTSs.jpg","https://iili.io/JhUNTSs.jpg","https://iili.io/JhUNTSs.jpg"],
           },
           {
             id: 5,
@@ -170,7 +170,7 @@ export const useObjectivesStore = defineStore("objectivesStore", {
             latitude: 45.3535,
             longitude: 25.5402,
             city: "Sinaia",
-            images: [],
+            images: ["https://iili.io/JhUNTSs.jpg","https://iili.io/JhUNTSs.jpg","https://iili.io/JhUNTSs.jpg"],
           },
         ];
       }

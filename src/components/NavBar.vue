@@ -1,26 +1,22 @@
 <template>
   <div class="bg-transparent">
-    <!-- Container principal pentru navbar -->
     <div class="flex justify-between items-center p-4">
-      <!-- Logo-ul TravelS - mereu vizibil -->
-       <div class="flex align-items-center justify-content-between w-full">
-      <div
-        class="text-4xl text-white cursor-pointer"
-        @click="router.push('/')"
+      <div class="flex align-items-center justify-content-between w-full">
+        <div
+          class="text-4xl text-white cursor-pointer"
+          @click="router.push('/')"
       >
         TravelS
       </div>
 
-      <!-- Buton hamburger pentru mobile -->
       <div class="md:hidden">
         <i class="pi pi-bars text-white text-3xl cursor-pointer" @click="toggleMenu"></i>
       </div>
     </div>
 
-      <!-- Meniul pentru desktop - vizibil doar pe ecrane mari -->
-      <div class="hidden md:flex md:items-center md:gap-6">
-        <div
-          class="text-2xl text-white navelement"
+    <div class="hidden md:flex md:items-center md:gap-6">
+      <div
+        class="text-2xl text-white navelement"
           @click="router.push('/objectives')"
         >
           Obiective populare
