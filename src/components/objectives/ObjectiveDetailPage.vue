@@ -72,6 +72,24 @@
           :src="`https://www.google.com/maps?q=${objective?.latitude},${objective?.longitude}&output=embed`"
         ></iframe>
       </div>
+
+      <!-- Secțiunea de review-uri -->
+      <div class="reviews-section">
+        <h2>Review-uri</h2>
+        <div v-if="reviews.length">
+          <div v-for="review in reviews" :key="review.id" class="review-item">
+            <strong>{{ review.user.name }}</strong>
+            <span>{{ review.datePosted | formatDate }}</span>
+            <div>
+              <strong>Rating:</strong> {{ review.raiting }}/5
+            </div>
+            <p>{{ review.comment }}</p>
+          </div>
+        </div>
+        <div v-else>
+          <p>Nu există review-uri pentru acest obiectiv.</p>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -80,16 +98,22 @@
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { useObjectivesStore } from '../../stores/objectivesStore';
+import { useReviewsStore } from '../../stores/reviewsStore';
 
 const route = useRoute();
 const objectiveStore = useObjectivesStore();
+const reviewsStore = useReviewsStore();
 const objective = ref();
+const reviews = ref([]);
 
 onMounted(async () => {
   const objectiveId = route.params.id;
   await objectiveStore.getById(parseInt(objectiveId as string));
   objective.value = objectiveStore.selectedObjective;
+  
+  reviews.value = await reviewsStore.getByObjectiveId(parseInt(objectiveId as string));
 });
+
 </script>
 
 <style scoped>
@@ -208,5 +232,31 @@ h2 {
   .objective-meta {
     gap: 1rem;
   }
+}
+
+.reviews-section {
+  margin-top: 2rem;
+  background: #444;
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+.review-item {
+  margin-bottom: 1rem;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+}
+
+.review-item strong {
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.review-item span {
+  font-size: 0.9rem;
+  color: #ccc;
+  margin-bottom: 0.5rem;
+  display: block;
 }
 </style>

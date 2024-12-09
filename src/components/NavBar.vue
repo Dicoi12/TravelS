@@ -115,6 +115,8 @@ div {
 }
 .navelement {
   cursor: pointer;
+  flex: 1;
+  text-align: center;
 }
 
 @media (max-width: 768px) {
