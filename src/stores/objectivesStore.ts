@@ -233,7 +233,7 @@ export const useObjectivesStore = defineStore("objectivesStore", {
     },
     async getById(id: number) {
       try {
-        const data = await fetchApi(`Objectives/GetObjectiveById/${id}`, "get");
+        const data = await fetchApi(`Objectives/${id}`, "get");
         let response = data as IServiceResult;
         return response.result;
       } catch (error) {

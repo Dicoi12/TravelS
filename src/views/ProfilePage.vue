@@ -4,7 +4,7 @@
     <div class="w-64 surface-card min-h-screen p-4">
       <div class="flex flex-col items-center mb-8">
         <img 
-          :src="userStore.userData.avatarUrl || '/default-avatar.png'" 
+          :src="'/default-avatar.png'" 
           class="w-24 h-24 rounded-full object-cover mb-4"
           alt="Profile picture"
         />
@@ -39,56 +39,56 @@
           <div class="surface-card p-4 rounded-lg">
             <h3 class="text-xl mb-4 text-white">Informații Principale</h3>
             <div class="space-y-2">
-              <p class="text-gray-300"><span class="text-white font-bold">Nume:</span> {{ userStore.userData.fullName }}</p>
+              <p class="text-gray-300"><span class="text-white font-bold">Nume:</span> {{ userStore.userData.userName }}</p>
               <p class="text-gray-300"><span class="text-white font-bold">Email:</span> {{ userStore.userData.email }}</p>
               <p class="text-gray-300"><span class="text-white font-bold">Telefon:</span> {{ userStore.userData.phone }}</p>
-              <p class="text-gray-300"><span class="text-white font-bold">Locație:</span> {{ userStore.userData.location }}</p>
+              <!-- <p class="text-gray-300"><span class="text-white font-bold">Locație:</span> {{ userStore.userData.location }}</p> -->
             </div>
           </div>
           <div class="surface-card p-4 rounded-lg">
             <h3 class="text-xl mb-4 text-white">Statistici Cont</h3>
             <div class="space-y-2">
-              <p class="text-gray-300"><span class="text-white font-bold">Membru din:</span> {{ formatDate(userStore.userData.createdAt) }}</p>
-              <p class="text-gray-300"><span class="text-white font-bold">Ultima actualizare:</span> {{ formatDate(userStore.userData.updatedAt) }}</p>
+              <p class="text-gray-300"><span class="text-white font-bold">Membru din:</span> {{ formatDate(userStore.userData.createdAt || new Date()) }}</p>
+              <p class="text-gray-300"><span class="text-white font-bold">Ultima actualizare:</span> {{ formatDate(userStore.userData.updatedAt || new Date()) }}</p>
             </div>
           </div>
         </div>
       </div>
 
       <!-- Secțiunea de editare profil -->
-      <div v-if="activeSection === 'edit'" class="max-w-3xl">
-        <h1 class="text-3xl font-bold mb-6">Editare Profil</h1>
+      <!-- <div v-if="activeSection === 'edit'" class="max-w-3xl">
+        <h1 class="text-3xl font-bold mb-6 text-white">Editare Profil</h1>
         <div class="space-y-4">
           <div class="field">
-            <label>Nume Complet</label>
+            <label class="text-white">Nume Complet</label>
             <InputText v-model="userStore.userData.fullName" class="w-full" />
           </div>
           <div class="field">
-            <label>Telefon</label>
+            <label class="text-white">Telefon</label>
             <InputText v-model="userStore.userData.phone" class="w-full" />
           </div>
           <div class="field">
-            <label>Locație</label>
+            <label class="text-white">Locație</label>
             <InputText v-model="userStore.userData.location" class="w-full" />
           </div>
           <Button label="Salvează Modificările" @click="saveProfile" />
         </div>
-      </div>
+      </div> -->
 
       <!-- Secțiunea de schimbare parolă -->
       <div v-if="activeSection === 'password'" class="max-w-3xl">
-        <h1 class="text-3xl font-bold mb-6">Schimbare Parolă</h1>
+        <h1 class="text-3xl font-bold mb-6 text-white">Schimbare Parolă</h1>
         <div class="space-y-4">
           <div class="field">
-            <label>Parola Actuală</label>
+            <label class="text-white">Parola Actuală</label>
             <Password v-model="currentPassword" class="w-full" toggleMask />
           </div>
           <div class="field">
-            <label>Parola Nouă</label>
+            <label class="text-white">Parola Nouă</label>
             <Password v-model="newPassword" class="w-full" toggleMask />
           </div>
           <div class="field">
-            <label>Confirmă Parola Nouă</label>
+            <label class="text-white">Confirmă Parola Nouă</label>
             <Password v-model="confirmPassword" class="w-full" toggleMask />
           </div>
           <Button label="Schimbă Parola" @click="changePassword" />
@@ -96,20 +96,16 @@
       </div>
 
       <!-- Secțiunea de preferințe -->
-      <div v-if="activeSection === 'preferences'" class="max-w-3xl">
-        <h1 class="text-3xl font-bold mb-6">Preferințe</h1>
+      <!-- <div v-if="activeSection === 'preferences'" class="max-w-3xl">
+        <h1 class="text-3xl font-bold mb-6 text-white">Preferințe</h1>
         <div class="space-y-4">
           <div class="field">
-            <label>Limbă</label>
+            <label class="text-white">Limbă</label>
             <Dropdown v-model="userStore.userData.language" :options="languages" class="w-full" />
-          </div>
-          <div class="field">
-            <label>Temă</label>
-            <SelectButton v-model="userStore.userData.theme" :options="['Light', 'Dark']" />
           </div>
           <Button label="Salvează Preferințele" @click="savePreferences" />
         </div>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
@@ -117,10 +113,8 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useUserStore } from "../stores/userStore";
-import { useRouter } from "vue-router";
 
 const userStore = useUserStore();
-const router = useRouter();
 const activeSection = ref('main');
 const currentPassword = ref('');
 const newPassword = ref('');
@@ -133,24 +127,24 @@ const menuItems = [
   { key: 'preferences', label: 'Preferințe', icon: 'pi pi-cog' }
 ];
 
-const languages = [
-  { label: 'Română', value: 'ro' },
-  { label: 'English', value: 'en' },
-  { label: 'Français', value: 'fr' }
-];
+// const languages = [
+//   { label: 'Română', value: 'ro' },
+//   { label: 'English', value: 'en' },
+//   { label: 'Français', value: 'fr' }
+// ];
 
 function formatDate(date: Date) {
   return new Date(date).toLocaleDateString();
 }
 
-async function saveProfile() {
-  try {
-    await userStore.updateProfile();
-    // Adăugați logica de salvare
-  } catch (error) {
-    // Gestionare erori
-  }
-}
+// async function saveProfile() {
+//   try {
+//     // await userStore.updateProfile();
+//     // Adăugați logica de salvare
+//   } catch (error) {
+//     // Gestionare erori
+//   }
+// }
 
 async function changePassword() {
   if (newPassword.value !== confirmPassword.value) {
@@ -164,13 +158,13 @@ async function changePassword() {
   }
 }
 
-async function savePreferences() {
-  try {
-    // Implementați logica de salvare a preferințelor
-  } catch (error) {
-    // Gestionare erori
-  }
-}
+// async function savePreferences() {
+//   try {
+//     // Implementați logica de salvare a preferințelor
+//   } catch (error) {
+//     // Gestionare erori
+//   }
+// }
 </script>
 
 <style scoped>

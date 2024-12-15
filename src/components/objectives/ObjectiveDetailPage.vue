@@ -49,7 +49,16 @@
             <strong>Categorie:</strong> {{ objective?.category }}
           </div>
           <div class="info-item">
-            <strong>Rating:</strong> {{ objective?.rating }}/5
+            <strong>Rating:</strong>
+            <span class="stars-container">
+              <i v-for="index in 5" 
+                 :key="index" 
+                 class="pi" 
+                 :class="index <= objective?.rating ? 'pi-star-fill' : 'pi-star'" 
+                 style="color: gold;">
+              </i>
+              <span>({{ objective?.rating }}/5)</span>
+            </span>
           </div>
           <div class="info-item">
             <strong>Website:</strong> 
@@ -81,7 +90,16 @@
             <strong>{{ review.user.userName }}</strong>
             <span>{{ review.createdAt }}</span>
             <div>
-              <strong>Rating:</strong> {{ review.rating }}/5
+              <strong>Rating:</strong>
+              <span class="stars-container">
+                <i v-for="index in 5" 
+                   :key="index" 
+                   class="pi" 
+                   :class="index <= review.raiting ? 'pi-star-fill' : 'pi-star'" 
+                   style="color: gold;">
+                </i>
+                <span>({{ review.raiting }}/5)</span>
+              </span>
             </div>
             <p>{{ review.comment }}</p>
           </div>
@@ -259,5 +277,20 @@ h2 {
   color: #ccc;
   margin-bottom: 0.5rem;
   display: block;
+}
+
+.stars-container {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: 10px;
+}
+
+.stars-container i {
+  font-size: 1.2rem;
+}
+
+.stars-container span {
+  margin-left: 8px;
 }
 </style>
