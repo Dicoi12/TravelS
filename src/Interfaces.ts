@@ -62,3 +62,11 @@ export interface IReview extends BaseAuditEntity {
   objective: IObjective;
   user: IUserModel;
 }
+export interface IExperience extends BaseAuditEntity {
+id: number;
+title: string;
+description: string;
+location: string;
+date: Date;
+images: string[];
+}

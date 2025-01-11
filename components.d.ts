@@ -8,15 +8,12 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     Button: typeof import('primevue/button')['default']
-    Calendar: typeof import('primevue/calendar')['default']
-    Card: typeof import('primevue/card')['default']
-    Dropdown: typeof import('primevue/dropdown')['default']
     EventDetailPage: typeof import('./src/components/events/EventDetailPage.vue')['default']
     EventsAdministration: typeof import('./src/components/events/EventsAdministration.vue')['default']
+    ExperiencesView: typeof import('./src/components/experiences/ExperiencesView.vue')['default']
     HandleEvents: typeof import('./src/components/events/HandleEvents.vue')['default']
     HandleObjectives: typeof import('./src/components/objectives/HandleObjectives.vue')['default']
     ImageUpload: typeof import('./src/components/ImageUpload.vue')['default']
-    InputText: typeof import('primevue/inputtext')['default']
     Layout: typeof import('./src/components/Layout.vue')['default']
     Map: typeof import('./src/components/map/Map.vue')['default']
     Menu: typeof import('primevue/menu')['default']
@@ -28,6 +25,5 @@ declare module 'vue' {
     PhotoGalleria: typeof import('./src/components/PhotoGalleria.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
-    SelectButton: typeof import('primevue/selectbutton')['default']
   }
 }
