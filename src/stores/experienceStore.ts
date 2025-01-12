@@ -22,9 +22,9 @@ export const useExperienceStore = defineStore("experienceStore", {
       try {
         const response = await fetchApi(`Experience`, "get");
         const result = response as IServiceResult;
-
+        console.log(response)
         if (result) {
-          this.experiences = result.result;
+          this.experiences = result;
           console.log(this.experiences);
         }
       } catch (error) {

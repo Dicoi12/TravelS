@@ -7,7 +7,7 @@ import { PrimeVueResolver } from "unplugin-vue-components/resolvers";
 // https://vitejs.dev/config/
 export default defineConfig({
   server: {
-    host: false // or '0.0.0.0' to bind to all interfaces
+    host: true // or '0.0.0.0' to bind to all interfaces
   },
   plugins: [
     vue(),

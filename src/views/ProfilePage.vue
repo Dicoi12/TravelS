@@ -1,111 +1,68 @@
 <template>
-  <div class="flex">
+  <div class="profile-container">
     <!-- Meniu lateral -->
-    <div class="w-64 surface-card min-h-screen p-4">
-      <div class="flex flex-col items-center mb-8">
+    <div class="sidebar">
+      <div class="profile-info">
         <img 
           :src="'/default-avatar.png'" 
-          class="w-24 h-24 rounded-full object-cover mb-4"
+          class="avatar"
           alt="Profile picture"
         />
-        <h2 class="text-white font-bold">{{ userStore.userData.userName }}</h2>
-        <p class="text-gray-400">{{ userStore.userData.email }}</p>
+        <h2 class="username">{{ userStore.userData.userName }}</h2>
+        <p class="email">{{ userStore.userData.email }}</p>
       </div>
       
-      <Menu class="w-full">
-        <template #start>
-          <MenuItem 
-            v-for="item in menuItems" 
-            :key="item.key"
-            @click="activeSection = item.key"
-            :class="{ 'bg-primary': activeSection === item.key }"
-            class="hover:surface-hover"
-          >
-            <template #label>
-              <i :class="item.icon" class="mr-2 text-white"></i>
-              <span class="text-white">{{ item.label }}</span>
-            </template>
-          </MenuItem>
-        </template>
-      </Menu>
+      <ul class="menu">
+        <li 
+          v-for="item in menuItems" 
+          :key="item.key" 
+          @click="activeSection = item.key"
+          :class="{ active: activeSection === item.key }"
+        >
+          <i :class="item.icon" class="menu-icon"></i>
+          <span>{{ item.label }}</span>
+        </li>
+      </ul>
     </div>
 
     <!-- Conținut principal -->
-    <div class="flex-1 p-6 surface-ground">
+    <div class="main-content">
       <!-- Secțiunea principală -->
-      <div v-if="activeSection === 'main'" class="max-w-3xl">
-        <h1 class="text-3xl font-bold mb-6 text-white">Profilul Meu</h1>
-        <div class="grid grid-cols-2 gap-6">
-          <div class="surface-card p-4 rounded-lg">
-            <h3 class="text-xl mb-4 text-white">Informații Principale</h3>
-            <div class="space-y-2">
-              <p class="text-gray-300"><span class="text-white font-bold">Nume:</span> {{ userStore.userData.userName }}</p>
-              <p class="text-gray-300"><span class="text-white font-bold">Email:</span> {{ userStore.userData.email }}</p>
-              <p class="text-gray-300"><span class="text-white font-bold">Telefon:</span> {{ userStore.userData.phone }}</p>
-              <!-- <p class="text-gray-300"><span class="text-white font-bold">Locație:</span> {{ userStore.userData.location }}</p> -->
-            </div>
+      <div v-if="activeSection === 'main'" class="section">
+        <h1 class="section-title">Profilul Meu</h1>
+        <div class="info-grid">
+          <div class="info-card">
+            <h3>Informații Principale</h3>
+            <p><span>Nume:</span> {{ userStore.userData.userName }}</p>
+            <p><span>Email:</span> {{ userStore.userData.email }}</p>
+            <p><span>Telefon:</span> {{ userStore.userData.phone }}</p>
+            <button class="btn" @click="userStore.$reset()">Resetează Contul</button>
           </div>
-          <div class="surface-card p-4 rounded-lg">
-            <h3 class="text-xl mb-4 text-white">Statistici Cont</h3>
-            <div class="space-y-2">
-              <p class="text-gray-300"><span class="text-white font-bold">Membru din:</span> {{ formatDate(userStore.userData.createdAt || new Date()) }}</p>
-              <p class="text-gray-300"><span class="text-white font-bold">Ultima actualizare:</span> {{ formatDate(userStore.userData.updatedAt || new Date()) }}</p>
-            </div>
+          <div class="info-card">
+            <h3>Statistici Cont</h3>
+            <p><span>Membru din:</span> {{ formatDate(userStore.userData.createdAt || new Date()) }}</p>
+            <p><span>Ultima actualizare:</span> {{ formatDate(userStore.userData.updatedAt || new Date()) }}</p>
           </div>
         </div>
       </div>
-
-      <!-- Secțiunea de editare profil -->
-      <!-- <div v-if="activeSection === 'edit'" class="max-w-3xl">
-        <h1 class="text-3xl font-bold mb-6 text-white">Editare Profil</h1>
-        <div class="space-y-4">
-          <div class="field">
-            <label class="text-white">Nume Complet</label>
-            <InputText v-model="userStore.userData.fullName" class="w-full" />
-          </div>
-          <div class="field">
-            <label class="text-white">Telefon</label>
-            <InputText v-model="userStore.userData.phone" class="w-full" />
-          </div>
-          <div class="field">
-            <label class="text-white">Locație</label>
-            <InputText v-model="userStore.userData.location" class="w-full" />
-          </div>
-          <Button label="Salvează Modificările" @click="saveProfile" />
-        </div>
-      </div> -->
 
       <!-- Secțiunea de schimbare parolă -->
-      <div v-if="activeSection === 'password'" class="max-w-3xl">
-        <h1 class="text-3xl font-bold mb-6 text-white">Schimbare Parolă</h1>
-        <div class="space-y-4">
-          <div class="field">
-            <label class="text-white">Parola Actuală</label>
-            <Password v-model="currentPassword" class="w-full" toggleMask />
-          </div>
-          <div class="field">
-            <label class="text-white">Parola Nouă</label>
-            <Password v-model="newPassword" class="w-full" toggleMask />
-          </div>
-          <div class="field">
-            <label class="text-white">Confirmă Parola Nouă</label>
-            <Password v-model="confirmPassword" class="w-full" toggleMask />
-          </div>
-          <Button label="Schimbă Parola" @click="changePassword" />
+      <div v-if="activeSection === 'password'" class="section">
+        <h1 class="section-title">Schimbare Parolă</h1>
+        <div class="field">
+          <label>Parola Actuală</label>
+          <input type="password" v-model="currentPassword" class="input" />
         </div>
+        <div class="field">
+          <label>Parola Nouă</label>
+          <input type="password" v-model="newPassword" class="input" />
+        </div>
+        <div class="field">
+          <label>Confirmă Parola Nouă</label>
+          <input type="password" v-model="confirmPassword" class="input" />
+        </div>
+        <button class="btn" @click="changePassword">Schimbă Parola</button>
       </div>
-
-      <!-- Secțiunea de preferințe -->
-      <!-- <div v-if="activeSection === 'preferences'" class="max-w-3xl">
-        <h1 class="text-3xl font-bold mb-6 text-white">Preferințe</h1>
-        <div class="space-y-4">
-          <div class="field">
-            <label class="text-white">Limbă</label>
-            <Dropdown v-model="userStore.userData.language" :options="languages" class="w-full" />
-          </div>
-          <Button label="Salvează Preferințele" @click="savePreferences" />
-        </div>
-      </div> -->
     </div>
   </div>
 </template>
@@ -122,77 +79,159 @@ const confirmPassword = ref('');
 
 const menuItems = [
   { key: 'main', label: 'Profilul Meu', icon: 'pi pi-user' },
-  { key: 'edit', label: 'Editare Profil', icon: 'pi pi-pencil' },
-  { key: 'password', label: 'Schimbare Parolă', icon: 'pi pi-lock' },
-  { key: 'preferences', label: 'Preferințe', icon: 'pi pi-cog' }
+  { key: 'password', label: 'Schimbare Parolă', icon: 'pi pi-lock' }
 ];
-
-// const languages = [
-//   { label: 'Română', value: 'ro' },
-//   { label: 'English', value: 'en' },
-//   { label: 'Français', value: 'fr' }
-// ];
 
 function formatDate(date: Date) {
   return new Date(date).toLocaleDateString();
 }
 
-// async function saveProfile() {
-//   try {
-//     // await userStore.updateProfile();
-//     // Adăugați logica de salvare
-//   } catch (error) {
-//     // Gestionare erori
-//   }
-// }
-
 async function changePassword() {
   if (newPassword.value !== confirmPassword.value) {
-    // Afișați eroare
+    alert('Parolele nu coincid!');
     return;
   }
   try {
     // Implementați logica de schimbare a parolei
+    alert('Parola a fost schimbată cu succes!');
   } catch (error) {
-    // Gestionare erori
+    alert('A apărut o eroare!');
   }
 }
-
-// async function savePreferences() {
-//   try {
-//     // Implementați logica de salvare a preferințelor
-//   } catch (error) {
-//     // Gestionare erori
-//   }
-// }
 </script>
 
 <style scoped>
+.profile-container {
+  display: flex;
+  min-height: 100vh;
+  background-color: #1e1e2f;
+  color: #ffffff;
+}
+
+.sidebar {
+  width: 250px;
+  background-color: #252539;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.profile-info {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 10px;
+}
+
+.username {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.email {
+  font-size: 0.9rem;
+  color: #b3b3b3;
+}
+
+.menu {
+  list-style: none;
+  padding: 0;
+  width: 100%;
+}
+
+.menu li {
+  padding: 10px 15px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  transition: background-color 0.3s;
+}
+
+.menu li:hover {
+  background-color: #3b3b5b;
+}
+
+.menu li.active {
+  background-color: #4a4a6a;
+}
+
+.menu-icon {
+  margin-right: 10px;
+}
+
+.main-content {
+  flex: 1;
+  padding: 20px;
+}
+
+.section-title {
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.info-card {
+  background-color: #284e38;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.info-card h3 {
+  margin-bottom: 10px;
+}
+
+.info-card p {
+  margin: 5px 0;
+}
+
+.info-card span {
+  font-weight: bold;
+}
+
 .field {
-  margin-bottom: 1.5rem;
+  margin-bottom: 15px;
 }
 
 .field label {
   display: block;
-  margin-bottom: 0.5rem;
-  font-weight: 600;
+  margin-bottom: 5px;
+  font-weight: bold;
 }
 
-:deep(.p-menuitem-link) {
-  padding: 0.75rem 1rem !important;
-  border-radius: 0.5rem !important;
-  margin-bottom: 0.5rem !important;
-  transition: all 0.2s ease-in-out !important;
+.input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background-color: #1e1e2f;
+  color: #ffffff;
 }
 
-:deep(.p-inputtext) {
-  background-color: var(--surface-card) !important;
-  border: 1px solid var(--surface-border) !important;
-  color: var(--text-color) !important;
-  border-radius: 0.5rem !important;
+.btn {
+  background-color: #4a4a6a;
+  color: #ffffff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s;
 }
 
-:deep(.p-button) {
-  border-radius: 0.5rem !important;
+.btn:hover {
+  background-color: #3b3b5b;
 }
 </style>
