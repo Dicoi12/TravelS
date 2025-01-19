@@ -87,7 +87,7 @@
         <h2>Review-uri</h2>
         <div v-if="reviews.length">
           <div v-for="review in reviews" :key="review.id" class="review-item">
-            <strong>{{ review.user.userName }}</strong>
+            <strong>{{ review.user?.userName }}</strong>
             <span>{{ review.createdAt }}</span>
             <div>
               <strong>Rating:</strong>
@@ -107,10 +107,25 @@
         <div v-else>
           <p>Nu există review-uri pentru acest obiectiv.</p>
         </div>
+
+        <!-- Formular pentru adăugare review -->
+        <div class="add-review">
+          <h2>Adaugă un review</h2>
+          <div>
+            <label for="rating">Rating:</label>
+            <input type="number" id="rating" v-model="newReview.raiting" min="1" max="5" />
+          </div>
+          <div>
+            <label for="comment">Comentariu:</label>
+            <Textarea class="w-full" id="comment" v-model="newReview.comment"></Textarea>
+          </div>
+          <Button @click="submitReview" align="end">Trimite Review</Button>
+        </div>
       </div>
     </div>
   </div>
 </template>
+
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
@@ -118,12 +133,15 @@ import { useRoute } from 'vue-router';
 import { useObjectivesStore } from '../../stores/objectivesStore';
 import { useReviewsStore } from '../../stores/reviewsStore';
 import { IReview } from '../../Interfaces';
+import { useUserStore } from '../../stores/userStore';
 
 const route = useRoute();
 const objectiveStore = useObjectivesStore();
 const reviewsStore = useReviewsStore();
+const userStore = useUserStore();
 const objective = ref();
 const reviews = ref<IReview[]>([]);
+const newReview = ref<IReview>({id:1, raiting: 0, comment: '',idUser:userStore.userData.id??1, objectiveId: parseInt(route.params.id as string) });
 
 onMounted(async () => {
   const objectiveId = route.params.id;
@@ -132,7 +150,9 @@ onMounted(async () => {
   
   reviews.value = await reviewsStore.getByObjectiveId(parseInt(objectiveId as string));
 });
-
+function submitReview() {
+  reviewsStore.addReview(newReview.value);
+}
 </script>
 
 <style scoped>

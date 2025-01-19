@@ -78,13 +78,13 @@ export const useUserStore = defineStore("userStore", {
       } catch (error) {
         if (userName == "dariusd2" && password == "123") {
           this.userData = {
-              id: 200,
-              userName: 'dariusd',
-              email: 'wink@ceva.com',
-              phone: '0742123212',
-              hash: "",
-              salt: "",
-              role: UserRoleEnum.Administrator,
+            id: 200,
+            userName: 'dariusd',
+            email: 'wink@ceva.com',
+            phone: '0742123212',
+            hash: "",
+            salt: "",
+            role: UserRoleEnum.Administrator,
           };
         }
         console.error("Error adding objective:", error);
@@ -108,6 +108,20 @@ export const useUserStore = defineStore("userStore", {
       } catch (error) {
         console.error("Error creating user:", error);
       }
+    },
+    async changePassword(oldPassword: string, newPassword: string) {
+      try {
+        let payload = {
+          userId: this.userData.id,
+          oldPassword: oldPassword,
+          newPassword: newPassword
+        };
+        const data = await fetchApi("User/ChangePassword", "POST", payload);
+        return data as boolean;
+      } catch (error) {
+        console.error("Error adding objective:", error);
+      }
+
     },
     logout() {
       this.userData = {

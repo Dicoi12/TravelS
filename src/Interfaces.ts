@@ -1,11 +1,11 @@
-export enum UserRoleEnum{
+export enum UserRoleEnum {
   Simple,
   Administrator
 }
 export interface IUserModel extends BaseAuditEntity {
   id: number;
   userName: string;
-  role:UserRoleEnum;
+  role: UserRoleEnum;
   email: string | null;
   phone: string | null;
   hash: string;
@@ -23,7 +23,7 @@ export interface IObjective extends BaseAuditEntity {
   latitude: number;
   longitude: number;
   images: string[];
-  distance?:number;
+  distance?: number;
 }
 export interface IObjectivesStore {
   selectedObjective: IObjective;
@@ -48,7 +48,7 @@ export interface IEvent extends BaseAuditEntity {
   objective?: IObjective | null;
   images: string[];
 }
-export interface IPhotoGalleria{
+export interface IPhotoGalleria {
   itemImageSrc: string;
   thumbnailImageSrc: string;
   alt: string;
@@ -59,14 +59,15 @@ export interface IReview extends BaseAuditEntity {
   raiting: number;
   comment: string;
   objectiveId: number;
-  objective: IObjective;
-  user: IUserModel;
+  objective?: IObjective;
+  user?: IUserModel;
+  idUser: number;
 }
 export interface IExperience extends BaseAuditEntity {
-id: number;
-title: string;
-description: string;
-location: string;
-date: Date;
-images: string[];
+  id: number;
+  title: string;
+  description: string;
+  location: string;
+  date: Date;
+  images: string[];
 }
