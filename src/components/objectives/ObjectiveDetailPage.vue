@@ -3,7 +3,7 @@
     <!-- Secțiunea de imagini -->
     <div class="images-section">
       <img 
-        :src="objective?.images?.[0] || 'https://via.placeholder.com/800x500?text=No+Image'" 
+        :src="objectiveStore.selectedObjective.images[0] || 'https://via.placeholder.com/800x500?text=No+Image'" 
         alt="Imagine principală obiectiv"
         class="main-image"
       />
@@ -118,6 +118,7 @@ import { useRoute } from 'vue-router';
 import { useObjectivesStore } from '../../stores/objectivesStore';
 import { useReviewsStore } from '../../stores/reviewsStore';
 import { IReview } from '../../Interfaces';
+import { onBeforeMount } from 'vue';
 
 const route = useRoute();
 const objectiveStore = useObjectivesStore();
@@ -125,7 +126,7 @@ const reviewsStore = useReviewsStore();
 const objective = ref();
 const reviews = ref<IReview[]>([]);
 
-onMounted(async () => {
+onBeforeMount(async () => {
   const objectiveId = route.params.id;
   await objectiveStore.getById(parseInt(objectiveId as string));
   objective.value = objectiveStore.selectedObjective;

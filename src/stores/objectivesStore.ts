@@ -235,6 +235,7 @@ export const useObjectivesStore = defineStore("objectivesStore", {
       try {
         const data = await fetchApi(`Objectives/${id}`, "get");
         let response = data as IServiceResult;
+        this.selectedObjective=response.result;
         return response.result;
       } catch (error) {
         console.error("Error fetching objective by id:", error);

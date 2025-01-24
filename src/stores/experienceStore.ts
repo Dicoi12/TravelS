@@ -21,7 +21,7 @@ export const useExperienceStore = defineStore("experienceStore", {
     async getAllExperiences() {
       try {
         const response = await fetchApi(`Experience`, "get");
-        const result = response as IServiceResult;
+        const result = response;
         console.log(response)
         if (result) {
           this.experiences = result;
@@ -35,8 +35,8 @@ export const useExperienceStore = defineStore("experienceStore", {
     async getExperienceById(id: number) {
       try {
         const response = await fetchApi(`Experience/${id}`, "get");
-        const result = response as IServiceResult;
-        this.selectedExperience = result.result;
+        const result = response ;
+        this.selectedExperience = result;
       } catch (error) {
         console.error("Error fetching experience by ID:", error);
       }
@@ -60,6 +60,15 @@ export const useExperienceStore = defineStore("experienceStore", {
         if (index !== -1) {
           this.experiences[index] = result.result;
         }
+      } catch (error) {
+        console.error("Error updating experience:", error);
+      }
+    },
+    async deleteExperience(id: number) {
+      try {
+        const response = await fetchApi(`Experience/${id}`, "delete" );
+        const result = response as IServiceResult;
+        return result;
       } catch (error) {
         console.error("Error updating experience:", error);
       }

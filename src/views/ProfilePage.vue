@@ -36,7 +36,7 @@
             <p><span>Nume:</span> {{ userStore.userData.userName }}</p>
             <p><span>Email:</span> {{ userStore.userData.email }}</p>
             <p><span>Telefon:</span> {{ userStore.userData.phone }}</p>
-            <button class="btn" @click="userStore.$reset()">Resetează Contul</button>
+            <button class="btn" @click="userStore.$reset()">Deconectare</button>
           </div>
           <div class="info-card">
             <h3>Statistici Cont</h3>

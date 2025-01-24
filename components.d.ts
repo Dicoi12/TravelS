@@ -14,6 +14,8 @@ declare module 'vue' {
     Dialog: typeof import('primevue/dialog')['default']
     EventDetailPage: typeof import('./src/components/events/EventDetailPage.vue')['default']
     EventsAdministration: typeof import('./src/components/events/EventsAdministration.vue')['default']
+    ExperienceDetail: typeof import('./src/components/experiences/ExperienceDetail.vue')['default']
+    ExperiencesAdministration: typeof import('./src/components/experiences/ExperiencesAdministration.vue')['default']
     ExperiencesView: typeof import('./src/components/experiences/ExperiencesView.vue')['default']
     Galleria: typeof import('primevue/galleria')['default']
     HandleEvents: typeof import('./src/components/events/HandleEvents.vue')['default']

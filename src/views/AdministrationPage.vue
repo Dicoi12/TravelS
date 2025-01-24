@@ -12,6 +12,7 @@
         <!-- <div v-if="currentSetting == 'Obiective'"> -->
         <ObjectiveAdministration v-if="currentSetting == 'Obiective'" />
         <EventsAdministration v-if="currentSetting == 'Evenimente'" />
+        <ExperiencesAdministration v-if="currentSetting=='Experiente'" />
         <!-- </div> -->
       </div>
     </div>
@@ -44,6 +45,12 @@ const items = ref([
     icon: "pi pi-directions-alt",
     command: () => {
       currentSetting.value = "Itinerarii";
+    },
+  }, {
+    label: "Experiente",
+    icon: "pi pi-directions-alt",
+    command: () => {
+      currentSetting.value = "Experiente";
     },
   },
 ]);
