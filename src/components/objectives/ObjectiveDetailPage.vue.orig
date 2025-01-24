@@ -133,7 +133,11 @@ import { useRoute } from 'vue-router';
 import { useObjectivesStore } from '../../stores/objectivesStore';
 import { useReviewsStore } from '../../stores/reviewsStore';
 import { IReview } from '../../Interfaces';
+<<<<<<< HEAD
+import { onBeforeMount } from 'vue';
+=======
 import { useUserStore } from '../../stores/userStore';
+>>>>>>> 7f59e008b82555f2b6bf246d5f8480d0c1e93d85
 
 const route = useRoute();
 const objectiveStore = useObjectivesStore();

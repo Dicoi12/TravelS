@@ -3,7 +3,7 @@
     <!-- Secțiunea de imagini -->
     <div class="images-section">
       <img 
-        :src="objectiveStore.selectedObjective.images[0] || 'https://via.placeholder.com/800x500?text=No+Image'" 
+        :src="objective?.images?.[0] || 'https://via.placeholder.com/800x500?text=No+Image'" 
         alt="Imagine principală obiectiv"
         class="main-image"
       />
@@ -143,7 +143,7 @@ const objective = ref();
 const reviews = ref<IReview[]>([]);
 const newReview = ref<IReview>({id:1, raiting: 0, comment: '',idUser:userStore.userData.id??1, objectiveId: parseInt(route.params.id as string) });
 
-onBeforeMount(async () => {
+onMounted(async () => {
   const objectiveId = route.params.id;
   await objectiveStore.getById(parseInt(objectiveId as string));
   objective.value = objectiveStore.selectedObjective;

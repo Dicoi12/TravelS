@@ -92,8 +92,7 @@ async function changePassword() {
     return;
   }
   try {
-    // Implementați logica de schimbare a parolei
-    alert('Parola a fost schimbată cu succes!');
+  await userStore.changePassword(currentPassword.value,newPassword.value);
   } catch (error) {
     alert('A apărut o eroare!');
   }
