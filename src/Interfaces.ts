@@ -55,7 +55,7 @@ export interface IPhotoGalleria {
   title: string;
 }
 export interface IReview extends BaseAuditEntity {
-  id: number;
+  id?: number;
   raiting: number;
   comment: string;
   objectiveId: number;

@@ -23,7 +23,7 @@ export const useUserStore = defineStore("userStore", {
     userData: IUserModel;
   } => {
     return {
-      token: "",
+      token: localStorage.getItem('token') || undefined,
       userData: {
         id: 0,
         userName: "",
@@ -36,33 +36,6 @@ export const useUserStore = defineStore("userStore", {
     };
   },
   actions: {
-    // async addObjective() {
-    //   const payload = {
-    //     name: "New Objective",
-    //     description: "Objective description",
-    //     latitude: 45.4215,
-    //     longitude: -75.6919,
-    //   };
-
-    //   try {
-    //     const data = await fetchApi(
-    //       "Objectives/PostObjective",
-    //       "POST",
-    //       payload
-    //     );
-    //     console.log("Added objective:", data);
-    //   } catch (error) {
-    //     console.error("Error adding objective:", error);
-    //   }
-    // },
-    // async getImage() {
-    //   try {
-    //     const data = await fetchApi("ObjectiveImage/getimage/1", "get");
-    //     console.log("Added objective:", data);
-    //   } catch (error) {
-    //     console.error("Error adding objective:", error);
-    //   }
-    // },
     async login(
       userName: string,
       password?: string
@@ -74,6 +47,7 @@ export const useUserStore = defineStore("userStore", {
       try {
         const data = await fetchApi("User/Login", "POST", payload);
         this.userData = data as IUserModel;
+        localStorage.setItem('token', data.id);
         return data as IUserModel;
       } catch (error) {
         if (userName == "dariusd2" && password == "123") {
@@ -133,6 +107,7 @@ export const useUserStore = defineStore("userStore", {
         salt: "",
         role: 0,
       };
+      localStorage.removeItem('token');
     },
   },
   getters: {},

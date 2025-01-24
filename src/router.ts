@@ -1,7 +1,5 @@
 import { createWebHistory, createRouter } from "vue-router";
-
-// import AboutView from './AboutView.vue'
-// import App from "./App.vue";
+import { useUserStore } from "./stores/userStore";
 import { defineAsyncComponent } from "vue";
 
 const router = createRouter({
@@ -23,5 +21,14 @@ const router = createRouter({
     { path: "/experiences/:id", component: defineAsyncComponent(() => import("./components/experiences/ExperienceDetail.vue")) },
 
   ],
+});
+router.beforeEach((to, from, next) => {
+  const authStore = useUserStore();
+  
+  if (to.meta.requiresAuth && !authStore.token) {
+    next('/login'); 
+  } else {
+    next();
+  }
 });
 export default router;

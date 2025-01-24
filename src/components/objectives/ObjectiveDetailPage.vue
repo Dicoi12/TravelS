@@ -2,14 +2,17 @@
   <div class="objective-detail-container">
     <!-- Secțiunea de imagini -->
     <div class="images-section">
-      <img 
-        :src="objectiveStore.selectedObjective.images[0] || 'https://via.placeholder.com/800x500?text=No+Image'" 
+      <img
+        :src="
+          objectiveStore.selectedObjective.images[0] ||
+          'https://via.placeholder.com/800x500?text=No+Image'
+        "
         alt="Imagine principală obiectiv"
         class="main-image"
       />
       <div class="thumbnail-container">
-        <img 
-          v-for="(image, index) in objective?.images?.slice(1)" 
+        <img
+          v-for="(image, index) in objective?.images?.slice(1)"
           :key="index"
           :src="image"
           alt="Imagine obiectiv"
@@ -21,7 +24,7 @@
     <!-- Secțiunea de detalii -->
     <div class="details-section">
       <h1>{{ objective?.name }}</h1>
-      
+
       <div class="objective-meta">
         <div class="meta-item">
           <i class="pi pi-clock"></i>
@@ -51,18 +54,24 @@
           <div class="info-item">
             <strong>Rating:</strong>
             <span class="stars-container">
-              <i v-for="index in 5" 
-                 :key="index" 
-                 class="pi" 
-                 :class="index <= objective?.rating ? 'pi-star-fill' : 'pi-star'" 
-                 style="color: gold;">
+              <i
+                v-for="index in 5"
+                :key="index"
+                class="pi"
+                :class="index <= objective?.rating ? 'pi-star-fill' : 'pi-star'"
+                style="color: gold"
+              >
               </i>
               <span>({{ objective?.rating }}/5)</span>
             </span>
           </div>
           <div class="info-item">
-            <strong>Website:</strong> 
-            <a :href="objective?.website" target="_blank" rel="noopener noreferrer">
+            <strong>Website:</strong>
+            <a
+              :href="objective?.website"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               {{ objective?.website }}
             </a>
           </div>
@@ -75,7 +84,7 @@
         <iframe
           width="100%"
           height="400"
-          style="border:0"
+          style="border: 0"
           loading="lazy"
           allowfullscreen
           :src="`https://www.google.com/maps?q=${objective?.latitude},${objective?.longitude}&output=embed`"
@@ -92,11 +101,13 @@
             <div>
               <strong>Rating:</strong>
               <span class="stars-container">
-                <i v-for="index in 5" 
-                   :key="index" 
-                   class="pi" 
-                   :class="index <= review.raiting ? 'pi-star-fill' : 'pi-star'" 
-                   style="color: gold;">
+                <i
+                  v-for="index in 5"
+                  :key="index"
+                  class="pi"
+                  :class="index <= review.raiting ? 'pi-star-fill' : 'pi-star'"
+                  style="color: gold"
+                >
                 </i>
                 <span>({{ review.raiting }}/5)</span>
               </span>
@@ -109,31 +120,39 @@
         </div>
 
         <!-- Formular pentru adăugare review -->
-        <div class="add-review">
+        <div class="add-review w-full">
           <h2>Adaugă un review</h2>
-          <div>
+          <div class="my-3">
             <label for="rating">Rating:</label>
-            <input type="number" id="rating" v-model="newReview.raiting" min="1" max="5" />
+            <Rating v-model="newReview.raiting" />
           </div>
           <div>
             <label for="comment">Comentariu:</label>
-            <Textarea class="w-full" id="comment" v-model="newReview.comment"></Textarea>
+            <Textarea
+              class="w-full"
+              id="comment"
+              v-model="newReview.comment"
+            ></Textarea>
           </div>
-          <Button @click="submitReview" align="end">Trimite Review</Button>
+          <Button @click="submitReview()" class="w-full align-self-end my-2"
+            >Trimite Review</Button
+          >
         </div>
       </div>
     </div>
+    <Toast group="w" />
   </div>
 </template>
 
-
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
-import { useRoute } from 'vue-router';
-import { useObjectivesStore } from '../../stores/objectivesStore';
-import { useReviewsStore } from '../../stores/reviewsStore';
-import { IReview } from '../../Interfaces';
-import { useUserStore } from '../../stores/userStore';
+import { ref, onBeforeMount } from "vue";
+import { useRoute } from "vue-router";
+import { useObjectivesStore } from "../../stores/objectivesStore";
+import { useReviewsStore } from "../../stores/reviewsStore";
+import { IReview } from "../../Interfaces";
+import { useUserStore } from "../../stores/userStore";
+import { useToast } from "primevue/usetoast";
+import Toast from "primevue/toast";
 
 const route = useRoute();
 const objectiveStore = useObjectivesStore();
@@ -141,17 +160,51 @@ const reviewsStore = useReviewsStore();
 const userStore = useUserStore();
 const objective = ref();
 const reviews = ref<IReview[]>([]);
-const newReview = ref<IReview>({id:1, raiting: 0, comment: '',idUser:userStore.userData.id??1, objectiveId: parseInt(route.params.id as string) });
+const newReview = ref<IReview>({
+  raiting: 0,
+  comment: "",
+  idUser: userStore.userData.id ?? 1,
+  objectiveId: parseInt(route.params.id as string),
+});
+const toast = useToast();
 
 onBeforeMount(async () => {
   const objectiveId = route.params.id;
   await objectiveStore.getById(parseInt(objectiveId as string));
   objective.value = objectiveStore.selectedObjective;
-  
-  reviews.value = await reviewsStore.getByObjectiveId(parseInt(objectiveId as string));
+
+  reviews.value = await reviewsStore.getByObjectiveId(
+    parseInt(objectiveId as string)
+  );
 });
-function submitReview() {
-  reviewsStore.addReview(newReview.value);
+async function submitReview() {
+  if (newReview.value.raiting === 0) {
+    toast.add({
+      severity: "warn",
+      summary: "Eroare",
+      detail: "Selectează un rating!",
+      group: "w",
+      life: 5000,
+    });
+    return;
+  }
+  if (newReview.value.comment === "") {
+    toast.add({
+      severity: "warn",
+      summary: "Eroare",
+      detail: "Completarea comentariului este obligatorie!",
+      group: "w",
+      life: 5000,
+    });
+    return;
+  }
+  await reviewsStore.addReview(newReview.value);
+  newReview.value = {
+    raiting: 0,
+    comment: "",
+    idUser: userStore.userData.id ?? 1,
+    objectiveId: parseInt(route.params.id as string),
+  };
 }
 </script>
 
@@ -233,7 +286,7 @@ function submitReview() {
 }
 
 .info-item a {
-  color: #4CAF50;
+  color: #4caf50;
   text-decoration: none;
 }
 
