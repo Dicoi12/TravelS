@@ -58,7 +58,7 @@
                 v-for="index in 5"
                 :key="index"
                 class="pi"
-                :class="index <= objective?.rating ? 'pi-star-fill' : 'pi-star'"
+                :class="index <= objective?.medieReview ? 'pi-star-fill' : 'pi-star'"
                 style="color: gold"
               >
               </i>
@@ -164,7 +164,7 @@ const newReview = ref<IReview>({
   raiting: 0,
   comment: "",
   idUser: userStore.userData.id ?? 1,
-  objectiveId: parseInt(route.params.id as string),
+  idObjective: parseInt(route.params.id as string),
 });
 const toast = useToast();
 
@@ -203,7 +203,7 @@ async function submitReview() {
     raiting: 0,
     comment: "",
     idUser: userStore.userData.id ?? 1,
-    objectiveId: parseInt(route.params.id as string),
+    idObjective: parseInt(route.params.id as string),
   };
 }
 </script>

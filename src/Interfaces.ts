@@ -24,6 +24,7 @@ export interface IObjective extends BaseAuditEntity {
   longitude: number;
   images: string[];
   distance?: number;
+  medieReview?: number;
 }
 export interface IObjectivesStore {
   selectedObjective: IObjective;
@@ -58,7 +59,7 @@ export interface IReview extends BaseAuditEntity {
   id?: number;
   raiting: number;
   comment: string;
-  objectiveId: number;
+  idObjective: number;
   objective?: IObjective;
   user?: IUserModel;
   idUser: number;
