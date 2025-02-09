@@ -54,7 +54,7 @@
   .main-page {
     height: 100vh;
     width: 100vw;
-    background-image: url("../assets/local/vidraru.jpg");
+    background-image: url("../assets/local/sibiu2.jpg");
     background-size: cover;
     background-position: center;
     display: flex;
@@ -121,9 +121,11 @@
   }
   
   .title {
-    font-size: 4rem;
-    margin-bottom: 1rem;
-    margin-top: 21rem;
-  }
+  font-size: 4rem;
+  margin-bottom: 1rem;
+  margin-top: 20rem;
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
   </style>
   

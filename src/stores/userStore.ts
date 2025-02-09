@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 import { IUserModel, UserRoleEnum } from "../Interfaces";
 import fetchApi from "../stores/fetch";
 
-interface UserData {
+export interface UserData {
   id: string;
   userName: string;
   email: string;

@@ -20,21 +20,20 @@ const appStore = useApplicationStore();
 </script>
 
 <style scoped>
-/* Stilul principal pentru layout */
 .layout {
   background-color: #36453b;
   background-size: auto;
   background-position: center;
   background-repeat: no-repeat;
-  height: 100vh; /* Setează înălțimea la 100% din viewport */
-  width: 100vw; /* Setează lățimea la 100% din viewport */
+  height: 100vh; 
+  width: 100vw; 
   display: flex;
-  flex-direction: column; /* Aliniază NavBar și content pe verticală */
-  overflow: hidden; /* Elimină scroll-ul pentru întreaga pagină */
+  flex-direction: column; 
+  overflow: hidden; 
 }
 
 .content {  
-  overflow: auto; /* Permite scroll doar în secțiunea content dacă e nevoie */
-  height: 100%; /* Asigură-te că secțiunea main ocupă întregul spațiu disponibil */
+  overflow: auto; 
+  height: 100%; 
 }
 </style>
