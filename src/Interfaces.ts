@@ -72,3 +72,15 @@ export interface IExperience extends BaseAuditEntity {
   date: Date;
   images: string[];
 }
+export interface IItineraryStore {
+  itineraries: IItinerary[]
+  selectedItinerary: IItinerary
+}
+export interface IItinerary {
+  id?:number;
+  name: string;
+  description: string;
+  idObjectives: number[];
+  idEvents: number[];
+  idUser?: number;
+}

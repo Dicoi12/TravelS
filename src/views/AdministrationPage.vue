@@ -13,6 +13,7 @@
         <ObjectiveAdministration v-if="currentSetting == 'Obiective'" />
         <EventsAdministration v-if="currentSetting == 'Evenimente'" />
         <ExperiencesAdministration v-if="currentSetting=='Experiente'" />
+        <ItineraryAdministration v-if="currentSetting=='Itinerarii'" />
         <!-- </div> -->
       </div>
     </div>
