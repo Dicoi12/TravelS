@@ -83,7 +83,7 @@ const props = defineProps({
 const dialogVisible = ref(false);
 const objectivesStore = useObjectivesStore();
 const addObjective = async () => {
-  await objectivesStore.addObjective();
+  objectivesStore.addObjective();
   dialogVisible.value = false;
   await objectivesStore.getObjectives();
 };

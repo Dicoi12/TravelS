@@ -84,3 +84,8 @@ export interface IItinerary {
   idEvents: number[];
   idUser?: number;
 }
+export interface IObjectiveType extends BaseAuditEntity {
+  id: number;
+  name: string;
+  description: string;  
+}

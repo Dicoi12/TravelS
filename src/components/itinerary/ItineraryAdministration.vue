@@ -80,6 +80,7 @@
             ></i>
           </div>
         </template>
+        
       </Column>
     </DataTable>
     <Dialog
@@ -148,14 +149,14 @@
  async function saveEvent() {
    await itineraryStore.addItinerary();
   }
-  function getImageSrc() {
-    // return eventStore.selectedEvent.images.map((image) => ({
-    //   itemImageSrc: image,
-    //   thumbnailImageSrc: "",
-    //   alt: "Description for Image 1",
-    //   title: "Title 1",
-    // }));
-    return;
-  }
+  // function getImageSrc() {
+  //   // return eventStore.selectedEvent.images.map((image) => ({
+  //   //   itemImageSrc: image,
+  //   //   thumbnailImageSrc: "",
+  //   //   alt: "Description for Image 1",
+  //   //   title: "Title 1",
+  //   // }));
+  //   return;
+  // }
   </script>
   

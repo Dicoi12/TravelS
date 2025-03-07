@@ -28,15 +28,15 @@
       <div class="objective-meta">
         <div class="meta-item">
           <i class="pi pi-clock"></i>
-          <span>Program: {{ objective?.schedule }}</span>
+          <span>Program: {{ objective?.interval }}</span>
         </div>
         <div class="meta-item">
           <i class="pi pi-map-marker"></i>
-          <span>{{ objective?.address }}</span>
+          <span>{{ objective?.city }}</span>
         </div>
         <div class="meta-item">
           <i class="pi pi-ticket"></i>
-          <span>Preț: {{ objective?.price }} RON</span>
+          <span>Preț: {{ objective?.pret }} RON</span>
         </div>
       </div>
 
@@ -58,7 +58,9 @@
                 v-for="index in 5"
                 :key="index"
                 class="pi"
-                :class="index <= objective?.medieReview ? 'pi-star-fill' : 'pi-star'"
+                :class="
+                  index <= objective?.medieReview ? 'pi-star-fill' : 'pi-star'
+                "
                 style="color: gold"
               >
               </i>
@@ -66,9 +68,13 @@
             </span>
           </div>
           <div class="info-item">
-            <strong>Website:</strong>
+            <strong>Website: </strong>
             <a
-              :href="objective?.website"
+              :href="
+                objective.website?objective?.website.startsWith('http')
+                  ? objective.website
+                  : `http://${objective.website}`:''
+              "
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -97,7 +103,7 @@
         <div v-if="reviews.length">
           <div v-for="review in reviews" :key="review.id" class="review-item">
             <strong>{{ review.user?.userName }}</strong>
-            <span>{{ review.createdAt }}</span>
+            <span>{{ helperStore.formatDate(review.createdAt) }}</span>
             <div>
               <strong>Rating:</strong>
               <span class="stars-container">
@@ -153,6 +159,7 @@ import { IReview } from "../../Interfaces";
 import { useUserStore } from "../../stores/userStore";
 import { useToast } from "primevue/usetoast";
 import Toast from "primevue/toast";
+import { useHelperStore } from "../../stores/helperStore";
 
 const route = useRoute();
 const objectiveStore = useObjectivesStore();
@@ -160,6 +167,7 @@ const reviewsStore = useReviewsStore();
 const userStore = useUserStore();
 const objective = ref();
 const reviews = ref<IReview[]>([]);
+const helperStore = useHelperStore();
 const newReview = ref<IReview>({
   raiting: 0,
   comment: "",
