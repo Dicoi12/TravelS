@@ -18,6 +18,7 @@ export interface BaseAuditEntity {
 export interface IObjective extends BaseAuditEntity {
   id: number;
   name: string;
+  type?: number;
   city: string;
   description: string | null;
   latitude: number;

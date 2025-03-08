@@ -19,6 +19,16 @@
       />
     </div>
     <div class="flex justify-content-center flex-column">
+      <label for="name">Tip</label>
+      <Dropdown
+        v-model="objectivesStore.selectedObjective.type"
+        label="Tip"
+        :options="useObjectiveTypeStore().objectiveTypes"
+        option-value="id"
+        option-label="name"
+      />
+    </div>
+    <div class="flex justify-content-center flex-column">
       <label for="city">Oraș</label>
       <InputText
         v-model="objectivesStore.selectedObjective.city"
@@ -75,7 +85,12 @@ import { ref } from "vue";
 import { useObjectivesStore } from "../../stores/objectivesStore";
 import { defineEmits, watch } from "vue";
 import Map from "../map/Map.vue";
+import { useObjectiveTypeStore } from "../../stores/objectiveTypeStore";
+import { onBeforeMount } from "vue";
 
+onBeforeMount(async()=>{
+  await useObjectiveTypeStore().getObjectiveTypes();
+})
 const emits = defineEmits(["onClose"]);
 const props = defineProps({
   showDialog: { type: Boolean, default: false },

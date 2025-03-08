@@ -22,9 +22,8 @@ export const useObjectiveTypeStore = defineStore("objectiveTypeStore", {
     async addObjectiveType() {
       try {
         const data = await fetchApi(
-          "ObjectiveTypes/PostObjectiveType",
+          "ObjectiveType?name=" + this.selectedObjectiveType.name + "&description=" + this.selectedObjectiveType.description,
           "POST",
-          this.selectedObjectiveType
         );
         console.log("Added objective type:", data);
       } catch (error) {
@@ -33,18 +32,18 @@ export const useObjectiveTypeStore = defineStore("objectiveTypeStore", {
     },
     async getObjectiveTypes() {
       try {
-        const data = await fetchApi("ObjectiveTypes/GetObjectiveTypesAsync", "get");
-        let response = data as IServiceResult;
-        this.objectiveTypes = response.result;
+        const data = await fetchApi("ObjectiveType", "get");
+        let response = data;
+        this.objectiveTypes = data
       } catch (error) {
         console.error("Error fetching objective types:", error);
         this.objectiveTypes = [];
       }
     },
-    async updateObjectiveType() {
+    async updateObjectiveType(id: number) {
       try {
         const data = await fetchApi(
-          "ObjectiveTypes/UpdateObjectiveType",
+          "ObjectiveType/" + id + "?name=" + this.selectedObjectiveType.name + "&description=" + this.selectedObjectiveType.description,
           "PUT",
           this.selectedObjectiveType
         );
@@ -55,7 +54,7 @@ export const useObjectiveTypeStore = defineStore("objectiveTypeStore", {
     },
     async deleteObjectiveType(id: number) {
       try {
-        await fetchApi(`ObjectiveTypes/${id}`, "DELETE");
+        await fetchApi(`ObjectiveType/${id}`, "DELETE");
         this.getObjectiveTypes();
       } catch (error) {
         console.error("Error deleting objective type:", error);
@@ -63,7 +62,7 @@ export const useObjectiveTypeStore = defineStore("objectiveTypeStore", {
     },
     async getById(id: number) {
       try {
-        const data = await fetchApi(`ObjectiveTypes/${id}`, "get");
+        const data = await fetchApi(`ObjectiveType/${id}`, "get");
         let response = data as IServiceResult;
         this.selectedObjectiveType = response.result;
         return response.result;

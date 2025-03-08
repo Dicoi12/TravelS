@@ -49,7 +49,7 @@
         <h2>Informații suplimentare</h2>
         <div class="info-grid">
           <div class="info-item">
-            <strong>Categorie:</strong> {{ objective?.category }}
+            <strong>Categorie:</strong> {{ objective?.objectiveType?.name }}
           </div>
           <div class="info-item">
             <strong>Rating:</strong>
