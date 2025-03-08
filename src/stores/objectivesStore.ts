@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { IObjective, IServiceResult } from "../Interfaces";
+import { IObjective, IServiceResult, ObjectiveFilterModel } from "../Interfaces";
 import fetchApi from "../stores/fetch";
 export const useObjectivesStore = defineStore("objectivesStore", {
   state: (): {
@@ -7,6 +7,7 @@ export const useObjectivesStore = defineStore("objectivesStore", {
     objectives: IObjective[];
     favourites: IObjective[];
     search: string;
+    filter: ObjectiveFilterModel;
   } => {
     return {
       selectedObjective: {
@@ -22,6 +23,14 @@ export const useObjectivesStore = defineStore("objectivesStore", {
       objectives: [],
       favourites: [],
       search: "",
+      filter:{
+        latitude: 0,
+        longitude: 0,
+        maxDistance: 0,
+        name: "",
+        typeId: 0,
+        minRating: 0,
+      }
     };
   },
   actions: {
@@ -105,17 +114,13 @@ export const useObjectivesStore = defineStore("objectivesStore", {
         ];
       }
     },
-    async getLocalObjectives(latitude: number, longitude: number) {
+    async getLocalObjectives() {
       try {
-        const payload = {
-          latitude: latitude,
-          longitude: longitude,
-        };
+       
         const data = await fetchApi(
           "Objectives/GetLocalObjectives",
-          "get",
-          undefined,
-          payload
+          "post",
+          this.filter
         );
         let response = data as IServiceResult;
         this.objectives = response.result;

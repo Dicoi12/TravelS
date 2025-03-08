@@ -1,5 +1,12 @@
 <template>
   <div>
+    <div class="filter-bar">
+      <InputText v-model="objectiveStore.filter.name" placeholder="Caută obiectiv" class="filter-input" />
+      <Dropdown v-model="objectiveStore.filter.typeId" :options="useObjectiveTypeStore().objectiveTypes" placeholder="Tip obiectiv" class="filter-input" />
+      <InputNumber v-model="objectiveStore.filter.minRating" :min="0" :max="5" placeholder="Rating minim" class="filter-input" />
+      <InputNumber v-model="objectiveStore.filter.maxDistance" :min="1" placeholder="Distanță maximă (km)" class="filter-input" />
+      <Button label="Aplică filtre" icon="pi pi-filter" @click="objectiveStore.getLocalObjectives" />
+    </div>
     <div class="flex justify-content-between">
       <h1 class="text-white align-self-start ml-2">
         Cele mai importante obiective turistice:
@@ -34,6 +41,7 @@
 <script setup lang="ts">
 import { ref, onBeforeMount } from "vue";
 import { useObjectivesStore } from "../stores/objectivesStore";
+import { useObjectiveTypeStore } from "../stores/objectiveTypeStore";
 
 const objectiveStore = useObjectivesStore();
 
@@ -47,7 +55,7 @@ const getUserLocation = async() => {
       (position) => {
         latitude.value = position.coords.latitude;
         longitude.value = position.coords.longitude;
-        objectiveStore.getLocalObjectives(latitude.value??1,longitude.value??1);
+        // objectiveStore.getLocalObjectives(latitude.value??1,longitude.value??1);
         locationAccessGranted.value = true; 
         console.log("Latitudine:", latitude.value);
         console.log("Longitudine:", longitude.value);
@@ -65,7 +73,10 @@ const getUserLocation = async() => {
 
 onBeforeMount(async () => {
   await getUserLocation(); 
+  await objectiveStore.getLocalObjectives();
+  await useObjectiveTypeStore().getObjectiveTypes();
 });
+
 </script>
 
 <style scoped>
@@ -146,5 +157,18 @@ onBeforeMount(async () => {
 
 .favorite-button:hover .pi-heart {
   color: red;
+}
+.filter-bar {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  align-items: center;
+  background: #333;
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+.filter-input {
+  flex: 1;
 }
 </style>

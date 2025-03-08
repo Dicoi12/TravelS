@@ -90,3 +90,11 @@ export interface IObjectiveType extends BaseAuditEntity {
   name: string;
   description: string;  
 }
+export interface ObjectiveFilterModel {
+  latitude: number | null;
+  longitude: number | null;
+  maxDistance: number | null;
+  name: string | null;
+  typeId: number | null;
+  minRating: number | null;
+}
