@@ -24,12 +24,12 @@ export const useObjectivesStore = defineStore("objectivesStore", {
       favourites: [],
       search: "",
       filter:{
-        latitude: 0,
-        longitude: 0,
-        maxDistance: 0,
+        latitude: null,
+        longitude: null,
+        maxDistance: null,
         name: "",
-        typeId: 0,
-        minRating: 0,
+        typeId: null,
+        minRating: null,
       }
     };
   },
@@ -235,6 +235,14 @@ export const useObjectivesStore = defineStore("objectivesStore", {
         images: [],
         distance: 0,
       };
+    },
+    resetFilterData(){
+this.filter={latitude: null,
+  longitude: null,
+  maxDistance: null,
+  name: "",
+  typeId: null,
+  minRating: null,}
     },
     async getById(id: number) {
       try {

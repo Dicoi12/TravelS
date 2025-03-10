@@ -8,9 +8,9 @@
       <Button label="Aplică filtre" icon="pi pi-filter" @click="objectiveStore.getLocalObjectives" />
     </div>
     <div class="flex justify-content-between">
-      <h1 class="text-white align-self-start ml-2">
+      <!-- <h1 class="text-white align-self-start ml-2">
         Cele mai importante obiective turistice:
-      </h1>
+      </h1> -->
       <div class="flex align-items-center gap-2" v-if="!locationAccessGranted">
         <i class="pi pi-map-marker text-white"></i>
         <h2 class=" block md:hidden text-white mr-3" >Vezi obiectivele din jurul tău</h2>
