@@ -23,6 +23,7 @@ declare module 'vue' {
     HandleIt: typeof import('./src/components/itinerary/HandleIt.vue')['default']
     HandleObjectives: typeof import('./src/components/objectives/HandleObjectives.vue')['default']
     HandleObjectiveTypes: typeof import('./src/components/objectives/HandleObjectiveTypes.vue')['default']
+    Image: typeof import('primevue/image')['default']
     ImageUpload: typeof import('./src/components/ImageUpload.vue')['default']
     InputNumber: typeof import('primevue/inputnumber')['default']
     InputText: typeof import('primevue/inputtext')['default']

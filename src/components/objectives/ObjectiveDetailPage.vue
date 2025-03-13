@@ -2,21 +2,9 @@
   <div class="objective-detail-container">
     <!-- Secțiunea de imagini -->
     <div class="images-section">
-      <img
-        :src="
-          objectiveStore.selectedObjective.images[0] ||
-          'https://via.placeholder.com/800x500?text=No+Image'
-        "
-        alt="Imagine principală obiectiv"
-        class="main-image"
-      />
       <div class="thumbnail-container">
-        <img
-          v-for="(image, index) in objective?.images?.slice(1)"
-          :key="index"
-          :src="image"
-          alt="Imagine obiectiv"
-          class="thumbnail"
+        <PhotoCarousel
+         :photos="objectiveStore.selectedObjective.images"
         />
       </div>
     </div>
@@ -67,7 +55,7 @@
               <span>({{ objective?.rating }}/5)</span>
             </span>
           </div>
-          <div class="info-item">
+          <div class="info-item" v-if="objective?.website">
             <strong>Website: </strong>
             <a
               :href="

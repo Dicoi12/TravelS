@@ -1,11 +1,35 @@
 <template>
   <div>
     <div class="filter-bar">
-      <InputText v-model="objectiveStore.filter.name" placeholder="Caută obiectiv" class="filter-input" />
-      <Dropdown v-model="objectiveStore.filter.typeId" :options="useObjectiveTypeStore().objectiveTypes" placeholder="Tip obiectiv" class="filter-input" />
-      <InputNumber v-model="objectiveStore.filter.minRating" :min="0" :max="5" placeholder="Rating minim" class="filter-input" />
-      <InputNumber v-model="objectiveStore.filter.maxDistance" :min="1" placeholder="Distanță maximă (km)" class="filter-input" />
-      <Button label="Aplică filtre" icon="pi pi-filter" @click="objectiveStore.getLocalObjectives" />
+      <InputText
+        v-model="objectiveStore.filter.name"
+        placeholder="Caută obiectiv"
+        class="filter-input"
+      />
+      <Dropdown
+        v-model="objectiveStore.filter.typeId"
+        :options="useObjectiveTypeStore().objectiveTypes"
+        placeholder="Tip obiectiv"
+        class="filter-input"
+      />
+      <InputNumber
+        v-model="objectiveStore.filter.minRating"
+        :min="0"
+        :max="5"
+        placeholder="Rating minim"
+        class="filter-input"
+      />
+      <InputNumber
+        v-model="objectiveStore.filter.maxDistance"
+        :min="1"
+        placeholder="Distanță maximă (km)"
+        class="filter-input"
+      />
+      <Button
+        label="Aplică filtre"
+        icon="pi pi-filter"
+        @click="objectiveStore.getLocalObjectives"
+      />
     </div>
     <div class="flex justify-content-between">
       <!-- <h1 class="text-white align-self-start ml-2">
@@ -13,7 +37,9 @@
       </h1> -->
       <div class="flex align-items-center gap-2" v-if="!locationAccessGranted">
         <i class="pi pi-map-marker text-white"></i>
-        <h2 class=" block md:hidden text-white mr-3" >Vezi obiectivele din jurul tău</h2>
+        <h2 class="block md:hidden text-white mr-3">
+          Vezi obiectivele din jurul tău
+        </h2>
       </div>
     </div>
     <div class="grid-container fadein animation-duration-1000">
@@ -24,10 +50,14 @@
         @click="$router.push(`/objectives/${item.id}`)"
       >
         <div class="card-content text-white">
-          <img :src="item.images?item.images[0]:'https://iili.io/JhUNTSs.jpg'" alt="objective image" class="image"  />
+          <img
+            :src="item.images ? item.images[0] : 'https://iili.io/JhUNTSs.jpg'"
+            alt="objective image"
+            class="image"
+          />
           <div class="card-details">
             <h3 class="location">{{ item.name }}</h3>
-            <p>{{ item.description }}</p>
+            <p>{{ truncateDescription(item.description ?? "") }}</p>
           </div>
           <Button class="favorite-button">
             <i class="pi pi-heart"></i>
@@ -47,16 +77,16 @@ const objectiveStore = useObjectivesStore();
 
 const latitude = ref<number | null>(null);
 const longitude = ref<number | null>(null);
-const locationAccessGranted = ref<boolean>(true); 
+const locationAccessGranted = ref<boolean>(true);
 
-const getUserLocation = async() => {
+const getUserLocation = async () => {
   if (navigator.geolocation) {
     await navigator.geolocation.getCurrentPosition(
       (position) => {
         latitude.value = position.coords.latitude;
         longitude.value = position.coords.longitude;
         // objectiveStore.getLocalObjectives(latitude.value??1,longitude.value??1);
-        locationAccessGranted.value = true; 
+        locationAccessGranted.value = true;
         console.log("Latitudine:", latitude.value);
         console.log("Longitudine:", longitude.value);
       },
@@ -67,16 +97,24 @@ const getUserLocation = async() => {
     );
   } else {
     console.error("Geolocația nu este suportată de acest browser.");
-    locationAccessGranted.value = false; 
+    locationAccessGranted.value = false;
   }
+};
+const truncateDescription = (
+  description: string,
+  maxLength: number = 180
+): string => {
+  if (description.length > maxLength) {
+    return description.substring(0, maxLength) + "...";
+  }
+  return description;
 };
 
 onBeforeMount(async () => {
-  await getUserLocation(); 
+  await getUserLocation();
   await objectiveStore.getLocalObjectives();
   await useObjectiveTypeStore().getObjectiveTypes();
 });
-
 </script>
 
 <style scoped>
@@ -106,12 +144,12 @@ onBeforeMount(async () => {
   border-radius: 10px;
   overflow: hidden;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  background-color: #666666; 
+  background-color: #666666;
   transition: transform 0.3s ease-in-out;
 }
 
 .card-container:hover {
-  transform: scale(1.05); 
+  transform: scale(1.05);
 }
 
 .card-content {
@@ -122,11 +160,11 @@ onBeforeMount(async () => {
   width: 100%;
   height: 200px;
   object-fit: cover;
-  transition: transform 0.3s ease-in-out; 
+  transition: transform 0.3s ease-in-out;
 }
 
 .card-container:hover .image {
-  transform: scale(1.1); 
+  transform: scale(1.1);
 }
 
 .card-details {

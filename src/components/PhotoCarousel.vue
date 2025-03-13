@@ -8,7 +8,7 @@
   >
     <template #item="slotProps">
       <div class="carousel-item">
-        <img :src="slotProps.data" :alt="'Photo ' + slotProps.index" style="max-height: 500px; max-width: 500px;"  />
+        <img :src="slotProps.data" :alt="'Photo ' + slotProps.index" class="carousel-image" />
       </div>
     </template>
   </Carousel>
@@ -18,9 +18,9 @@
 import { defineProps } from 'vue'
 import Carousel from 'primevue/carousel'
 
-defineProps<{
-  photos: string[]
-}>()
+defineProps({
+  photos: { type: Array, default: [] }
+})
 </script>
 
 <style scoped>
@@ -29,5 +29,11 @@ defineProps<{
   justify-content: center;
   align-items: center;
   padding: 1rem;
+}
+
+.carousel-image {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
 }
 </style>
