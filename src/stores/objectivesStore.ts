@@ -135,7 +135,7 @@ export const useObjectivesStore = defineStore("objectivesStore", {
             latitude: 45.5155,
             longitude: 25.3674,
             city: "Bran",
-            images: ["https://iili.io/JhUNTSs.jpg","https://iili.io/JhUNTSs.jpg","https://iili.io/JhUNTSs.jpg"],
+            images: ["https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Transf%C4%83g%C4%83r%C4%83%C8%99an_04.JPG/450px-Transf%C4%83g%C4%83r%C4%83%C8%99an_04.JPG","https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Transf%C4%83g%C4%83r%C4%83%C8%99an_04.JPG/450px-Transf%C4%83g%C4%83r%C4%83%C8%99an_04.JPG","https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Transf%C4%83g%C4%83r%C4%83%C8%99an_04.JPG/450px-Transf%C4%83g%C4%83r%C4%83%C8%99an_04.JPG"],
           },
           {
             id: 2,
@@ -145,7 +145,7 @@ export const useObjectivesStore = defineStore("objectivesStore", {
             latitude: 45.5935,
             longitude: 25.5854,
             city: "Brașov",
-            images: ["https://iili.io/JhUNTSs.jpg","https://iili.io/JhUNTSs.jpg","https://iili.io/JhUNTSs.jpg"],
+            images: ["https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Transf%C4%83g%C4%83r%C4%83%C8%99an_04.JPG/450px-Transf%C4%83g%C4%83r%C4%83%C8%99an_04.JPG","https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Transf%C4%83g%C4%83r%C4%83%C8%99an_04.JPG/450px-Transf%C4%83g%C4%83r%C4%83%C8%99an_04.JPG","https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Transf%C4%83g%C4%83r%C4%83%C8%99an_04.JPG/450px-Transf%C4%83g%C4%83r%C4%83%C8%99an_04.JPG"],
           },
           {
             id: 3,
@@ -155,7 +155,7 @@ export const useObjectivesStore = defineStore("objectivesStore", {
             latitude: 45.1354,
             longitude: 29.5743,
             city: "Tulcea",
-            images: ["https://iili.io/JhUNTSs.jpg","https://iili.io/JhUNTSs.jpg","https://iili.io/JhUNTSs.jpg"],
+            images: ["https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Transf%C4%83g%C4%83r%C4%83%C8%99an_04.JPG/450px-Transf%C4%83g%C4%83r%C4%83%C8%99an_04.JPG","https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Transf%C4%83g%C4%83r%C4%83%C8%99an_04.JPG/450px-Transf%C4%83g%C4%83r%C4%83%C8%99an_04.JPG","https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Transf%C4%83g%C4%83r%C4%83%C8%99an_04.JPG/450px-Transf%C4%83g%C4%83r%C4%83%C8%99an_04.JPG"],
           },
           {
             id: 4,
@@ -165,7 +165,7 @@ export const useObjectivesStore = defineStore("objectivesStore", {
             latitude: 45.5952,
             longitude: 24.6423,
             city: "Sebeș",
-            images: ["https://iili.io/JhUNTSs.jpg","https://iili.io/JhUNTSs.jpg","https://iili.io/JhUNTSs.jpg"],
+            images: ["https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Transf%C4%83g%C4%83r%C4%83%C8%99an_04.JPG/450px-Transf%C4%83g%C4%83r%C4%83%C8%99an_04.JPG","https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Transf%C4%83g%C4%83r%C4%83%C8%99an_04.JPG/450px-Transf%C4%83g%C4%83r%C4%83%C8%99an_04.JPG","https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Transf%C4%83g%C4%83r%C4%83%C8%99an_04.JPG/450px-Transf%C4%83g%C4%83r%C4%83%C8%99an_04.JPG"],
           },
           {
             id: 5,
@@ -175,7 +175,7 @@ export const useObjectivesStore = defineStore("objectivesStore", {
             latitude: 45.3535,
             longitude: 25.5402,
             city: "Sinaia",
-            images: ["https://iili.io/JhUNTSs.jpg","https://iili.io/JhUNTSs.jpg","https://iili.io/JhUNTSs.jpg"],
+            images: ["https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Transf%C4%83g%C4%83r%C4%83%C8%99an_04.JPG/450px-Transf%C4%83g%C4%83r%C4%83%C8%99an_04.JPG","https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Transf%C4%83g%C4%83r%C4%83%C8%99an_04.JPG/450px-Transf%C4%83g%C4%83r%C4%83%C8%99an_04.JPG","https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Transf%C4%83g%C4%83r%C4%83%C8%99an_04.JPG/450px-Transf%C4%83g%C4%83r%C4%83%C8%99an_04.JPG"],
           },
         ];
       }
