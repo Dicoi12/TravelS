@@ -72,6 +72,8 @@ export interface IExperience extends BaseAuditEntity {
   location: string;
   date: Date;
   images: string[];
+  latitude?: number;
+  longitude?: number;
 }
 export interface IItineraryStore {
   itineraries: IItinerary[]
@@ -95,6 +97,6 @@ export interface ObjectiveFilterModel {
   longitude: number | null;
   maxDistance: number | null;
   name: string | null;
-  typeId: number | null;
+  typeId?: number | null;
   minRating: number | null;
 }

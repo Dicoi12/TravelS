@@ -97,6 +97,7 @@
   import { ref, onBeforeMount } from "vue";
   import { useExperienceStore } from "../../stores/experienceStore";
 import { IExperience } from "@/Interfaces";
+import HandleExperiences from "./HandleExperiences.vue";
   
   const experienceStore = useExperienceStore();
   const editingRows = ref();

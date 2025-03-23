@@ -11,6 +11,9 @@
         :options="useObjectiveTypeStore().objectiveTypes"
         placeholder="Tip obiectiv"
         class="filter-input"
+        optionLabel="name"
+        showClear 
+        optionValue="id"
       />
       <InputNumber
         v-model="objectiveStore.filter.minRating"
@@ -111,6 +114,10 @@ const truncateDescription = (
 };
 
 onBeforeMount(async () => {
+  objectiveStore.filter.typeId = null;
+  objectiveStore.filter.minRating = null;
+  objectiveStore.filter.maxDistance = null;
+  objectiveStore.filter.name = null;
   await getUserLocation();
   await objectiveStore.getLocalObjectives();
   await useObjectiveTypeStore().getObjectiveTypes();
