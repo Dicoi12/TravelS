@@ -36,7 +36,7 @@
             <p><span>Nume:</span> {{ userStore.userData.userName }}</p>
             <p><span>Email:</span> {{ userStore.userData.email }}</p>
             <p><span>Telefon:</span> {{ userStore.userData.phone }}</p>
-            <button class="btn" @click="userStore.$reset()">Deconectare</button>
+            <button class="btn" @click="userStore.$reset();router.push('/login')">Deconectare</button>
           </div>
           <div class="info-card">
             <h3>Statistici Cont</h3>
@@ -70,13 +70,14 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useUserStore } from "../stores/userStore";
+import { useRouter } from 'vue-router';
 
 const userStore = useUserStore();
 const activeSection = ref('main');
 const currentPassword = ref('');
 const newPassword = ref('');
 const confirmPassword = ref('');
-
+const router = useRouter();
 const menuItems = [
   { key: 'main', label: 'Profilul Meu', icon: 'pi pi-user' },
   { key: 'password', label: 'Schimbare Parolă', icon: 'pi pi-lock' }

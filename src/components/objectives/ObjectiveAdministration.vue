@@ -1,36 +1,18 @@
 <template>
-  <DataTable
-    :value="objectiveStore.objectives"
-    v-model:editingRows="editingRows"
-    editMode="row"
-    scrollable
-    scrollHeight="45rem"
-    paginator
-    :rows="10"
-    :rowsPerPageOptions="[10, 20, 50]"
-  >
+  <DataTable :value="objectiveStore.objectives" v-model:editingRows="editingRows" editMode="row" scrollable
+    scrollHeight="45rem" paginator :rows="10" :rowsPerPageOptions="[10, 20, 50]">
     <template #header>
       <div class="flex justify-content-between">
         <div class="flex w-full gap-3">
           <div class="font-bold text-xl">Gestionează obiectivele</div>
-          <InputText
-            v-model="objectiveStore.search"
-            placeholder="Caută după nume"
-            class="w-8"
-            @input="getObjectiveSearch()"
-          />
+          <InputText v-model="objectiveStore.search" placeholder="Caută după nume" class="w-8"
+            @input="getObjectiveSearch()" />
         </div>
         <div class="flex justify-content-end">
-          <HandleObjectives
-            :show-dialog="showEditDialog"
-            @on-close="showEditDialog = false"
-          >
+          <Button rounded class="mx-2" icon="pi pi-file-import" @click="objectiveStore.importObjectives()" />
+          <HandleObjectives :show-dialog="showEditDialog" @on-close="showEditDialog = false">
             <template #button>
-              <Button
-                icon="pi pi-plus"
-                label="Adaugă"
-                @click="objectiveStore.resetSelectedObjective()"
-              />
+              <Button icon="pi pi-plus" label="Adaugă" @click="objectiveStore.resetSelectedObjective()" />
             </template>
           </HandleObjectives>
         </div>
@@ -40,68 +22,55 @@
     <Column field="name" header="Nume">
       <template #editor="{ data, field }">
         <InputText v-model="data[field]" fluid />
-      </template> </Column
-    ><Column field="city" header="Oraș">
+      </template>
+    </Column>
+    <Column field="city" header="Oraș">
       <template #editor="{ data, field }">
         <InputText v-model="data[field]" fluid />
       </template>
     </Column>
     <Column field="description" header="Descriere">
       <template #editor="{ data, field }">
-        <InputText v-model="data[field]" fluid /> </template
-    ></Column>
+        <InputText v-model="data[field]" fluid />
+      </template>
+    </Column>
     <Column field="latitude" header="Latitudine">
       <template #editor="{ data, field }">
-        <InputNumber v-model="data[field]" fluid /> </template
-    ></Column>
+        <InputNumber v-model="data[field]" fluid />
+      </template>
+    </Column>
     <Column field="longitude" header="Longitudine">
       <template #editor="{ data, field }">
-        <InputNumber v-model="data[field]" fluid /> </template
-    ></Column>
+        <InputNumber v-model="data[field]" fluid />
+      </template>
+    </Column>
     <Column style="width: 10%; min-width: 8rem" header="Acțiuni">
       <template #body="slotProps">
         <div class="flex gap-3">
-          <i
-            class="pi pi-pencil"
-            @click="handleEditObjective(slotProps.data)"
-          ></i>
-          <i
-            class="pi pi-trash"
-            @click="deleteObjective(slotProps.data.id)"
-          ></i>
-          <i
-            class="pi pi-image"
-            @click="
-              objectiveStore.selectedObjective = slotProps.data;
-              showGallery = true;
-            "
-          ></i>
+          <i class="pi pi-pencil" @click="handleEditObjective(slotProps.data)"></i>
+          <i class="pi pi-trash" @click="deleteObjective(slotProps.data.id)"></i>
+          <i class="pi pi-image" @click="
+            objectiveStore.selectedObjective = slotProps.data;
+          showGallery = true;
+          "></i>
         </div>
       </template>
     </Column>
   </DataTable>
-  <Dialog
-      v-model:visible="showGallery"
-      maximizable
-      modal
-      :header="`Galeria obiectivului #${objectiveStore.selectedObjective.name}`"
-      :style="{ width: '50rem' }"
-      :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
-      @hide="showGallery = false"
-    >
-      <ImageUpload
-        :id-obiectiv="objectiveStore.selectedObjective.id"
-        @uploaded="
-          objectiveStore.getObjectives();
-          showGallery = false;
-        "
-      />
-      <PhotoGalleria :images="getImageSrc()" />
-    </Dialog>
+  <Dialog v-model:visible="showGallery" maximizable modal
+    :header="`Galeria obiectivului #${objectiveStore.selectedObjective.name}`" :style="{ width: '50rem' }"
+    :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" @hide="showGallery = false">
+    <ImageUpload :id-obiectiv="objectiveStore.selectedObjective.id" @uploaded="
+      objectiveStore.getObjectives();
+    showGallery = false;
+    " />
+    <PhotoGalleria :images="getImageSrc()" />
+  </Dialog>
 </template>
 <script setup lang="ts">
 import { useObjectivesStore } from "../../stores/objectivesStore";
 import { ref, onBeforeMount } from "vue";
+import { fetchApi } from "../../services/apiService";
 onBeforeMount(async () => {
   await objectiveStore.getObjectives();
 });
@@ -131,4 +100,6 @@ function getImageSrc() {
     title: "Title 1",
   }));
 }
+
+
 </script>

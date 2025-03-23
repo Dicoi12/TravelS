@@ -224,6 +224,14 @@ export const useObjectivesStore = defineStore("objectivesStore", {
         throw error;
       }
     },
+    async  importObjectives() {
+      try {
+        const data = await fetchApi("Objectives/ImportObjectives", "get");
+        console.log("Added objective:", data);
+      } catch (error) {
+        console.error("Error adding objective:", error);
+      }
+    },  
     resetSelectedObjective() {
       this.selectedObjective = {
         id: 0,

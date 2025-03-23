@@ -4,7 +4,7 @@
     <NavBar v-if="appStore.onMainPage == false" />
 
     <div class="content">
-      <router-view v-slot="{ Component }">
+      <router-view v-slot="{ Component }" class="fadein animation-duration-300">
         <transition name="fade" mode="out-in">
           <component :is="Component" />
         </transition>
