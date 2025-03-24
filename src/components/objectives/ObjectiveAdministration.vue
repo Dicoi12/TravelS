@@ -70,7 +70,6 @@
 <script setup lang="ts">
 import { useObjectivesStore } from "../../stores/objectivesStore";
 import { ref, onBeforeMount } from "vue";
-import { fetchApi } from "../../services/apiService";
 onBeforeMount(async () => {
   await objectiveStore.getObjectives();
 });

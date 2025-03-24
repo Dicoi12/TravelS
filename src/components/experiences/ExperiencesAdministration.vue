@@ -67,6 +67,7 @@
           <div class="flex gap-3">
             <i class="pi pi-pencil" @click="handleEditExperience(slotProps.data)"></i>
             <i class="pi pi-trash" @click="deleteExperience(slotProps.data.id)"></i>
+            <i class="pi pi-image" @click="handleImageDialog(slotProps.data)"></i>
           </div>
         </template>
       </Column>
@@ -91,6 +92,23 @@
         </template>
       </HandleExperiences>
     </Dialog>
+
+    <!-- Adăugăm dialogul pentru galerie -->
+    <Dialog 
+      v-model:visible="showGallery" 
+      maximizable 
+      modal
+      :header="`Galeria experienței #${experienceStore.selectedExperience.title}`" 
+      :style="{ width: '50rem' }"
+      :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" 
+      @hide="showGallery = false"
+    >
+      <ImageUpload 
+        :id-experience="experienceStore.selectedExperience.id" 
+        @uploaded="handleImageUpload"
+      />
+      <PhotoGalleria :images="getImageSrc()" />
+    </Dialog>
   </template>
   
   <script setup lang="ts">
@@ -98,10 +116,13 @@
   import { useExperienceStore } from "../../stores/experienceStore";
 import { IExperience } from "@/Interfaces";
 import HandleExperiences from "./HandleExperiences.vue";
+import PhotoGalleria from "../PhotoGalleria.vue";
+import ImageUpload from "../ImageUpload.vue";
   
   const experienceStore = useExperienceStore();
   const editingRows = ref();
   const showEditDialog = ref(false);
+  const showGallery = ref(false);
   
   function handleEditExperience(experience:IExperience) {
     experienceStore.selectedExperience = experience;
@@ -118,6 +139,25 @@ import HandleExperiences from "./HandleExperiences.vue";
   
   function saveExperience() {
     experienceStore.addExperience(experienceStore.selectedExperience);
+  }
+  
+  function handleImageDialog(experience: IExperience) {
+    experienceStore.selectedExperience = experience;
+    showGallery.value = true;
+  }
+  
+  function handleImageUpload() {
+    experienceStore.getAllExperiences();
+    showGallery.value = false;
+  }
+  
+  function getImageSrc() {
+    return experienceStore.selectedExperience.images?.map((image) => ({
+      itemImageSrc: image,
+      thumbnailImageSrc: "",
+      alt: "Imagine experiență",
+      title: experienceStore.selectedExperience.title,
+    })) || [];
   }
   
   onBeforeMount(async () => {

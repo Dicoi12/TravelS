@@ -10,6 +10,13 @@ export const useItineraryStore = defineStore("itineraryStore", {
         description:'',
         idObjectives:[],
         idEvents:[]
+    },
+    search:'',
+    selectedItineraryDTO:{
+      name:'',
+      description:'',
+      objectivesIds:[],
+      eventsIds:[]
     }
     };
   },

@@ -54,14 +54,6 @@
       "
     />
 
-    <div class="mt-4">
-      <h3>Imagini</h3>
-      <ImageUpload 
-        :id-obiectiv="experienceStore.selectedExperience.id"
-        @uploaded="handleImageUpload"
-      />
-    </div>
-
     <div class="flex justify-content-end mt-2">
       <Button
         icon="pi pi-plus"
@@ -77,7 +69,6 @@ import { ref } from "vue";
 import { useExperienceStore } from "../../stores/experienceStore";
 import { defineEmits, watch } from "vue";
 import Map from "../map/Map.vue";
-import ImageUpload from "../ImageUpload.vue";
 
 const emits = defineEmits(["onClose"]);
 const props = defineProps({
@@ -95,11 +86,6 @@ const addExperience = async () => {
 const updateExperience = async () => {
   await experienceStore.updateExperience(experienceStore.selectedExperience);
   dialogVisible.value = false;
-  await experienceStore.getAllExperiences();
-};
-
-const handleImageUpload = async () => {
-  // Reîmprospătează datele experienței pentru a obține imaginile actualizate
   await experienceStore.getAllExperiences();
 };
 

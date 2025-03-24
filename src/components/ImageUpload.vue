@@ -16,6 +16,7 @@ const uploadStatus = ref("");
 const props = defineProps({
   idObiectiv: { type: Number, required: false, default: null },
   idEveniment: { type: Number, required: false, default: null },
+  idExperience: { type: Number, required: false, default: null },
 });
 
 const handleFileChange = (event: any) => {
@@ -40,6 +41,10 @@ const uploadFile = async () => {
   if (props.idEveniment !== null) {
     params.append('eventId', props.idEveniment.toString());
   }
+  if (props.idExperience !== null) {
+    params.append('idExperience', props.idExperience.toString());
+  }
+
 
   if (params.toString()) {
     url += `?${params.toString()}`;

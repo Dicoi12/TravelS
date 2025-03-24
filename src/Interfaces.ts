@@ -78,6 +78,8 @@ export interface IExperience extends BaseAuditEntity {
 export interface IItineraryStore {
   itineraries: IItinerary[]
   selectedItinerary: IItinerary
+  selectedItineraryDTO: IItineraryDTO
+  search:string
 }
 export interface IItinerary {
   id?:number;
@@ -86,6 +88,14 @@ export interface IItinerary {
   idObjectives: number[];
   idEvents: number[];
   idUser?: number;
+}
+export interface IItineraryDTO {
+  id?: number;
+  name: string;
+  description: string;
+  objectivesIds: number[];
+  idUser?: number;
+  eventsIds: number[];
 }
 export interface IObjectiveType extends BaseAuditEntity {
   id: number;

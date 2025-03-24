@@ -33,7 +33,7 @@ export const useObjectiveTypeStore = defineStore("objectiveTypeStore", {
     async getObjectiveTypes() {
       try {
         const data = await fetchApi("ObjectiveType", "get");
-        let response = data;
+        // let response = data;
         this.objectiveTypes = data
       } catch (error) {
         console.error("Error fetching objective types:", error);

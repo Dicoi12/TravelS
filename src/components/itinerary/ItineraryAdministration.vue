@@ -12,15 +12,16 @@
       <template #header>
         <div class="flex justify-content-between">
           <div class="flex w-full gap-3">
-            <div class="font-bold text-xl">Gestionează itinerariile prestabilite</div>
+            <div class="font-bold text-xl">Gestionează itinerariile</div>
             <InputText
+              v-model="itineraryStore.search"
               placeholder="Caută după nume"
               class="w-8"
               @input="getItinerarySearch()"
             />
           </div>
           <div class="flex justify-content-end">
-            <HandleEvents
+            <HandleItinerary
               :show-dialog="showEditDialog"
               @on-close="showEditDialog = false"
             >
@@ -31,7 +32,7 @@
                   @click="itineraryStore.resetItinerary()"
                 />
               </template>
-            </HandleEvents>
+            </HandleItinerary>
           </div>
         </div>
       </template>
@@ -66,11 +67,21 @@
           {{ helperStore.formatDate(new Date(data.endDate)) }}
         </template></Column
       >
+      <Column field="objectivesCount" header="Număr obiective">
+        <template #body="slotProps">
+          {{ slotProps.data.objectivesIds?.length || 0 }}
+        </template>
+      </Column>
+      <Column field="eventsCount" header="Număr evenimente">
+        <template #body="slotProps">
+          {{ slotProps.data.eventsIds?.length || 0 }}
+        </template>
+      </Column>
       <Column style="width: 10%; min-width: 8rem" header="Acțiuni">
         <template #body="slotProps">
           <div class="flex gap-3">
-            <i class="pi pi-pencil" @click="handleEditEvent(slotProps.data)"></i>
-            <i class="pi pi-trash" @click="deleteEvent(slotProps.data.id)"></i>
+            <i class="pi pi-pencil" @click="handleEditItinerary(slotProps.data)"></i>
+            <i class="pi pi-trash" @click="deleteItinerary(slotProps.data.id)"></i>
             <i
               class="pi pi-image"
               @click="
@@ -126,6 +137,7 @@
   import {  IItinerary } from "../../Interfaces";
   import { useHelperStore } from "../../stores/helperStore";
   import { useItineraryStore } from "../../stores/itineraryStore";
+  import HandleIt from "./HandleIt.vue";
 
   const itineraryStore= useItineraryStore();
   const helperStore = useHelperStore();
@@ -133,18 +145,19 @@
   const showEditDialog = ref(false);
   const showGallery = ref(false);
   
-  function handleEditEvent(event: IItinerary) {
-    itineraryStore.selectedItinerary = event;
+  function handleEditItinerary(data: IItinerary) {
+    itineraryStore.selectedItinerary = data;
     showEditDialog.value = true;
   }
-  function deleteEvent(id: number) {
-    // itineraryStore.deleteEvent(id);
+  async function deleteItinerary(id: number) {
+    // await itineraryStore.deleteItinerary(id);
+    // await itineraryStore.getItineraries();
   }
-  function getItinerarySearch() {
-    // itineraryStore.getItineraries();
+  async function getItinerarySearch() {
+    // await itineraryStore.getItineraries();
   }
   onBeforeMount(async () => {
-    // await eventStore.getEvents();
+    // await itineraryStore.getItineraries();
   });
  async function saveEvent() {
    await itineraryStore.addItinerary();
