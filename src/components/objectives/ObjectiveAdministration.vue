@@ -64,7 +64,7 @@
       objectiveStore.getObjectives();
     showGallery = false;
     " />
-    <PhotoGalleria :images="getImageSrc()" />
+    <PhotoGalleria :images="getImageSrc()" onAdministration />
   </Dialog>
 </template>
 <script setup lang="ts">
