@@ -10,6 +10,9 @@ import InputGroup from "primevue/inputgroup";
 import InputGroupAddon from "primevue/inputgroupaddon";
 import ToastService from "primevue/toastservice";
 import router from "./router";
+
+import ConfirmationService from 'primevue/confirmationservice';
+
 import '/node_modules/primeflex/primeflex.css'
 import 'primeflex/primeflex.css';
 import 'primeicons/primeicons.css'
@@ -34,6 +37,7 @@ app.use(PrimeVue, {
     }
 });
 app.use(ToastService);
+app.use(ConfirmationService);
 app.directive("tooltip", Tooltip);
 app.directive("badge", BadgeDirective);
 app.component("InputGroup", InputGroup);
