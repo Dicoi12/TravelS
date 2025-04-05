@@ -90,7 +90,7 @@
           </Column>
 
           <Column style="width: 10rem">
-            <template #body="{ data, index }">
+            <template #body="{ index }">
               <Button 
                 icon="pi pi-trash" 
                 class="p-button-danger" 

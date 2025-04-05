@@ -85,8 +85,10 @@ export interface IItinerary {
   id?:number;
   name: string;
   description: string;
-  idObjectives: number[];
-  idEvents: number[];
+  startDate: Date;
+  endDate: Date;
+  idObjectives?: number[];
+  idEvents?: number[];
   idUser?: number;
 }
 export interface IItineraryDTO {
@@ -157,4 +159,13 @@ export interface IItineraryPageDTO {
   updatedAt: Date;
   objectivesIds: number[];
   eventsIds: number[];
+}
+export interface ItineraryFilterModel {
+  latitude: number | null;
+  longitude: number | null;
+  maxDistance: number | null;
+  name: string;
+  startDate: Date | null;
+  endDate: Date | null;
+  minRating: number | null;
 }

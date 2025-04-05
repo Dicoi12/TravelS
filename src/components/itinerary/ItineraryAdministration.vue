@@ -8,7 +8,6 @@
       paginator
       :rows="10"
       :rowsPerPageOptions="[10, 20, 50]"
-      :loading="itineraryStore.loading"
     >
       <template #header>
         <div class="flex justify-content-between">
@@ -39,8 +38,6 @@
       <Column field="id" header="Id" style="width: 5rem"></Column>
       <Column field="name" header="Nume" style="width: 15rem"></Column>
       <Column field="description" header="Descriere" style="width: 20rem"></Column>
-      
-      <!-- Detalii Itinerariu -->
       <Column header="Obiective și Evenimente" style="width: 25rem">
         <template #body="{ data }">
           <div v-if="data.itineraryDetails && data.itineraryDetails.length > 0">
@@ -60,22 +57,16 @@
           </div>
         </template>
       </Column>
-
-      <!-- Data creării -->
       <Column field="createdAt" header="Data creării" style="width: 12rem">
         <template #body="{ data }">
           {{ formatDate(data.itineraryDetails[0]?.createdAt) }}
         </template>
       </Column>
-
-      <!-- Data actualizării -->
       <Column field="updatedAt" header="Ultima actualizare" style="width: 12rem">
         <template #body="{ data }">
           {{ formatDate(data.itineraryDetails[0]?.updatedAt) }}
         </template>
       </Column>
-
-      <!-- Acțiuni -->
       <Column style="width: 10rem" header="Acțiuni">
         <template #body="slotProps">
           <div class="flex gap-3">
@@ -135,7 +126,6 @@
     <!-- Error Message Toast -->
     <Toast position="bottom-right" />
 
-    <!-- Delete Confirmation Dialog -->
     <ConfirmDialog>
       <template #message="slotProps">
         <div class="flex flex-column gap-2">
@@ -144,7 +134,6 @@
       </template>
     </ConfirmDialog>
 
-    <!-- Dialog pentru detalii -->
     <Dialog 
       v-model:visible="showDetailsDialog" 
       header="Detalii itinerariu"
@@ -171,41 +160,34 @@
   </template>
   <script setup lang="ts">
   import { onBeforeMount, ref, onMounted } from "vue";
-  import { useHelperStore } from "../../stores/helperStore";
   import { useItineraryStore } from "../../stores/itineraryStore";
   import HandleIt from "./HandleIt.vue";
   import { useConfirm } from "primevue/useconfirm";
   import { useToast } from "primevue/usetoast";
-  import type { IItineraryPageDTO, IItineraryDTO } from '../../Interfaces';
+  import type { IItineraryPageDTO, IItineraryDTO, IItinerary } from '../../Interfaces';
   import ConfirmDialog from 'primevue/confirmdialog';
 
   const itineraryStore= useItineraryStore();
-  const helperStore = useHelperStore();
   const editingRows = ref();
   const showEditDialog = ref(false);
-  const showGallery = ref(false);
   const confirm = useConfirm();
   const toast = useToast();
   const searchQuery = ref('');
   const showDetailsDialog = ref(false);
   const selectedItineraryForDetails = ref<IItineraryDTO | null>(null);
   
-  function handleEditItinerary(data: any) {
-    itineraryStore.setSelectedItinerary(data);
-    showEditDialog.value = true;
-  }
   async function deleteItinerary(id: number) {
-    // await itineraryStore.deleteItinerary(id);
-    // await itineraryStore.getItineraries();
+    await itineraryStore.deleteItinerary(id);
+    await itineraryStore.getItineraries();
   }
   async function getItinerarySearch() {
-    // await itineraryStore.getItineraries();
+    await itineraryStore.getItineraries();
   }
   onBeforeMount(async () => {
-    // await itineraryStore.getItineraries();
+    await itineraryStore.getItineraries();
   });
  async function saveEvent() {
-   await itineraryStore.addOrUpdateItinerary(itineraryStore.selectedItinerary);
+   await itineraryStore.updateItinerary();
   }
   // function getImageSrc() {
   //   // return eventStore.selectedEvent.images.map((image) => ({
@@ -235,8 +217,8 @@
     showEditDialog.value = true;
   }
 
-  function handleEdit(itinerary: IItineraryPageDTO) {
-    itineraryStore.setSelectedItinerary(itinerary);
+  function handleEdit(itinerary: IItinerary) {
+    itineraryStore.selectedItinerary = itinerary;
     showEditDialog.value = true;
   }
 
@@ -254,11 +236,9 @@
     });
   }
 
-  async function handleDelete(itinerary: IItineraryPageDTO) {
+  async function handleDelete(itinerary: IItinerary) {
     try {
-      // Presupunem că avem userId în aplicație, poate din auth store
-      const userId = 1; // Înlocuiți cu userId-ul real din aplicație
-      const success = await itineraryStore.deleteItineraryByUser(itinerary.id, userId);
+      const success = await itineraryStore.deleteItinerary(itinerary.id);
       
       if (success) {
         toast.add({
@@ -281,7 +261,7 @@
   // Lifecycle hooks
   onMounted(async () => {
     try {
-      await itineraryStore.getAllItineraries();
+      await itineraryStore.getItineraries();
     } catch (error) {
       console.error('Eroare la încărcarea itinerariilor:', error);
     }

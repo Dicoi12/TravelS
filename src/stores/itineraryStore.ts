@@ -1,158 +1,163 @@
-import { defineStore } from 'pinia';
-import { ref } from 'vue';
-import type { 
-  IItineraryDTO, 
-  IItineraryPageDTO, 
-  IServiceResult 
-} from '../Interfaces';
-import fetchApi from '../stores/fetch';
+import { defineStore } from "pinia";
+import { IItinerary, IServiceResult, ItineraryFilterModel } from "../Interfaces";
+import fetchApi from "../stores/fetch";
 
-export const useItineraryStore = defineStore('itinerary', () => {
-  const itineraries = ref<IItineraryPageDTO[]>([]);
-  const selectedItinerary = ref<IItineraryDTO>({
-    name: '',
-    description: '',
-    objectivesIds: [],
-    eventsIds: [],
-    itineraryDetails: []
-  });
-  const loading = ref(false);
-  const error = ref<string | null>(null);
-  const showDetailsDialog = ref(false);
-  const selectedItineraryForDetails = ref<IItineraryDTO | null>(null);
-
-  /**
-   * Obține toate itinerariile
-   */
-  async function getAllItineraries() {
-    try {
-      loading.value = true;
-      error.value = null;
-      const response: IServiceResult = await fetchApi('Itinerary');
-      if (response.isSuccesful) {
-        itineraries.value = response.result;
-      } else {
-       console.log(response.validationMessage);
+export const useItineraryStore = defineStore("itineraryStore", {
+  state: (): {
+    selectedItinerary: IItinerary;
+    itineraries: IItinerary[];
+    search: string;
+    filter: ItineraryFilterModel;
+  } => {
+    return {
+      selectedItinerary: {
+        id: 0,
+        name: "",
+        description: "",
+        startDate: new Date(),
+        endDate: new Date(),
+        itineraryDetails: []
+      },
+      itineraries: [],
+      search: "",
+      filter: {
+        latitude: null,
+        longitude: null,
+        maxDistance: null,
+        name: "",
+        startDate: null,
+        endDate: null,
+        minRating: null,
       }
-    } catch (err) {
-      error.value = 'Eroare la comunicarea cu serverul';
-      console.error('Eroare la încărcarea itinerariilor:', err);
-    } finally {
-      loading.value = false;
-    }
-  }
+    };
+  },
 
-  /**
-   * Adaugă sau actualizează un itinerariu
-   */
-  async function addOrUpdateItinerary(itinerary: IItineraryDTO) {
-    try {
-      loading.value = true;
-      error.value = null;
-      const response: IServiceResult = await fetchApi('Itinerary', 'POST', itinerary);
+  actions: {
+    async addItinerary() {
+      try {
+        const data = await fetchApi(
+          "Itinerary/PostItinerary",
+          "POST",
+          this.selectedItinerary
+        );
+        console.log("Added itinerary:", data);
+      } catch (error) {
+        console.error("Error adding itinerary:", error);
+      }
+    },
 
-      if (response.isSuccesful) {
-        await getAllItineraries(); // Reîmprospătăm lista
+    async getItineraries() {
+      try {
+        const data = await fetchApi(
+          `Itinerary/GetItineraryAsync`,
+          "get"
+        );
+        let response = data as IServiceResult;
+        this.itineraries = response.result;
+      } catch (error) {
+        console.error("Error fetching itineraries:", error);
+        this.itineraries = []; 
+      }
+    },
+
+    async getLocalItineraries() {
+      try {
+        const data = await fetchApi(
+          "Itinerary/GetLocalItineraries",
+          "post",
+          this.filter
+        );
+        let response = data as IServiceResult;
+        this.itineraries = response.result;
+      } catch (error) {
+        console.error("Error fetch itineraries:", error);
+        this.itineraries = [];
+      }
+    },
+
+    async updateItinerary() {
+      try {
+        const data = await fetchApi(
+          "Itinerary/UpdateItinerary",
+          "put",
+          undefined,
+          this.selectedItinerary
+        );
+        let response = data as IServiceResult;
         return response.result;
-      } else {
-        console.log(response.validationMessage);
+      } catch (error) {
+        console.error("Error updating itinerary:", error);
       }
-    } catch (err) {
-      error.value = 'Eroare la comunicarea cu serverul';
-      console.error('Eroare la salvarea itinerariului:', err);
-      throw err;
-    } finally {
-      loading.value = false;
-    }
-  }
+    },
 
-  /**
-   * Obține itinerariile unui utilizator specific
-   */
-  async function getItinerariesByUserId(userId: number) {
-    try {
-      loading.value = true;
-      error.value = null;
-      const response: IServiceResult = await fetchApi(`Itinerary/user/${userId}`);
-      if (response.isSuccesful) {
-        itineraries.value = response.result;
-      } else {
-        console.log(response.validationMessage);
+    async deleteItinerary(id?: number) {
+      try {
+        const data = await fetchApi(`Itinerary/${id}`, "delete");
+        let response = data as IServiceResult;
+        this.getItineraries();
+        return response.result;
+      } catch (error) {
+        console.error("Error deleting itinerary:", error);
       }
-    } catch (err) {
-      error.value = 'Eroare la comunicarea cu serverul';
-      console.error('Eroare la încărcarea itin  erariilor utilizatorului:', err);
-    } finally {
-      loading.value = false;
-    }
-  }
+    },
 
-  /**
-   * Șterge un itinerariu pentru un utilizator specific
-   */
-  async function deleteItineraryByUser(itineraryId: number, userId: number) {
-    try {
-      loading.value = true;
-      error.value = null;
-      const response: IServiceResult = await fetchApi(`Itinerary/user/${itineraryId}`, 'DELETE', { userId });
+    async uploadFile(file: File, itineraryId: number) {
+      const formData = new FormData();
+      formData.append("imageFile", file);
+      formData.append("itineraryId", String(itineraryId));
 
-      if (response.isSuccesful) {
-        await getAllItineraries(); // Reîmprospătăm lista
-        return true;
-      } else {
-        console.log(response.validationMessage);
-        return false;
+      try {
+        const response = await fetchApi(
+          "ItineraryImage/UploadImage",
+          "POST",
+          formData,
+          undefined,
+          true
+        );
+        console.log("File uploaded successfully:", response);
+        return response;
+      } catch (error) {
+        console.error("Error uploading file:", error);
+        throw error;
       }
-    } catch (err) {
-      error.value = 'Eroare la comunicarea cu serverul';
-      console.error('Eroare la ștergerea itinerariului:', err);
-      return false;
-    } finally {
-      loading.value = false;
-    }
-  }
+    },
 
-  /**
-   * Resetează itinerariul selectat
-   */
-  function resetSelectedItinerary() {
-    selectedItinerary.value = {
-      name: '',
-      description: '',
-      objectivesIds: [],
-      eventsIds: [],
-      itineraryDetails: []
-    };
-  }
+    resetSelectedItinerary() {
+      this.selectedItinerary = {
+        id: 0,
+        name: "",
+        description: "",
+        startDate: new Date(),
+        endDate: new Date(),
+        itineraryDetails: []
+      };
+    },
 
-  /**
-   * Setează itinerariul selectat
-   */
-  function setSelectedItinerary(itinerary: IItineraryPageDTO) {
-    selectedItinerary.value = {
-      id: itinerary.id,
-      name: itinerary.name,
-      description: itinerary.description,
-      idUser: itinerary.idUser,
-      itineraryDetails: [...itinerary.itineraryDetails],
-      objectivesIds: itinerary.objectivesIds,
-      eventsIds: itinerary.eventsIds
-    };
-  }
+    resetFilterData() {
+      this.filter = {
+        latitude: null,
+        longitude: null,
+        maxDistance: null,
+        name: "",
+        startDate: null,
+        endDate: null,
+        minRating: null,
+      };
+    },
 
-  return {
-    // state
-    itineraries,
-    selectedItinerary,
-    loading,
-    error,
+    async getById(id: number) {
+      try { 
+        const data = await fetchApi(`Itinerary/${id}`, "get");
+        let response = data as IServiceResult;
+        this.selectedItinerary = response.result;
+        return response.result;
+      } catch (error) {
+        console.error("Error fetching itinerary by id:", error);
+        return null;
+      }
+    },
+  },
 
-    // actions
-    getAllItineraries,
-    addOrUpdateItinerary,
-    getItinerariesByUserId,
-    deleteItineraryByUser,
-    resetSelectedItinerary,
-    setSelectedItinerary
-  };
+  getters: {},
+  persist: true,
 });
