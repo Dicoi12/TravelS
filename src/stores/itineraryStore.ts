@@ -33,12 +33,13 @@ export const useItineraryStore = defineStore("itineraryStore", {
   },
 
   actions: {
-    async addItinerary() {
+    async addOrUpdateItinerary() {
       try {
         const data = await fetchApi(
-          "Itinerary/PostItinerary",
-          "POST",
-          this.selectedItinerary
+          "Itinerary/AddOrUpdateItineraryAsync",
+          "post",
+          null,
+          this.selectedItinerary  
         );
         console.log("Added itinerary:", data);
       } catch (error) {

@@ -35,57 +35,75 @@
 
         <DataTable 
           v-model:value="itineraryStore.selectedItinerary.itineraryDetails"
-          editMode="row"
+          editMode="cell"
           dataKey="visitOrder"
-          :reorderableRows="true"
           @row-reorder="onRowReorder"
+          v-model:editingRows="editingRows"
+          responsiveLayout="scroll"
+          @cell-edit-complete="onCellEditComplete"
         >
           <Column :rowReorder="true" style="width: 3rem" />
-          <Column field="visitOrder" header="Ordine">
+          <Column field="visitOrder" header="Ordine" :sortable="false">
             <template #body="slotProps">
               {{ slotProps.index + 1 }}
             </template>
           </Column>
           
           <Column field="name" header="Nume">
-            <template #editor="{ data }">
-              <InputText v-model="data.name" />
+            <template #editor="{ data, field }">
+              <InputText v-model="data[field]" autofocus />
+            </template>
+            <template #body="{ data }">
+              <div class="editable-cell" @click="onCellClick($event, data, 'name')">
+                {{ data.name }}
+              </div>
             </template>
           </Column>
 
           <Column field="descriere" header="Descriere">
-            <template #editor="{ data }">
-              <InputText v-model="data.descriere" />
+            <template #editor="{ data, field }">
+              <InputText v-model="data[field]" autofocus />
+            </template>
+            <template #body="{ data }">
+              <div class="editable-cell" @click="onCellClick($event, data, 'descriere')">
+                {{ data.descriere }}
+              </div>
             </template>
           </Column>
 
           <Column field="idObjective" header="Obiectiv">
-            <template #editor="{ data }">
+            <template #editor="{ data, field }">
               <Dropdown
-                v-model="data.idObjective"
+                v-model="data[field]"
                 :options="objectiveStore.objectives"
                 optionLabel="name"
                 optionValue="id"
                 placeholder="Selectează obiectiv"
+                autofocus
               />
             </template>
             <template #body="{ data }">
-              {{ getObjectiveName(data.idObjective) }}
+              <div class="editable-cell" @click="onCellClick($event, data, 'idObjective')">
+                {{ getObjectiveName(data.idObjective) }}
+              </div>
             </template>
           </Column>
 
           <Column field="idEvent" header="Eveniment">
-            <template #editor="{ data }">
+            <template #editor="{ data, field }">
               <Dropdown
-                v-model="data.idEvent"
+                v-model="data[field]"
                 :options="eventStore.events"
                 optionLabel="name"
                 optionValue="id"
                 placeholder="Selectează eveniment"
+                autofocus
               />
             </template>
             <template #body="{ data }">
-              {{ getEventName(data.idEvent) }}
+              <div class="editable-cell" @click="onCellClick($event, data, 'idEvent')">
+                {{ getEventName(data.idEvent) }}
+              </div>
             </template>
           </Column>
 
@@ -93,7 +111,7 @@
             <template #body="{ index }">
               <Button 
                 icon="pi pi-trash" 
-                class="p-button-danger" 
+                class="p-button-danger p-button-text" 
                 @click="removeDetail(index)"
               />
             </template>
@@ -140,6 +158,8 @@ const itineraryStore = useItineraryStore();
 const objectiveStore = useObjectivesStore();
 const eventStore = useEventsStore();
 
+const editingRows = ref({});
+
 function addNewDetail() {
   const newDetail: IItineraryDetail = {
     name: '',
@@ -154,14 +174,29 @@ function removeDetail(index: number) {
   updateVisitOrder();
 }
 
-function updateVisitOrder() {
-  itineraryStore.selectedItinerary.itineraryDetails.forEach((detail, index) => {
-    detail.visitOrder = index + 1;
-  });
+function onCellClick(event: Event, data: any, field: string) {
+  event.preventDefault();
+  const element = event.target as HTMLElement;
+  if (!element.classList.contains('p-button')) {
+    data.editing = true;
+    editingRows.value = { [field]: true };
+  }
 }
 
 function onRowReorder(event: any) {
+  const details = [...itineraryStore.selectedItinerary.itineraryDetails];
+  const movedItem = details.splice(event.dragIndex, 1)[0];
+  details.splice(event.dropIndex, 0, movedItem);
+  itineraryStore.selectedItinerary.itineraryDetails = details;
   updateVisitOrder();
+}
+
+function updateVisitOrder() {
+  itineraryStore.selectedItinerary.itineraryDetails = 
+    itineraryStore.selectedItinerary.itineraryDetails.map((detail, index) => ({
+      ...detail,
+      visitOrder: index + 1
+    }));
 }
 
 function getObjectiveName(id: number) {
@@ -172,10 +207,43 @@ function getEventName(id: number) {
   return eventStore.events.find(e => e.id === id)?.name || '';
 }
 
+function onCellEditComplete(event: any) {
+  const { data, newValue, field } = event;
+  
+  // Validare simplă
+  if (field === 'name' && !newValue.trim()) {
+    // Dacă numele este gol, nu permitem salvarea
+    return;
+  }
+  
+  const index = itineraryStore.selectedItinerary.itineraryDetails.findIndex(
+    detail => detail.visitOrder === data.visitOrder
+  );
+  
+  if (index !== -1) {
+    try {
+      const updatedDetail = { 
+        ...itineraryStore.selectedItinerary.itineraryDetails[index],
+        [field]: newValue 
+      };
+      
+      itineraryStore.selectedItinerary.itineraryDetails.splice(index, 1, updatedDetail);
+      
+      // Opțional: Feedback pozitiv
+      // toast.add({ severity: 'success', summary: 'Succes', detail: 'Modificare salvată', life: 3000 });
+    } catch (error) {
+      console.error('Eroare la actualizarea detaliului:', error);
+      // Opțional: Feedback negativ
+      // toast.add({ severity: 'error', summary: 'Eroare', detail: 'Eroare la salvare', life: 3000 });
+    }
+  }
+}
+
 async function saveItinerary() {
   try {
     saving.value = true;
-    await itineraryStore.addOrUpdateItinerary(itineraryStore.selectedItinerary);
+    console.log(itineraryStore.selectedItinerary);
+    await itineraryStore.addOrUpdateItinerary();
     dialogVisible.value = false;
     emits('onClose');
   } catch (error) {
@@ -208,5 +276,19 @@ onMounted(async () => {
   padding: 1rem;
   border-radius: 4px;
   background: var(--surface-card);
+}
+
+.editable-cell {
+  cursor: pointer;
+  padding: 0.5rem;
+}
+
+.editable-cell:hover {
+  background-color: var(--surface-hover);
+  border-radius: 4px;
+}
+
+:deep(.p-datatable-reorderablerow-handle) {
+  cursor: move;
 }
 </style>

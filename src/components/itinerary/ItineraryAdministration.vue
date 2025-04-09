@@ -20,6 +20,11 @@
             />
           </div>
           <div class="flex justify-content-end">
+            <Button
+                  icon="pi pi-plus"
+                  label="Adaugă"
+                  @click="handleAddNew"
+                />
             <HandleItinerary
               :show-dialog="showEditDialog"
               @on-close="closeDialog"
@@ -78,52 +83,15 @@
                @click="confirmDelete(slotProps.data)"
                title="Șterge"
             ></i>
-            <i class="pi pi-list cursor-pointer"
-               @click="showDetails(slotProps.data)"
-               title="Vezi detalii"
-            ></i>
           </div>
         </template>
       </Column>
     </DataTable>
-    <Dialog
-      v-model:visible="showEditDialog"
-      :header="
-        itineraryStore.selectedItinerary.id == 0
-          ? 'Adaugă itinerariu'
-          : 'Editează itinerariu'
-      "
-      :modal="true"
-      :closable="false"
-    >
       <HandleIt
         :show-dialog="showEditDialog"
         @on-close="closeDialog"
       >
-        <template #button>
-          <Button label="Salvează" @click="saveEvent()" />
-        </template>
     </HandleIt>
-    </Dialog>
-    <!-- <Dialog
-      v-model:visible="showGallery"
-      maximizable
-      modal
-      :header="`Galeria evenimentului #${eventStore.selectedEvent.name}`"
-      :style="{ width: '50rem' }"
-      :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
-      @hide="showGallery = false"
-    >
-      <ImageUpload
-        :id-eveniment="eventStore.selectedEvent.id"
-        @uploaded="
-          eventStore.getEvents();
-          showGallery = false;
-        "
-      />
-      <PhotoGalleria :images="getImageSrc()" />
-    </Dialog> -->
-    <!-- Error Message Toast -->
     <Toast position="bottom-right" />
 
     <ConfirmDialog>
@@ -133,30 +101,6 @@
         </div>
       </template>
     </ConfirmDialog>
-
-    <Dialog 
-      v-model:visible="showDetailsDialog" 
-      header="Detalii itinerariu"
-      :style="{ width: '50rem' }"
-      modal
-    >
-      <div v-if="selectedItineraryForDetails">
-        <h3>{{ selectedItineraryForDetails.name }}</h3>
-        <p>{{ selectedItineraryForDetails.description }}</p>
-        
-        <h4 class="mt-4">Obiective și Evenimente</h4>
-        <div v-for="detail in selectedItineraryForDetails.itineraryDetails" :key="detail.id">
-          <div v-if="detail.objective">
-            <i class="pi pi-map-marker"></i>
-            <span>{{ detail.objective.name }}</span>
-          </div>
-          <div v-if="detail.event">
-            <i class="pi pi-calendar"></i>
-            <span>{{ detail.event.name }}</span>
-          </div>
-        </div>
-      </div>
-    </Dialog>
   </template>
   <script setup lang="ts">
   import { onBeforeMount, ref, onMounted } from "vue";
@@ -164,7 +108,7 @@
   import HandleIt from "./HandleIt.vue";
   import { useConfirm } from "primevue/useconfirm";
   import { useToast } from "primevue/usetoast";
-  import type { IItineraryPageDTO, IItineraryDTO, IItinerary } from '../../Interfaces';
+  import type { IItinerary } from '../../Interfaces';
   import ConfirmDialog from 'primevue/confirmdialog';
 
   const itineraryStore= useItineraryStore();
@@ -173,33 +117,10 @@
   const confirm = useConfirm();
   const toast = useToast();
   const searchQuery = ref('');
-  const showDetailsDialog = ref(false);
-  const selectedItineraryForDetails = ref<IItineraryDTO | null>(null);
   
-  async function deleteItinerary(id: number) {
-    await itineraryStore.deleteItinerary(id);
-    await itineraryStore.getItineraries();
-  }
-  async function getItinerarySearch() {
-    await itineraryStore.getItineraries();
-  }
   onBeforeMount(async () => {
     await itineraryStore.getItineraries();
   });
- async function saveEvent() {
-   await itineraryStore.updateItinerary();
-  }
-  // function getImageSrc() {
-  //   // return eventStore.selectedEvent.images.map((image) => ({
-  //   //   itemImageSrc: image,
-  //   //   thumbnailImageSrc: "",
-  //   //   alt: "Description for Image 1",
-  //   //   title: "Title 1",
-  //   // }));
-  //   return;
-  // }
-
-  // Formatare dată
   function formatDate(date: string | Date) {
     if (!date) return '';
     return new Date(date).toLocaleDateString('ro-RO', {
@@ -210,8 +131,6 @@
       minute: '2-digit'
     });
   }
-
-  // Handlers
   function handleAddNew() {
     itineraryStore.resetSelectedItinerary();
     showEditDialog.value = true;
@@ -227,7 +146,7 @@
     itineraryStore.resetSelectedItinerary();
   }
 
-  function confirmDelete(itinerary: IItineraryPageDTO) {
+  function confirmDelete(itinerary: IItinerary) {
     confirm.require({
       message: `Sunteți sigur că doriți să ștergeți itinerariul "${itinerary.name}"?`,
       header: 'Confirmare ștergere',
@@ -258,7 +177,6 @@
     }
   }
 
-  // Lifecycle hooks
   onMounted(async () => {
     try {
       await itineraryStore.getItineraries();
