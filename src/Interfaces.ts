@@ -81,16 +81,6 @@ export interface IItineraryStore {
   selectedItineraryDTO: IItineraryDTO
   search:string
 }
-export interface IItinerary {
-  id?:number;
-  name: string;
-  description: string;
-  startDate: Date;
-  endDate: Date;
-  idObjectives?: number[];
-  idEvents?: number[];
-  idUser?: number;
-}
 export interface IItineraryDTO {
   id?: number;
   name: string;
@@ -98,6 +88,7 @@ export interface IItineraryDTO {
   objectivesIds: number[];
   idUser?: number;
   eventsIds: number[];
+  itineraryDetails: IItineraryDetail[];
 }
 export interface IObjectiveType extends BaseAuditEntity {
   id: number;
@@ -131,11 +122,14 @@ export interface IItinerary {
   itineraryDetails: IItineraryDetail[];
   createdAt?: Date;
   updatedAt?: Date;
+  startDate: Date;
+  endDate: Date;
 }
 export interface IItineraryDetail {
   id?: number;
   name: string;
   descriere: string;
+  idItinerary?: number;
   idObjective?: number;
   idEvent?: number;
   visitOrder: number;

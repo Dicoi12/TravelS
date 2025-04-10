@@ -1,6 +1,6 @@
 <template>
     <DataTable
-      :value="itineraryStore.itineraries"
+      :value="filteredItineraries"
       v-model:editingRows="editingRows"
       editMode="row"
       scrollable
@@ -20,12 +20,7 @@
             />
           </div>
           <div class="flex justify-content-end">
-            <Button
-                  icon="pi pi-plus"
-                  label="Adaugă"
-                  @click="handleAddNew"
-                />
-            <HandleItinerary
+            <HandleIt
               :show-dialog="showEditDialog"
               @on-close="closeDialog"
             >
@@ -36,7 +31,7 @@
                   @click="handleAddNew"
                 />
               </template>
-            </HandleItinerary>
+            </HandleIt>
           </div>
         </div>
       </template>
@@ -46,14 +41,14 @@
       <Column header="Obiective și Evenimente" style="width: 25rem">
         <template #body="{ data }">
           <div v-if="data.itineraryDetails && data.itineraryDetails.length > 0">
-            <div v-for="detail in data.itineraryDetails" :key="detail.id" class="mb-2">
-              <div v-if="detail.objective" class="flex align-items-center gap-2">
+            <div v-for="detail in data.itineraryDetails" :key="detail.visitOrder" class="mb-2">
+              <div v-if="detail.idObjective" class="flex align-items-center gap-2">
                 <i class="pi pi-map-marker"></i>
-                <span>{{ detail.objective.name }}</span>
+                <span>{{ getObjectiveName(detail.idObjective) }}</span>
               </div>
-              <div v-if="detail.event" class="flex align-items-center gap-2">
+              <div v-if="detail.idEvent" class="flex align-items-center gap-2">
                 <i class="pi pi-calendar"></i>
-                <span>{{ detail.event.name }}</span>
+                <span>{{ getEventName(detail.idEvent) }}</span>
               </div>
             </div>
           </div>
@@ -64,64 +59,67 @@
       </Column>
       <Column field="createdAt" header="Data creării" style="width: 12rem">
         <template #body="{ data }">
-          {{ formatDate(data.itineraryDetails[0]?.createdAt) }}
+          {{ formatDate(data.createdAt) }}
         </template>
       </Column>
       <Column field="updatedAt" header="Ultima actualizare" style="width: 12rem">
         <template #body="{ data }">
-          {{ formatDate(data.itineraryDetails[0]?.updatedAt) }}
+          {{ formatDate(data.updatedAt) }}
         </template>
       </Column>
       <Column style="width: 10rem" header="Acțiuni">
         <template #body="slotProps">
           <div class="flex gap-3">
-            <i class="pi pi-pencil cursor-pointer" 
-               @click="handleEdit(slotProps.data)"
-               title="Editează"
-            ></i>
-            <i class="pi pi-trash cursor-pointer" 
-               @click="confirmDelete(slotProps.data)"
-               title="Șterge"
-            ></i>
+            <Button
+              icon="pi pi-pencil"
+              class="p-button-text p-button-rounded"
+              @click="handleEdit(slotProps.data)"
+              title="Editează"
+            />
+            <Button
+              icon="pi pi-trash"
+              class="p-button-text p-button-rounded p-button-danger"
+              @click="confirmDelete(slotProps.data)"
+              title="Șterge"
+            />
           </div>
         </template>
       </Column>
     </DataTable>
-      <HandleIt
-        :show-dialog="showEditDialog"
-        @on-close="closeDialog"
-      >
-    </HandleIt>
-    <Toast position="bottom-right" />
 
-    <ConfirmDialog>
-      <template #message="slotProps">
-        <div class="flex flex-column gap-2">
-          {{ slotProps.message }}
-        </div>
-      </template>
-    </ConfirmDialog>
+    <Toast position="bottom-right" />
+    <ConfirmDialog />
   </template>
   <script setup lang="ts">
-  import { onBeforeMount, ref, onMounted } from "vue";
+  import { onBeforeMount, ref, computed } from "vue";
   import { useItineraryStore } from "../../stores/itineraryStore";
+  import { useObjectivesStore } from "../../stores/objectivesStore";
+  import { useEventsStore } from "../../stores/eventStore";
   import HandleIt from "./HandleIt.vue";
   import { useConfirm } from "primevue/useconfirm";
   import { useToast } from "primevue/usetoast";
   import type { IItinerary } from '../../Interfaces';
   import ConfirmDialog from 'primevue/confirmdialog';
 
-  const itineraryStore= useItineraryStore();
+  const itineraryStore = useItineraryStore();
+  const objectiveStore = useObjectivesStore();
+  const eventStore = useEventsStore();
   const editingRows = ref();
   const showEditDialog = ref(false);
   const confirm = useConfirm();
   const toast = useToast();
   const searchQuery = ref('');
   
-  onBeforeMount(async () => {
-    await itineraryStore.getItineraries();
+  const filteredItineraries = computed(() => {
+    if (!searchQuery.value) return itineraryStore.itineraries;
+    const query = searchQuery.value.toLowerCase();
+    return itineraryStore.itineraries.filter(itinerary => 
+      itinerary.name.toLowerCase().includes(query) ||
+      itinerary.description.toLowerCase().includes(query)
+    );
   });
-  function formatDate(date: string | Date) {
+
+  function formatDate(date: string | Date | undefined) {
     if (!date) return '';
     return new Date(date).toLocaleDateString('ro-RO', {
       year: 'numeric',
@@ -131,13 +129,22 @@
       minute: '2-digit'
     });
   }
+
+  function getObjectiveName(id: number | undefined) {
+    return objectiveStore.objectives.find(o => o.id === id)?.name || '';
+  }
+
+  function getEventName(id: number | undefined) {
+    return eventStore.events.find(e => e.id === id)?.name || '';
+  }
+
   function handleAddNew() {
     itineraryStore.resetSelectedItinerary();
     showEditDialog.value = true;
   }
 
   function handleEdit(itinerary: IItinerary) {
-    itineraryStore.selectedItinerary = itinerary;
+    itineraryStore.selectedItinerary = { ...itinerary };
     showEditDialog.value = true;
   }
 
@@ -157,17 +164,25 @@
 
   async function handleDelete(itinerary: IItinerary) {
     try {
-      const success = await itineraryStore.deleteItinerary(itinerary.id);
+      const response = await itineraryStore.deleteItinerary(itinerary.id || 0);
       
-      if (success) {
+      if (response.isSuccesful) {
         toast.add({
           severity: 'success',
           summary: 'Succes',
           detail: 'Itinerariul a fost șters cu succes',
           life: 3000
         });
+      } else {
+        toast.add({
+          severity: 'error',
+          summary: 'Eroare',
+          detail: response.validationMessage || 'A apărut o eroare la ștergerea itinerariului',
+          life: 3000
+        });
       }
     } catch (error) {
+      console.error('Eroare la ștergerea itinerariului:', error);
       toast.add({
         severity: 'error',
         summary: 'Eroare',
@@ -177,12 +192,32 @@
     }
   }
 
-  onMounted(async () => {
+  onBeforeMount(async () => {
     try {
-      await itineraryStore.getItineraries();
+      await Promise.all([
+        itineraryStore.getItineraries(),
+        objectiveStore.getObjectives(),
+        eventStore.getEvents()
+      ]);
     } catch (error) {
-      console.error('Eroare la încărcarea itinerariilor:', error);
+      console.error('Eroare la încărcarea datelor:', error);
+      toast.add({
+        severity: 'error',
+        summary: 'Eroare',
+        detail: 'A apărut o eroare la încărcarea datelor',
+        life: 3000
+      });
     }
   });
 </script>
+
+<style scoped>
+.p-button-text {
+  padding: 0.5rem;
+}
+
+.p-button-text:hover {
+  background: var(--surface-hover);
+}
+</style>
   
