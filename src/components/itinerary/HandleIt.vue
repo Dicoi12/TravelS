@@ -2,15 +2,9 @@
   <div @click="dialogVisible = true">
     <slot name="button"></slot>
   </div>
-  <Dialog
-    v-model:visible="dialogVisible"
-    maximizable
-    modal
+  <Dialog v-model:visible="dialogVisible" maximizable modal
     :header="itineraryStore.selectedItinerary.id ? 'Editează itinerariu' : 'Adaugă itinerariu'"
-    :style="{ width: '70rem' }"
-    :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
-    @hide="closeDialog()"
-  >
+    :style="{ width: '70rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" @hide="closeDialog()">
     <div class="flex flex-column gap-3">
       <!-- Informații de bază itinerariu -->
       <div class="flex justify-content-center flex-column">
@@ -26,29 +20,18 @@
       <!-- Tabel pentru detalii itinerariu -->
       <div class="card">
         <h3>Detalii itinerariu</h3>
-        <Button 
-          icon="pi pi-plus" 
-          label="Adaugă detaliu" 
-          @click="addNewDetail"
-          class="mb-3"
-        />
+        <Button icon="pi pi-plus" label="Adaugă detaliu" @click="addNewDetail" class="mb-3" />
 
-        <DataTable 
-          v-model:value="itineraryStore.selectedItinerary.itineraryDetails"
-          editMode="cell"
-          dataKey="visitOrder"
-          @row-reorder="onRowReorder"
-          v-model:editingRows="editingRows"
-          responsiveLayout="scroll"
-          @cell-edit-complete="onCellEditComplete"
-        >
+        <DataTable v-model:value="itineraryStore.selectedItinerary.itineraryDetails" editMode="cell"
+          dataKey="visitOrder" @row-reorder="onRowReorder" v-model:editingRows="editingRows" responsiveLayout="scroll"
+          @cell-edit-complete="onCellEditComplete">
           <Column :rowReorder="true" style="width: 3rem" />
           <Column field="visitOrder" header="Ordine" :sortable="false">
             <template #body="slotProps">
               {{ slotProps.index + 1 }}
             </template>
           </Column>
-          
+
           <Column field="name" header="Nume">
             <template #editor="{ data, field }">
               <InputText v-model="data[field]" autofocus />
@@ -73,14 +56,8 @@
 
           <Column field="idObjective" header="Obiectiv">
             <template #editor="{ data, field }">
-              <Dropdown
-                v-model="data[field]"
-                :options="objectiveStore.objectives"
-                optionLabel="name"
-                optionValue="id"
-                placeholder="Selectează obiectiv"
-                autofocus
-              />
+              <Dropdown v-model="data[field]" :options="objectiveStore.objectives" optionLabel="name" optionValue="id"
+                placeholder="Selectează obiectiv" autofocus />
             </template>
             <template #body="{ data }">
               <div class="editable-cell" @click="onCellClick($event, data, 'idObjective')">
@@ -91,14 +68,8 @@
 
           <Column field="idEvent" header="Eveniment">
             <template #editor="{ data, field }">
-              <Dropdown
-                v-model="data[field]"
-                :options="eventStore.events"
-                optionLabel="name"
-                optionValue="id"
-                placeholder="Selectează eveniment"
-                autofocus
-              />
+              <Dropdown v-model="data[field]" :options="eventStore.events" optionLabel="name" optionValue="id"
+                placeholder="Selectează eveniment" autofocus />
             </template>
             <template #body="{ data }">
               <div class="editable-cell" @click="onCellClick($event, data, 'idEvent')">
@@ -109,11 +80,7 @@
 
           <Column style="width: 10rem">
             <template #body="{ index }">
-              <Button 
-                icon="pi pi-trash" 
-                class="p-button-danger p-button-text" 
-                @click="removeDetail(index)"
-              />
+              <Button icon="pi pi-trash" class="p-button-danger p-button-text" @click="removeDetail(index)" />
             </template>
           </Column>
         </DataTable>
@@ -122,18 +89,8 @@
 
     <template #footer>
       <div class="flex justify-content-end gap-2">
-        <Button 
-          label="Anulează" 
-          icon="pi pi-times" 
-          @click="closeDialog()" 
-          class="p-button-text"
-        />
-        <Button 
-          label="Salvează" 
-          icon="pi pi-check" 
-          @click="saveItinerary()" 
-          :loading="saving"
-        />
+        <Button label="Anulează" icon="pi pi-times" @click="closeDialog()" class="p-button-text" />
+        <Button label="Salvează" icon="pi pi-check" @click="saveItinerary()" :loading="saving" />
       </div>
     </template>
   </Dialog>
@@ -192,7 +149,7 @@ function onRowReorder(event: any) {
 }
 
 function updateVisitOrder() {
-  itineraryStore.selectedItinerary.itineraryDetails = 
+  itineraryStore.selectedItinerary.itineraryDetails =
     itineraryStore.selectedItinerary.itineraryDetails.map((detail, index) => ({
       ...detail,
       visitOrder: index + 1
@@ -209,26 +166,26 @@ function getEventName(id: number) {
 
 function onCellEditComplete(event: any) {
   const { data, newValue, field } = event;
-  
+
   // Validare simplă
   if (field === 'name' && !newValue.trim()) {
     // Dacă numele este gol, nu permitem salvarea
     return;
   }
-  
+
   const index = itineraryStore.selectedItinerary.itineraryDetails.findIndex(
     detail => detail.visitOrder === data.visitOrder
   );
-  
+
   if (index !== -1) {
     try {
-      const updatedDetail = { 
+      const updatedDetail = {
         ...itineraryStore.selectedItinerary.itineraryDetails[index],
-        [field]: newValue 
+        [field]: newValue
       };
-      
+
       itineraryStore.selectedItinerary.itineraryDetails.splice(index, 1, updatedDetail);
-      
+
       // Opțional: Feedback pozitiv
       // toast.add({ severity: 'success', summary: 'Succes', detail: 'Modificare salvată', life: 3000 });
     } catch (error) {
@@ -242,6 +199,7 @@ function onCellEditComplete(event: any) {
 async function saveItinerary() {
   try {
     saving.value = true;
+    itineraryStore.selectedItinerary.idUser = null;
     console.log(itineraryStore.selectedItinerary);
     await itineraryStore.addOrUpdateItinerary();
     dialogVisible.value = false;

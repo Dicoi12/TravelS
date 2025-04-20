@@ -81,16 +81,6 @@ export interface IItineraryStore {
   selectedItineraryDTO: IItineraryDTO
   search:string
 }
-export interface IItinerary {
-  id?:number;
-  name: string;
-  description: string;
-  startDate: Date;
-  endDate: Date;
-  idObjectives?: number[];
-  idEvents?: number[];
-  idUser?: number;
-}
 export interface IItineraryDTO {
   id?: number;
   name: string;
@@ -127,7 +117,7 @@ export interface IItinerary {
   id?: number;
   name: string;
   description: string;
-  idUser?: number;
+  idUser?: number | null;
   itineraryDetails: IItineraryDetail[];
   createdAt?: Date;
   updatedAt?: Date;
@@ -145,7 +135,7 @@ export interface IItineraryDTO {
   id?: number;
   name: string;
   description: string;
-  idUser?: number;
+  idUser?: number | null;
   itineraryDetails: IItineraryDetail[];
 }
 
