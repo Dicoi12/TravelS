@@ -1,4 +1,5 @@
 <template>
+  <Toast />
   <div @click="dialogVisible = true">
     <slot name="button"></slot>
   </div>
@@ -6,7 +7,6 @@
     :header="itineraryStore.selectedItinerary.id ? 'Editează itinerariu' : 'Adaugă itinerariu'"
     :style="{ width: '70rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" @hide="closeDialog()">
     <div class="flex flex-column gap-3">
-      <!-- Informații de bază itinerariu -->
       <div class="flex justify-content-center flex-column">
         <label for="name">Nume itinerariu</label>
         <InputText v-model="itineraryStore.selectedItinerary.name" />
@@ -17,7 +17,6 @@
         <Textarea v-model="itineraryStore.selectedItinerary.description" rows="3" />
       </div>
 
-      <!-- Tabel pentru detalii itinerariu -->
       <div class="card">
         <h3>Detalii itinerariu</h3>
         <Button icon="pi pi-plus" label="Adaugă detaliu" @click="addNewDetail" class="mb-3" />
@@ -101,7 +100,10 @@ import { ref, onMounted, watch } from 'vue';
 import { useItineraryStore } from '../../stores/itineraryStore';
 import { useObjectivesStore } from '../../stores/objectivesStore';
 import { useEventsStore } from '../../stores/eventStore';
+import { useItineraryDetailStore } from '../../stores/itineraryDetailStore';
 import type { IItineraryDetail } from '../../Interfaces';
+import { useToast } from 'primevue/usetoast';
+import Toast from 'primevue/toast';
 
 const props = defineProps({
   showDialog: { type: Boolean, default: false },
@@ -110,10 +112,12 @@ const props = defineProps({
 const emits = defineEmits(['onClose']);
 const dialogVisible = ref(false);
 const saving = ref(false);
+const toast = useToast();
 
 const itineraryStore = useItineraryStore();
 const objectiveStore = useObjectivesStore();
 const eventStore = useEventsStore();
+const itineraryDetailStore = useItineraryDetailStore();
 
 const editingRows = ref({});
 
@@ -121,14 +125,55 @@ function addNewDetail() {
   const newDetail: IItineraryDetail = {
     name: '',
     descriere: '',
-    visitOrder: itineraryStore.selectedItinerary.itineraryDetails.length + 1
+    visitOrder: itineraryStore.selectedItinerary.itineraryDetails.length + 1,
+    idObjective: undefined,
+    idEvent: undefined
   };
   itineraryStore.selectedItinerary.itineraryDetails.push(newDetail);
+  editingRows.value = { [newDetail.visitOrder]: true };
 }
 
-function removeDetail(index: number) {
-  itineraryStore.selectedItinerary.itineraryDetails.splice(index, 1);
-  updateVisitOrder();
+async function removeDetail(index: number) {
+  try {
+    const detail = itineraryStore.selectedItinerary.itineraryDetails[index];
+    if (detail.id) {
+      const response = await itineraryDetailStore.deleteItineraryDetail(detail.id);
+      if (response.isSuccesful) {
+        itineraryStore.selectedItinerary.itineraryDetails.splice(index, 1);
+        updateVisitOrder();
+        toast.add({
+          severity: 'success',
+          summary: 'Succes',
+          detail: 'Detaliul a fost șters cu succes',
+          life: 3000
+        });
+      } else {
+        toast.add({
+          severity: 'error',
+          summary: 'Eroare',
+          detail: response.validationMessage || 'A apărut o eroare la ștergerea detaliului',
+          life: 3000
+        });
+      }
+    } else {
+      itineraryStore.selectedItinerary.itineraryDetails.splice(index, 1);
+      updateVisitOrder();
+      toast.add({
+        severity: 'success',
+        summary: 'Succes',
+        detail: 'Detaliul a fost șters cu succes',
+        life: 3000
+      });
+    }
+  } catch (error) {
+    console.error('Eroare la ștergerea detaliului:', error);
+    toast.add({
+      severity: 'error',
+      summary: 'Eroare',
+      detail: 'A apărut o eroare la ștergerea detaliului',
+      life: 3000
+    });
+  }
 }
 
 function onCellClick(event: Event, data: any, field: string) {
@@ -136,16 +181,32 @@ function onCellClick(event: Event, data: any, field: string) {
   const element = event.target as HTMLElement;
   if (!element.classList.contains('p-button')) {
     data.editing = true;
-    editingRows.value = { [field]: true };
+    editingRows.value = { [data.visitOrder]: true };
   }
 }
 
 function onRowReorder(event: any) {
-  const details = [...itineraryStore.selectedItinerary.itineraryDetails];
-  const movedItem = details.splice(event.dragIndex, 1)[0];
-  details.splice(event.dropIndex, 0, movedItem);
-  itineraryStore.selectedItinerary.itineraryDetails = details;
-  updateVisitOrder();
+  try {
+    const details = [...itineraryStore.selectedItinerary.itineraryDetails];
+    const movedItem = details.splice(event.dragIndex, 1)[0];
+    details.splice(event.dropIndex, 0, movedItem);
+    itineraryStore.selectedItinerary.itineraryDetails = details;
+    updateVisitOrder();
+    toast.add({
+      severity: 'success',
+      summary: 'Succes',
+      detail: 'Ordinea detaliilor a fost actualizată',
+      life: 3000
+    });
+  } catch (error) {
+    console.error('Eroare la reordonarea detaliilor:', error);
+    toast.add({
+      severity: 'error',
+      summary: 'Eroare',
+      detail: 'A apărut o eroare la reordonarea detaliilor',
+      life: 3000
+    });
+  }
 }
 
 function updateVisitOrder() {
@@ -156,20 +217,35 @@ function updateVisitOrder() {
     }));
 }
 
-function getObjectiveName(id: number) {
+function getObjectiveName(id: number | undefined) {
   return objectiveStore.objectives.find(o => o.id === id)?.name || '';
 }
 
-function getEventName(id: number) {
+function getEventName(id: number | undefined) {
   return eventStore.events.find(e => e.id === id)?.name || '';
 }
 
-function onCellEditComplete(event: any) {
+async function onCellEditComplete(event: any) {
   const { data, newValue, field } = event;
 
   // Validare simplă
   if (field === 'name' && !newValue.trim()) {
-    // Dacă numele este gol, nu permitem salvarea
+    toast.add({
+      severity: 'error',
+      summary: 'Eroare',
+      detail: 'Numele detaliului nu poate fi gol',
+      life: 3000
+    });
+    return;
+  }
+
+  if (field === 'idEvent' && !newValue) {
+    toast.add({
+      severity: 'error',
+      summary: 'Eroare',
+      detail: 'Trebuie să selectați un eveniment',
+      life: 3000
+    });
     return;
   }
 
@@ -190,14 +266,33 @@ function onCellEditComplete(event: any) {
       // toast.add({ severity: 'success', summary: 'Succes', detail: 'Modificare salvată', life: 3000 });
     } catch (error) {
       console.error('Eroare la actualizarea detaliului:', error);
-      // Opțional: Feedback negativ
-      // toast.add({ severity: 'error', summary: 'Eroare', detail: 'Eroare la salvare', life: 3000 });
+      toast.add({
+        severity: 'error',
+        summary: 'Eroare',
+        detail: 'A apărut o eroare la actualizarea detaliului',
+        life: 3000
+      });
     }
   }
 }
 
 async function saveItinerary() {
   try {
+    // Validare înainte de salvare
+    const invalidDetails = itineraryStore.selectedItinerary.itineraryDetails.some(
+      detail => !detail.name 
+    );
+
+    if (invalidDetails) {
+      toast.add({
+        severity: 'error',
+        summary: 'Eroare',
+        detail: 'Toate câmpurile sunt obligatorii pentru fiecare detaliu al itinerariului',
+        life: 3000
+      });
+      return;
+    }
+
     saving.value = true;
     itineraryStore.selectedItinerary.idUser = null;
     console.log(itineraryStore.selectedItinerary);
@@ -206,6 +301,12 @@ async function saveItinerary() {
     emits('onClose');
   } catch (error) {
     console.error('Eroare la salvarea itinerariului:', error);
+    toast.add({
+      severity: 'error',
+      summary: 'Eroare',
+      detail: 'A apărut o eroare la salvarea itinerariului',
+      life: 3000
+    });
   } finally {
     saving.value = false;
   }
