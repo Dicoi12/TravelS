@@ -60,6 +60,7 @@
           />
           <div class="card-details">
             <h3 class="location">{{ item.name }}</h3>
+            <h3 class="distance">{{ item.distance }}</h3>
             <p>{{ truncateDescription(item.description ?? "") }}</p>
           </div>
           <Button class="favorite-button">
@@ -90,6 +91,8 @@ const getUserLocation = async () => {
         longitude.value = position.coords.longitude;
         // objectiveStore.getLocalObjectives(latitude.value??1,longitude.value??1);
         locationAccessGranted.value = true;
+        objectiveStore.filter.latitude = latitude.value;
+        objectiveStore.filter.longitude = longitude.value;
         console.log("Latitudine:", latitude.value);
         console.log("Longitudine:", longitude.value);
       },
