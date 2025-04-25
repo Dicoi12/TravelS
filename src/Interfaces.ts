@@ -135,13 +135,6 @@ export interface IItineraryDetail {
   visitOrder: number;
 }
 
-export interface IItineraryDTO {
-  id?: number;
-  name: string;
-  description: string;
-  idUser?: number | null;
-  itineraryDetails: IItineraryDetail[];
-}
 
 export interface IItineraryPageDTO {
   id: number;

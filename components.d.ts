@@ -31,7 +31,6 @@ declare module 'vue' {
     Layout: typeof import('./src/components/Layout.vue')['default']
     Map: typeof import('./src/components/map/Map.vue')['default']
     Menu: typeof import('primevue/menu')['default']
-    MultiSelect: typeof import('primevue/multiselect')['default']
     NavBar: typeof import('./src/components/NavBar.vue')['default']
     ObiectiveTypeAdministration: typeof import('./src/components/objectives/ObiectiveTypeAdministration.vue')['default']
     ObjectiveAdministration: typeof import('./src/components/objectives/ObjectiveAdministration.vue')['default']

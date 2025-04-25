@@ -1,7 +1,6 @@
 import { defineStore } from "pinia";
 import { IItinerary, IServiceResult, ItineraryFilterModel } from "../Interfaces";
 import fetchApi from "../stores/fetch";
-import { useItineraryDetailStore } from "./itineraryDetailStore";
 
 export const useItineraryStore = defineStore("itineraryStore", {
   state: (): {
@@ -57,7 +56,10 @@ export const useItineraryStore = defineStore("itineraryStore", {
         );
         
         const response = data as IServiceResult;
-        await this.getItineraries();
+        if (response.isSuccesful) {
+          await this.getItineraries();
+          this.selectedItinerary = response.result as IItinerary;
+        }
         return response;
       } catch (error) {
         console.error("Error adding itinerary:", error);
@@ -80,7 +82,9 @@ export const useItineraryStore = defineStore("itineraryStore", {
         );
         
         const response = data as IServiceResult;
-        await this.getItineraries();
+        if (response.isSuccesful) {
+          await this.getItineraries();
+        }
         return response;
       } catch (error) {
         console.error("Error updating itinerary:", error);

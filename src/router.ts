@@ -19,6 +19,7 @@ const router = createRouter({
     { path: "/objectives/:id", component: defineAsyncComponent(() => import("./components/objectives/ObjectiveDetailPage.vue")) },
     { path: "/experiences", component: defineAsyncComponent(() => import("./views/ExperiencesPage.vue")) },
     { path: "/experiences/:id", component: defineAsyncComponent(() => import("./components/experiences/ExperienceDetail.vue")) },
+    { path: "/itineraries", component: defineAsyncComponent(() => import("./views/ItineraryPage.vue")) },
 
   ],
 });

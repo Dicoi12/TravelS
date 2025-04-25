@@ -60,7 +60,10 @@
           />
           <div class="card-details">
             <h3 class="location">{{ item.name }}</h3>
-            <h3 class="distance">{{ item.distance }}</h3>
+            <div class="flex align-items-center gap-2">
+              <i class="pi pi-map-marker"></i>
+              <h4>{{item.city}}</h4>
+            </div>
             <p>{{ truncateDescription(item.description ?? "") }}</p>
           </div>
           <Button class="favorite-button">

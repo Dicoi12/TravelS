@@ -23,7 +23,7 @@
         </div>
         <div class="text-2xl text-white navelement" @click="router.push('/experiences')">Experiente</div>
         <div class="text-2xl text-white navelement" @click="router.push('/events')">Evenimente</div>
-        <div class="text-2xl text-white navelement">Itinerarii</div>
+        <div class="text-2xl text-white navelement" @click="router.push('/itineraries')">Itinerarii</div>
         <div
           v-if="!userStore.userData?.id"
           class="text-2xl text-white navelement"
