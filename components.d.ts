@@ -28,6 +28,7 @@ declare module 'vue' {
     InputNumber: typeof import('primevue/inputnumber')['default']
     InputText: typeof import('primevue/inputtext')['default']
     ItineraryAdministration: typeof import('./src/components/itinerary/ItineraryAdministration.vue')['default']
+    ItineraryDetailPage: typeof import('./src/components/itinerary/ItineraryDetailPage.vue')['default']
     Layout: typeof import('./src/components/Layout.vue')['default']
     Map: typeof import('./src/components/map/Map.vue')['default']
     Menu: typeof import('primevue/menu')['default']

@@ -216,7 +216,7 @@ function getEventName(id: number | undefined) {
 async function saveItinerary() {
   try {
     const invalidDetails = localItinerary.value.itineraryDetails.some(
-      detail => !detail.name || !detail.descriere
+      detail => !detail.name
     );
 
     if (invalidDetails) {

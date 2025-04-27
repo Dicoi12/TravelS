@@ -20,7 +20,7 @@ const router = createRouter({
     { path: "/experiences", component: defineAsyncComponent(() => import("./views/ExperiencesPage.vue")) },
     { path: "/experiences/:id", component: defineAsyncComponent(() => import("./components/experiences/ExperienceDetail.vue")) },
     { path: "/itineraries", component: defineAsyncComponent(() => import("./views/ItineraryPage.vue")) },
-
+    { path: "/itineraries/:id", component: defineAsyncComponent(() => import("./components/itinerary/ItineraryDetailPage.vue")) },
   ],
 });
 router.beforeEach((to, from, next) => {

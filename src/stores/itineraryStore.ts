@@ -113,6 +113,18 @@ export const useItineraryStore = defineStore("itineraryStore", {
         this.itineraries = [];
       }
     },
+    async getItineraryById(id: string) {
+      try {
+        const data = await fetchApi(
+          `Itinerary/${id}`,
+          "get"
+        );
+        const response = data as IServiceResult;
+        this.selectedItinerary = response.result;
+      } catch (error) {
+        console.error("Error fetching itineraries:", error);
+      }
+    },
 
     async getLocalItineraries() {
       try {

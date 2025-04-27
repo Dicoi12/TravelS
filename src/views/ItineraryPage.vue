@@ -4,7 +4,7 @@
     <div v-for="itinerary in itineraryStore.itineraries" 
          :key="itinerary.id" 
          class="itinerary-preview-card"
-         @click="selectedItinerary = itinerary">
+         @click="navigateToDetail(itinerary.id?.toString() || '')">
       <!-- Carusel pentru previzualizare imagini -->
       <swiper
         :modules="[SwiperNavigation, SwiperPagination, SwiperAutoplay]"
@@ -117,6 +117,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 import { Swiper, SwiperSlide } from 'swiper/vue'
 import { Navigation as SwiperNavigation, Pagination as SwiperPagination, Autoplay as SwiperAutoplay } from 'swiper/modules'
 import 'swiper/css'
@@ -125,12 +126,17 @@ import 'swiper/css/pagination'
 import { useItineraryStore } from '../stores/itineraryStore'
 import { onBeforeMount } from 'vue'
 
+const router = useRouter()
 const itineraryStore = useItineraryStore()
 const selectedItinerary = ref<any>(null)
 
 onBeforeMount(async () => {
   await itineraryStore.getItineraries()
 })
+
+const navigateToDetail = (id: string) => {
+  router.push(`/itineraries/${id}`)
+}
 
 const getPreviewImage = (detail: any) => {
   if (detail.objective && detail.objective.images.length > 0) {
