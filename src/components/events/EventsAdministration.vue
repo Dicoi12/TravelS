@@ -119,7 +119,7 @@
         showGallery = false;
       "
     />
-    <PhotoGalleria :images="getImageSrc()" />
+    <PhotoGalleria :images="getImageSrc()" :onAdministration="true" @refresh="showGallery = false;eventStore.getEvents()" />
   </Dialog>
 </template>
 <script setup lang="ts">

@@ -107,7 +107,7 @@
         :id-experience="experienceStore.selectedExperience.id" 
         @uploaded="handleImageUpload"
       />
-      <PhotoGalleria :images="getImageSrc()" />
+      <PhotoGalleria :images="getImageSrc()" :onAdministration="true" @refresh="showGallery = false;experienceStore.getAllExperiences()" />
     </Dialog>
   </template>
   

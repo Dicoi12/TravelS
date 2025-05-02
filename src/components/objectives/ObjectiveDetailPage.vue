@@ -148,6 +148,7 @@ import { useUserStore } from "../../stores/userStore";
 import { useToast } from "primevue/usetoast";
 import Toast from "primevue/toast";
 import { useHelperStore } from "../../stores/helperStore";
+import { onBeforeUnmount } from "vue";
 
 const route = useRoute();
 const objectiveStore = useObjectivesStore();
@@ -173,6 +174,21 @@ onBeforeMount(async () => {
     parseInt(objectiveId as string)
   );
 });
+onBeforeUnmount(()=>{
+  objectiveStore.selectedObjective = {
+    id: 0,
+    name: "",
+    type: 0,
+    city: "",
+    description: "",
+    latitude: 0,
+    longitude: 0,
+    images: [],
+    distance: 0,
+    medieReview: 0,
+    createdAt: new Date(),
+  };
+})
 async function submitReview() {
   if (newReview.value.raiting === 0) {
     toast.add({
