@@ -203,8 +203,12 @@ function onRowEditCancel(event: any) {
 
 async function onRowEditSave(event: any) {
   if (isEditMode.value) {
-    event.data.idItinerary = itineraryStore.selectedItinerary.id;
-    await itineraryDetailStore.updateItineraryDetail(event.data);
+    if (event.data.id) {
+      await itineraryDetailStore.updateItineraryDetail(event.data);
+    } else {
+      event.data.idItinerary = itineraryStore.selectedItinerary.id;
+      await itineraryDetailStore.addItineraryDetail(event.data);
+    }
   }
 }
 
@@ -249,12 +253,19 @@ async function removeDetail(index: number) {
   }
 }
 
-function onRowReorder(event: any) {
+async function onRowReorder(event: any) {
   const details = [...localItinerary.value.itineraryDetails];
   const movedItem = details.splice(event.dragIndex, 1)[0];
   details.splice(event.dropIndex, 0, movedItem);
   localItinerary.value.itineraryDetails = details;
   updateVisitOrder();
+  if (isEditMode.value) {
+    for (const detail of localItinerary.value.itineraryDetails) {
+      if (detail.id) {
+        await itineraryDetailStore.updateItineraryDetail(detail);
+      }
+    }
+  }
 }
 
 function updateVisitOrder() {

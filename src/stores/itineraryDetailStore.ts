@@ -32,6 +32,8 @@ export const useItineraryDetailStore = defineStore("itineraryDetailStore", {
     },
 
     async updateItineraryDetail(itineraryDetailDto: IItineraryDetail) {
+      itineraryDetailDto.event=undefined;
+      itineraryDetailDto.objective=undefined;
       try {
         const data = await fetchApi(
           "ItineraryDetail/UpdateItineraryDetailAsync",

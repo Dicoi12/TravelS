@@ -112,6 +112,8 @@ export interface IItineraryDetail {
   visitOrder: number;
   createdAt?: Date;
   updatedAt?: Date;
+  objective?: IObjective;
+  event?: IEvent;
 }
 
 export interface IItinerary {
