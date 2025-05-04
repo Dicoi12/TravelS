@@ -65,6 +65,16 @@
               <h4>{{item.city}}</h4>
             </div>
             <p>{{ truncateDescription(item.description ?? "") }}</p>
+            <div class="stars-container" v-if="item.medieReview">
+              <i
+                v-for="index in 5"
+                :key="index"
+                class="pi"
+                :class="index <= (item.medieReview ?? 0) ? 'pi-star-fill' : 'pi-star'"
+                style="color: gold"
+              ></i>
+              <span>({{ item.medieReview?.toFixed(1) ?? 0 }}/5)</span>
+            </div>
           </div>
           <Button class="favorite-button">
             <i class="pi pi-heart"></i>
@@ -221,5 +231,22 @@ onBeforeMount(async () => {
 
 .filter-input {
   flex: 1;
+}
+
+.stars-container {
+  display: inline-flex;
+  align-items: center;
+  align-self:center;
+  gap: 4px;
+  margin-top: 8px;
+}
+
+.stars-container i {
+  font-size: 1.2rem;
+}
+
+.stars-container span {
+  margin-left: 8px;
+  font-size: 0.9rem;
 }
 </style>
