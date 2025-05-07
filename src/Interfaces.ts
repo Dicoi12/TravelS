@@ -26,6 +26,7 @@ export interface IObjective extends BaseAuditEntity {
   images: string[];
   distance?: number;
   medieReview?: number;
+  duration?: number;
 }
 export interface IObjectivesStore {
   selectedObjective: IObjective;

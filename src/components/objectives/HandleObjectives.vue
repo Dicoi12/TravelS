@@ -56,6 +56,13 @@
         label="Longitudine"
       />
     </div>
+     <div class="flex justify-content-center flex-column">
+      <label for="description">Durata</label>
+      <InputNumber
+        v-model="objectivesStore.selectedObjective.duration"
+        label="Durata"
+      />
+    </div>
     <Map
       :latitude="objectivesStore.selectedObjective.latitude"
       :longitude="objectivesStore.selectedObjective.longitude"

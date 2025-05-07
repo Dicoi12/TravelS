@@ -19,6 +19,7 @@ export const useObjectivesStore = defineStore("objectivesStore", {
         longitude: 0,
         images: [],
         distance: 0,
+        duration: 0,
       },
       objectives: [],
       favourites: [],
@@ -241,7 +242,8 @@ export const useObjectivesStore = defineStore("objectivesStore", {
         latitude: 0,
         longitude: 0,
         images: [],
-        distance: 0,
+        distance: 0,  
+        duration: 0,
       };
     },
     resetFilterData(){
