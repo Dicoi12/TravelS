@@ -88,30 +88,32 @@
       <!-- Secțiunea de review-uri -->
       <div class="reviews-section">
         <h2>Review-uri</h2>
-        <div v-if="reviews.length">
-          <div v-for="review in reviews" :key="review.id" class="review-item">
-            <strong>{{ review.user?.userName }}</strong>
-            <span>{{ helperStore.formatDate(review.createdAt) }}</span>
-            <div>
-              <strong>Rating:</strong>
-              <span class="stars-container">
-                <i
-                  v-for="index in 5"
-                  :key="index"
-                  class="pi"
-                  :class="index <= review.raiting ? 'pi-star-fill' : 'pi-star'"
-                  style="color: gold"
-                >
-                </i>
-                <span>({{ review.raiting }}/5)</span>
-              </span>
+        <ScrollPanel style="width: 100%; height: 400px" class="custombar1">
+          <div v-if="reviews.length">
+            <div v-for="review in reviews" :key="review.id" class="review-item">
+              <strong>{{ review.user?.userName }}</strong>
+              <span>{{ helperStore.formatDate(review.createdAt) }}</span>
+              <div>
+                <strong>Rating:</strong>
+                <span class="stars-container">
+                  <i
+                    v-for="index in 5"
+                    :key="index"
+                    class="pi"
+                    :class="index <= review.raiting ? 'pi-star-fill' : 'pi-star'"
+                    style="color: gold"
+                  >
+                  </i>
+                  <span>({{ review.raiting }}/5)</span>
+                </span>
+              </div>
+              <p>{{ review.comment }}</p>
             </div>
-            <p>{{ review.comment }}</p>
           </div>
-        </div>
-        <div v-else>
-          <p>Nu există review-uri pentru acest obiectiv.</p>
-        </div>
+          <div v-else>
+            <p>Nu există review-uri pentru acest obiectiv.</p>
+          </div>
+        </ScrollPanel>
 
         <!-- Formular pentru adăugare review -->
         <div class="add-review w-full">
@@ -133,6 +135,30 @@
           >
         </div>
       </div>
+
+      <!-- Secțiunea de obiective recomandate -->
+      <div class="recommended-objectives" v-if="recommendedObjectives.length > 0">
+        <h2>Obiective Recomandate</h2>
+        <div class="recommended-grid">
+          <div v-for="obj in recommendedObjectives" :key="obj.id" class="recommended-item">
+            <img :src="obj.firstImageUrl || ''" :alt="obj.name" class="recommended-image" />
+            <div class="recommended-info">
+              <h3>{{ obj.name }}</h3>
+              <p>{{ obj.city }}</p>
+              <div class="stars-container">
+                <i
+                  v-for="index in 5"
+                  :key="index"
+                  class="pi"
+                  :class="index <= (obj.averageRating || 0) ? 'pi-star-fill' : 'pi-star'"
+                  style="color: gold"
+                ></i>
+                <span>({{ (obj.averageRating || 0).toFixed(1) }}/5)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
     <Toast group="w" />
   </div>
@@ -141,12 +167,13 @@
 <script setup lang="ts">
 import { ref, onBeforeMount } from "vue";
 import { useRoute } from "vue-router";
-import { useObjectivesStore } from "../../stores/objectivesStore";
+import { RecommendedObjectiveDto, useObjectivesStore } from "../../stores/objectivesStore";
 import { useReviewsStore } from "../../stores/reviewsStore";
 import { IReview } from "../../Interfaces";
 import { useUserStore } from "../../stores/userStore";
 import { useToast } from "primevue/usetoast";
 import Toast from "primevue/toast";
+import ScrollPanel from 'primevue/scrollpanel';
 import { useHelperStore } from "../../stores/helperStore";
 import { onBeforeUnmount } from "vue";
 
@@ -156,6 +183,7 @@ const reviewsStore = useReviewsStore();
 const userStore = useUserStore();
 const objective = ref();
 const reviews = ref<IReview[]>([]);
+const recommendedObjectives = ref<RecommendedObjectiveDto[]>([]);
 const helperStore = useHelperStore();
 const newReview = ref<IReview>({
   raiting: 0,
@@ -173,6 +201,14 @@ onBeforeMount(async () => {
   reviews.value = await reviewsStore.getByObjectiveId(
     parseInt(objectiveId as string)
   );
+
+  // Obținerea obiectivelor recomandate
+  try {
+     await objectiveStore.recommendObjectives(parseInt(objectiveId as string));
+    recommendedObjectives.value = objectiveStore.recommendedObjectives;
+  } catch (error) {
+    console.error('Eroare la obținerea obiectivelor recomandate:', error);
+  }
 });
 onBeforeUnmount(()=>{
   objectiveStore.selectedObjective = {
@@ -377,5 +413,64 @@ h2 {
 
 .stars-container span {
   margin-left: 8px;
+}
+
+.recommended-objectives {
+  margin-top: 2rem;
+  background: #444;
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+.recommended-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.recommended-item {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+  transition: transform 0.2s;
+}
+
+.recommended-item:hover {
+  transform: translateY(-5px);
+}
+
+.recommended-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.recommended-info {
+  padding: 1rem;
+}
+
+.recommended-info h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.2rem;
+}
+
+.recommended-info p {
+  color: #ccc;
+  margin: 0 0 0.5rem 0;
+}
+
+.custombar1 .p-scrollpanel-wrapper {
+  border-right: 10px solid #444;
+}
+
+.custombar1 .p-scrollpanel-bar {
+  background-color: #666;
+  opacity: 1;
+  transition: background-color .2s;
+}
+
+.custombar1 .p-scrollpanel-bar:hover {
+  background-color: #888;
 }
 </style>

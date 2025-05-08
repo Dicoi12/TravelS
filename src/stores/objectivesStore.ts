@@ -1,6 +1,13 @@
 import { defineStore } from "pinia";
 import { IObjective, IServiceResult, ObjectiveFilterModel } from "../Interfaces";
 import fetchApi from "../stores/fetch";
+export interface RecommendedObjectiveDto {
+  id: number;
+  name: string;
+  city: string;
+  firstImageUrl: string | null;
+  averageRating: number | null;
+}
 export const useObjectivesStore = defineStore("objectivesStore", {
   state: (): {
     selectedObjective: IObjective;
@@ -8,6 +15,7 @@ export const useObjectivesStore = defineStore("objectivesStore", {
     favourites: IObjective[];
     search: string;
     filter: ObjectiveFilterModel;
+    recommendedObjectives: RecommendedObjectiveDto[];
   } => {
     return {
       selectedObjective: {
@@ -31,7 +39,8 @@ export const useObjectivesStore = defineStore("objectivesStore", {
         name: "",
         typeId: null,
         minRating: null,
-      }
+      },
+      recommendedObjectives: [],
     };
   },
   actions: {
@@ -259,6 +268,18 @@ this.filter={latitude: null,
         const data = await fetchApi(`Objectives/${id}`, "get");
         let response = data as IServiceResult;
         this.selectedObjective=response.result;
+        return response.result;
+      } catch (error) {
+        console.error("Error fetching objective by id:", error);
+        // Returnăm null în caz de eroare
+        return null;
+      }
+    }, 
+    async recommendObjectives(id: number) {
+      try {
+        const data = await fetchApi(`ML/recommendations/${id}`, "get");
+        let response = data as IServiceResult;
+        this.recommendedObjectives=response.result;
         return response.result;
       } catch (error) {
         console.error("Error fetching objective by id:", error);
