@@ -1,5 +1,9 @@
 <template>
+  <div v-if="photos.length === 1" class="single-image-container">
+    <img :src="photos[0]" :alt="'Photo'" class="single-image" />
+  </div>
   <Carousel 
+    v-else
     :value="photos" 
     :numVisible="1" 
     :numScroll="1" 
@@ -19,11 +23,26 @@ import { defineProps } from 'vue'
 import Carousel from 'primevue/carousel'
 
 defineProps({
-  photos: { type: Array, default: [] }
+  photos: { type: Array as () => string[], default: () => [] }
 })
 </script>
 
 <style scoped>
+.single-image-container {
+  width: 100%;
+  height: 400px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.single-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 .carousel-item {
   display: flex;
   justify-content: center;
@@ -32,8 +51,8 @@ defineProps({
 }
 
 .carousel-image {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 </style>

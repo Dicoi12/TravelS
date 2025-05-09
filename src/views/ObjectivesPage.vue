@@ -102,7 +102,6 @@ const getUserLocation = async () => {
       (position) => {
         latitude.value = position.coords.latitude;
         longitude.value = position.coords.longitude;
-        // objectiveStore.getLocalObjectives(latitude.value??1,longitude.value??1);
         locationAccessGranted.value = true;
         objectiveStore.filter.latitude = latitude.value;
         objectiveStore.filter.longitude = longitude.value;

@@ -1,38 +1,60 @@
 <template>
-  <div class="itineraries-grid">
-    <!-- Grid de itinerarii -->
-    <div v-for="itinerary in itineraryStore.itineraries" 
-         :key="itinerary.id" 
-         class="itinerary-preview-card"
-         @click="navigateToDetail(itinerary.id?.toString() || '')">
-      <!-- Carusel pentru previzualizare imagini -->
-      <swiper
-        :modules="[SwiperNavigation, SwiperPagination, SwiperAutoplay]"
-        :slides-per-view="1"
-        :pagination="{ clickable: true }"
-        :autoplay="{ delay: 3000, disableOnInteraction: false }"
-        class="preview-carousel"
-      >
-        <swiper-slide v-for="detail in itinerary.itineraryDetails" :key="detail.id">
-          <div class="preview-image-container">
-            <img 
-              :src="getPreviewImage(detail)"
-              :alt="detail.name"
-              class="preview-image"
-            >
-            <div class="image-overlay">
-              <span class="location-name">{{ detail.name }}</span>
-            </div>
-          </div>
-        </swiper-slide>
-      </swiper>
+  <div class="itinerary-page">
+    <div class="page-header">
+      <h1>Itinerare</h1>
+      <Button 
+        label="Creează itinerar nou" 
+        icon="pi pi-plus" 
+        class="p-button-primary"
+        @click="showWizard = true" 
+      />
+    </div>
 
-      <div class="preview-content">
-        <h3>{{ itinerary.name }}</h3>
-        <p>{{ itinerary.description }}</p>
-        <span class="locations-count">
-          {{ itinerary.itineraryDetails.length }} locații de vizitat
-        </span>
+    <div v-if="showWizard" class="wizard-overlay">
+      <div class="wizard-container">
+        <Button 
+          icon="pi pi-times" 
+          class="p-button-rounded p-button-text close-wizard"
+          @click="showWizard = false" 
+        />
+        <CreateItineraryWizard @itinerary-created="onItineraryCreated" />
+      </div>
+    </div>
+
+    <div class="itineraries-grid">
+      <!-- Grid de itinerarii -->
+      <div v-for="itinerary in itineraryStore.itineraries" 
+           :key="itinerary.id" 
+           class="itinerary-preview-card"
+           @click="navigateToDetail(itinerary.id?.toString() || '')">
+        <swiper
+          :modules="[SwiperNavigation, SwiperPagination, SwiperAutoplay]"
+          :slides-per-view="1"
+          :pagination="{ clickable: true }"
+          :autoplay="{ delay: 3000, disableOnInteraction: false }"
+          class="preview-carousel"
+        >
+          <swiper-slide v-for="detail in itinerary.itineraryDetails" :key="detail.id">
+            <div class="preview-image-container">
+              <img 
+                :src="getPreviewImage(detail)"
+                :alt="detail.name"
+                class="preview-image"
+              >
+              <div class="image-overlay">
+                <span class="location-name">{{ detail.name }}</span>
+              </div>
+            </div>
+          </swiper-slide>
+        </swiper>
+
+        <div class="preview-content">
+          <h3>{{ itinerary.name }}</h3>
+          <p>{{ helperStore.truncateText(itinerary.description) }}</p>
+          <span class="locations-count">
+            {{ itinerary.itineraryDetails.length }} locații de vizitat
+          </span>
+        </div>
       </div>
     </div>
 
@@ -55,7 +77,6 @@
             <div class="timeline-content">
               <h3>{{ detail.name }}</h3>
               
-              <!-- Carusel pentru toate imaginile locației -->
               <swiper
                 :modules="[SwiperNavigation, SwiperPagination]"
                 :slides-per-view="1"
@@ -125,10 +146,14 @@ import 'swiper/css/navigation'
 import 'swiper/css/pagination'
 import { useItineraryStore } from '../stores/itineraryStore'
 import { onBeforeMount } from 'vue'
+import { useHelperStore } from '../stores/helperStore'
+import CreateItineraryWizard from '../components/itinerary/CreateItineraryWizard.vue'
 
 const router = useRouter()
 const itineraryStore = useItineraryStore()
+const helperStore = useHelperStore()
 const selectedItinerary = ref<any>(null)
+const showWizard = ref(false)
 
 onBeforeMount(async () => {
   await itineraryStore.getItineraries()
@@ -136,6 +161,11 @@ onBeforeMount(async () => {
 
 const navigateToDetail = (id: string) => {
   router.push(`/itineraries/${id}`)
+}
+
+const onItineraryCreated = async () => {
+  showWizard.value = false
+  await itineraryStore.getItineraries() // Reîncarcă lista de itinerare
 }
 
 const getPreviewImage = (detail: any) => {
@@ -172,6 +202,48 @@ const formatDate = (date: string) => {
 </script>
 
 <style scoped>
+.itinerary-page {
+  padding: 2rem;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.wizard-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.wizard-container {
+  position: relative;
+  width: 90%;
+  max-width: 1200px;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: white;
+  border-radius: 8px;
+  padding: 2rem;
+}
+
+.close-wizard {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 1;
+}
+
 .itineraries-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));

@@ -37,7 +37,11 @@
       </template>
       <Column field="id" header="Id" style="width: 5rem"></Column>
       <Column field="name" header="Nume" style="width: 15rem"></Column>
-      <Column field="description" header="Descriere" style="width: 20rem"></Column>
+      <Column field="description" header="Descriere" style="width: 20rem">
+        <template #body="{ data }">
+          {{ helperStore.truncateText(data.description) }}
+        </template>
+      </Column>
       <Column header="Obiective și Evenimente" style="width: 25rem">
         <template #body="{ data }">
           <div v-if="data.itineraryDetails && data.itineraryDetails.length > 0">
@@ -100,10 +104,12 @@
   import { useToast } from "primevue/usetoast";
   import type { IItinerary } from '../../Interfaces';
   import ConfirmDialog from 'primevue/confirmdialog';
+  import { useHelperStore } from '../../stores/helperStore';
 
   const itineraryStore = useItineraryStore();
   const objectiveStore = useObjectivesStore();
   const eventStore = useEventsStore();
+  const helperStore = useHelperStore();
   const editingRows = ref();
   const showEditDialog = ref(false);
   const confirm = useConfirm();

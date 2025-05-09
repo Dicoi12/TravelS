@@ -20,7 +20,13 @@ export const useHelperStore = defineStore("helperStore", {
       const minutes = pad(date.getMinutes());
       
       return `${day}.${month}.${year} ${hours}:${minutes}`;
-  },
+    },
+
+    truncateText(text: string, maxLength: number = 100): string {
+      if (!text) return '';
+      if (text.length <= maxLength) return text;
+      return text.slice(0, maxLength) + '...';
+    }
   },
   getters: {},
   persist: true,

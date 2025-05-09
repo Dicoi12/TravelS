@@ -1,6 +1,5 @@
 <template>
   <div class="objective-detail-container">
-    <!-- Secțiunea de imagini -->
     <div class="images-section">
       <div class="thumbnail-container">
         <PhotoCarousel
@@ -9,7 +8,6 @@
       </div>
     </div>
 
-    <!-- Secțiunea de detalii -->
     <div class="details-section">
       <h1>{{ objective?.name }}</h1>
 
@@ -72,7 +70,6 @@
         </div>
       </div>
 
-      <!-- Harta Google Maps -->
       <div class="map-container">
         <h2>Locație</h2>
         <iframe
@@ -85,7 +82,6 @@
         ></iframe>
       </div>
 
-      <!-- Secțiunea de review-uri -->
       <div class="reviews-section">
         <h2>Review-uri</h2>
         <ScrollPanel style="width: 100%; height: 400px" class="custombar1">
@@ -115,7 +111,6 @@
           </div>
         </ScrollPanel>
 
-        <!-- Formular pentru adăugare review -->
         <div class="add-review w-full">
           <h2>Adaugă un review</h2>
           <div class="my-3">
@@ -136,11 +131,14 @@
         </div>
       </div>
 
-      <!-- Secțiunea de obiective recomandate -->
       <div class="recommended-objectives" v-if="recommendedObjectives.length > 0">
         <h2>Obiective Recomandate</h2>
         <div class="recommended-grid">
-          <div v-for="obj in recommendedObjectives" :key="obj.id" class="recommended-item">
+          <div v-for="obj in recommendedObjectives" :key="obj.id" class="recommended-item" @click="() => { 
+        
+            router.push(`/objectives/${obj.id}`);
+            router.go(0);
+          }">
             <img :src="obj.firstImageUrl || ''" :alt="obj.name" class="recommended-image" />
             <div class="recommended-info">
               <h3>{{ obj.name }}</h3>
@@ -165,7 +163,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onBeforeMount } from "vue";
+import { ref, onBeforeMount, watch } from "vue";
 import { useRoute } from "vue-router";
 import { RecommendedObjectiveDto, useObjectivesStore } from "../../stores/objectivesStore";
 import { useReviewsStore } from "../../stores/reviewsStore";
@@ -176,8 +174,10 @@ import Toast from "primevue/toast";
 import ScrollPanel from 'primevue/scrollpanel';
 import { useHelperStore } from "../../stores/helperStore";
 import { onBeforeUnmount } from "vue";
+import { useRouter } from "vue-router";
 
 const route = useRoute();
+const router = useRouter();
 const objectiveStore = useObjectivesStore();
 const reviewsStore = useReviewsStore();
 const userStore = useUserStore();
@@ -193,23 +193,38 @@ const newReview = ref<IReview>({
 });
 const toast = useToast();
 
-onBeforeMount(async () => {
-  const objectiveId = route.params.id;
-  await objectiveStore.getById(parseInt(objectiveId as string));
+const loadObjectiveData = async (objectiveId: string) => {
+  await objectiveStore.getById(parseInt(objectiveId));
   objective.value = objectiveStore.selectedObjective;
 
   reviews.value = await reviewsStore.getByObjectiveId(
-    parseInt(objectiveId as string)
+    parseInt(objectiveId)
   );
 
-  // Obținerea obiectivelor recomandate
   try {
-     await objectiveStore.recommendObjectives(parseInt(objectiveId as string));
+    await objectiveStore.recommendObjectives(parseInt(objectiveId));
     recommendedObjectives.value = objectiveStore.recommendedObjectives;
   } catch (error) {
     console.error('Eroare la obținerea obiectivelor recomandate:', error);
   }
+
+  // Scroll la începutul paginii
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  });
+};
+
+onBeforeMount(async () => {
+  await loadObjectiveData(route.params.id as string);
 });
+
+watch(() => route.params.id, async (newId) => {
+  if (newId) {
+    await loadObjectiveData(newId as string);
+  }
+});
+
 onBeforeUnmount(()=>{
   objectiveStore.selectedObjective = {
     id: 0,
@@ -254,6 +269,13 @@ async function submitReview() {
     idObjective: parseInt(route.params.id as string),
   };
 }
+
+const scrollToTop = () => {
+  const container = document.querySelector('.objective-detail-container');
+  if (container) {
+    container.scrollIntoView({ behavior: 'smooth' });
+  }
+};
 </script>
 
 <style scoped>
@@ -434,10 +456,32 @@ h2 {
   border-radius: 8px;
   overflow: hidden;
   transition: transform 0.2s;
+  cursor: pointer;
+  position: relative;
 }
 
 .recommended-item:hover {
   transform: translateY(-5px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.recommended-item::after {
+  content: 'Click pentru detalii';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 8px;
+  text-align: center;
+  opacity: 0;
+  transition: opacity 0.2s;
+  z-index: 1;
+}
+
+.recommended-item:hover::after {
+  opacity: 1;
 }
 
 .recommended-image {
@@ -448,16 +492,28 @@ h2 {
 
 .recommended-info {
   padding: 1rem;
+  position: relative;
+  z-index: 0;
 }
 
 .recommended-info h3 {
   margin: 0 0 0.5rem 0;
   font-size: 1.2rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .recommended-info p {
   color: #ccc;
   margin: 0 0 0.5rem 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.4;
+  max-height: 2.8em;
 }
 
 .custombar1 .p-scrollpanel-wrapper {
