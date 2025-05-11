@@ -10,12 +10,16 @@
         </transition>
       </router-view>
     </div>
+
+    <!-- Adăugăm ChatBot-ul -->
+    <ChatBot />
   </div>
 </template>
 
 <script setup lang="ts">
 import { useApplicationStore } from "../stores/aplicationStateStore";
 import NavBar from "../components/NavBar.vue";
+import ChatBot from "../components/ChatBot.vue";
 const appStore = useApplicationStore();
 </script>
 

@@ -8,18 +8,14 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     Button: typeof import('primevue/button')['default']
-    Calendar: typeof import('primevue/calendar')['default']
-    Column: typeof import('primevue/column')['default']
+    ChatBot: typeof import('./src/components/ChatBot.vue')['default']
     CreateItineraryWizard: typeof import('./src/components/itinerary/CreateItineraryWizard.vue')['default']
-    DataTable: typeof import('primevue/datatable')['default']
-    Dialog: typeof import('primevue/dialog')['default']
     Dropdown: typeof import('primevue/dropdown')['default']
     EventDetailPage: typeof import('./src/components/events/EventDetailPage.vue')['default']
     EventsAdministration: typeof import('./src/components/events/EventsAdministration.vue')['default']
     ExperienceDetail: typeof import('./src/components/experiences/ExperienceDetail.vue')['default']
     ExperiencesAdministration: typeof import('./src/components/experiences/ExperiencesAdministration.vue')['default']
     ExperiencesView: typeof import('./src/components/experiences/ExperiencesView.vue')['default']
-    Galleria: typeof import('primevue/galleria')['default']
     HandleEvents: typeof import('./src/components/events/HandleEvents.vue')['default']
     HandleExperiences: typeof import('./src/components/experiences/HandleExperiences.vue')['default']
     HandleIt: typeof import('./src/components/itinerary/HandleIt.vue')['default']
@@ -32,7 +28,6 @@ declare module 'vue' {
     ItineraryDetailPage: typeof import('./src/components/itinerary/ItineraryDetailPage.vue')['default']
     Layout: typeof import('./src/components/Layout.vue')['default']
     Map: typeof import('./src/components/map/Map.vue')['default']
-    Menu: typeof import('primevue/menu')['default']
     NavBar: typeof import('./src/components/NavBar.vue')['default']
     ObiectiveTypeAdministration: typeof import('./src/components/objectives/ObiectiveTypeAdministration.vue')['default']
     ObjectiveAdministration: typeof import('./src/components/objectives/ObjectiveAdministration.vue')['default']
@@ -42,7 +37,6 @@ declare module 'vue' {
     Rating: typeof import('primevue/rating')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
-    Steps: typeof import('primevue/steps')['default']
     Textarea: typeof import('primevue/textarea')['default']
   }
 }

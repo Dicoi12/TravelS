@@ -270,12 +270,6 @@ async function submitReview() {
   };
 }
 
-const scrollToTop = () => {
-  const container = document.querySelector('.objective-detail-container');
-  if (container) {
-    container.scrollIntoView({ behavior: 'smooth' });
-  }
-};
 </script>
 
 <style scoped>
@@ -508,7 +502,6 @@ h2 {
   color: #ccc;
   margin: 0 0 0.5rem 0;
   display: -webkit-box;
-  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
