@@ -24,6 +24,10 @@
       <InputText v-model="eventStore.selectedEvent.city" label="Oraș" />
     </div>
     <div class="flex justify-content-center flex-column">
+      <label for="country">Țară</label>
+      <InputText v-model="eventStore.selectedEvent.country" label="Țară" value="România" />
+    </div>
+    <div class="flex justify-content-center flex-column">
       <label for="description">Descriere</label>
       <InputText
         v-model="eventStore.selectedEvent.description"

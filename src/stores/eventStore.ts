@@ -19,6 +19,7 @@ export const useEventsStore = defineStore("eventsStore", {
       startDate: new Date(),
       endDate: new Date(),
       images: [],
+      country: "",
     },
     search: "",
   }),
