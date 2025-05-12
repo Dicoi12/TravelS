@@ -119,11 +119,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onBeforeMount } from 'vue'
 import { useObjectivesStore } from '../../stores/objectivesStore'
 import { useEventsStore } from '../../stores/eventStore'
 import { useItineraryStore } from '../../stores/itineraryStore'
-
+import { IItinerary, IItineraryDetail } from '../../Interfaces'
+import { useUserStore } from '../../stores/userStore'
 interface ItineraryItem {
   id: number;
   name: string;
@@ -131,6 +132,7 @@ interface ItineraryItem {
   images?: string[];
   visitDate: Date;
   duration: number;
+  type: 'objective' | 'event';
 }
 
 interface Itinerary {
@@ -142,6 +144,7 @@ interface Itinerary {
 const objectivesStore = useObjectivesStore()
 const eventsStore = useEventsStore()
 const itineraryStore = useItineraryStore()
+const userStore = useUserStore()
 
 const currentStep = ref(0)
 const searchQuery = ref('')
@@ -157,16 +160,41 @@ const steps = [
   { label: 'Programare' }
 ]
 
+onBeforeMount(async () => {
+  try {
+    console.log('Începe încărcarea datelor...')
+    await objectivesStore.getObjectives()
+    console.log('Obiective încărcate:', objectivesStore.objectives)
+    await eventsStore.getEvents()
+    console.log('Evenimente încărcate:', eventsStore.events)
+  } catch (error) {
+    console.error('Eroare la încărcarea datelor:', error)
+  }
+})
+
 const filteredItems = computed(() => {
   const query = searchQuery.value.toLowerCase()
   const objectives = objectivesStore.objectives
   const events = eventsStore.events
   const allItems = [...objectives, ...events]
   
-  return allItems.filter(item => 
+  console.log('Obiective curente:', objectives)
+  console.log('Evenimente curente:', events)
+  console.log('Toate elementele:', allItems)
+  console.log('Text căutare:', query)
+  
+  if (!query || query.trim() === '') {
+    console.log('Nu există text de căutare, se returnează toate elementele')
+    return allItems
+  }
+  
+  console.log('Se filtrează elementele după:', query)
+  const filtered = allItems.filter(item => 
     item.name?.toLowerCase().includes(query) ||
     item.city?.toLowerCase().includes(query)
   )
+  console.log('Elemente filtrate:', filtered)
+  return filtered
 })
 
 const getItemImage = (item: any) => {
@@ -182,12 +210,17 @@ const onDragStart = (event: DragEvent, item: any) => {
 const onDrop = (event: DragEvent) => {
   const itemData = event.dataTransfer?.getData('text/plain')
   if (itemData) {
-    const item = JSON.parse(itemData) as ItineraryItem
-    itinerary.value.items.push({
-      ...item,
+    const item = JSON.parse(itemData)
+    const itineraryItem: ItineraryItem = {
+      id: item.id,
+      name: item.name,
+      city: item.city,
+      images: item.images,
       visitDate: new Date(),
-      duration: 1
-    })
+      duration: 1,
+      type: item.idObjective ? 'objective' : 'event'
+    }
+    itinerary.value.items.push(itineraryItem)
   }
 }
 
@@ -211,8 +244,36 @@ const emit = defineEmits(['itinerary-created'])
 
 const saveItinerary = async () => {
   try {
-    // @ts-ignore - Metoda va fi implementată în store
-    await itineraryStore.createItinerary(itinerary.value)
+    // Transformăm datele în formatul corect pentru API
+    const itineraryData: IItinerary = {
+      id: 0,
+      name: itinerary.value.name,
+      description: itinerary.value.description,
+      idUser: userStore.userData.id,
+      startDate: new Date(),
+      endDate: new Date(),
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      itineraryDetails: itinerary.value.items.map((item, index) => {
+        const objective = objectivesStore.objectives.find(o => o.id === item.id)
+        const event = eventsStore.events.find(e => e.id === item.id)
+        
+        return {
+          id: 0,
+          name: item.name,
+          descriere: item.type === 'objective' 
+            ? objective?.description || ''
+            : event?.description || '',
+          visitOrder: index + 1,
+          idObjective: item.type === 'objective' ? item.id : undefined,
+          idEvent: item.type === 'event' ? item.id : undefined,
+          idItinerary: 0
+        } as IItineraryDetail
+      })
+    }
+
+    itineraryStore.selectedItinerary = itineraryData
+    await itineraryStore.addItinerary()
     emit('itinerary-created')
   } catch (error) {
     console.error('Eroare la salvarea itinerarului:', error)

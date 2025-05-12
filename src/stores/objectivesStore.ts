@@ -66,10 +66,14 @@ export const useObjectivesStore = defineStore("objectivesStore", {
     },
     async getObjectives() {
       try {
+        console.log('Se încarcă obiectivele...')
         const data = await fetchApi(`Objectives/GetObjectivesAsync?search=${this.search}`, "get");
+        console.log('Răspuns API obiective:', data)
         let response = data as IServiceResult;
         this.objectives = response.result;
+        console.log('Obiective setate în store:', this.objectives)
       } catch (error) {
+        console.error("Error fetching objectives:", error);
         this.objectives = [
           {
             id: 1,

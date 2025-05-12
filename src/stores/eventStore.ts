@@ -26,12 +26,14 @@ export const useEventsStore = defineStore("eventsStore", {
   actions: {
     async getEvents() {
       try {
+        console.log('Se încarcă evenimentele...')
         const response = await fetchApi(`Event/GetAllEventsAsync`, "get");
+        console.log('Răspuns API evenimente:', response)
         const result = response as IServiceResult;
     
         if (result) {
           this.events = result.result;
-          console.log(this.events);
+          console.log('Evenimente setate în store:', this.events)
         } 
       } catch (error) {
         console.error("Error fetching events:", error);
