@@ -1,11 +1,9 @@
 <template>
   <div class="chat-container">
-    <!-- Butonul flotant pentru deschiderea chat-ului -->
     <button class="chat-button" @click="toggleChat">
       <i class="pi pi-comments"></i>
     </button>
 
-    <!-- Fereastra de chat -->
     <div v-if="isOpen" class="chat-window">
       <div class="chat-header">
         <h3>Asistent TravelS</h3>
@@ -14,7 +12,6 @@
         </button>
       </div>
 
-      <!-- Zona de mesaje -->
       <div class="chat-messages" ref="messagesContainer">
         <div v-for="(message, index) in messages" :key="index" 
              :class="['message', message.isUser ? 'user-message' : 'bot-message']">
@@ -78,12 +75,10 @@ const messagesContainer = ref<HTMLElement | null>(null);
 const toast = useToast();
 const isLoading = ref(false);
 
-// Funcție pentru deschiderea/închiderea chat-ului
 const toggleChat = () => {
   isOpen.value = !isOpen.value;
 };
 
-// Funcție pentru convertirea mesajelor în formatul pentru istoric
 const getChatHistory = (): ChatHistoryItem[] => {
   return messages.value.map(msg => ({
     role: msg.isUser ? 'user' : 'assistant',
@@ -91,11 +86,9 @@ const getChatHistory = (): ChatHistoryItem[] => {
   }));
 };
 
-// Funcție pentru trimiterea mesajului
 const sendMessage = async () => {
   if (!newMessage.value.trim() || isLoading.value) return;
 
-  // Adăugăm mesajul utilizatorului
   const userMessage: ChatMessage = {
     text: newMessage.value,
     isUser: true,
@@ -103,14 +96,11 @@ const sendMessage = async () => {
   };
   messages.value.push(userMessage);
   
-  // Curățăm input-ul
   const messageToSend = newMessage.value;
   newMessage.value = '';
 
-  // Activăm indicatorul de încărcare
   isLoading.value = true;
 
-  // Scroll la ultimul mesaj
   await nextTick();
   scrollToBottom();
 
@@ -132,7 +122,6 @@ const sendMessage = async () => {
       throw new Error(data.error);
     }
     
-    // Adăugăm răspunsul bot-ului
     const botMessage: ChatMessage = {
       text: data.response,
       isUser: false,
@@ -149,15 +138,12 @@ const sendMessage = async () => {
       life: 3000
     });
   } finally {
-    // Dezactivăm indicatorul de încărcare
     isLoading.value = false;
-    // Scroll la ultimul mesaj
     await nextTick();
     scrollToBottom();
   }
 };
 
-// Funcție pentru formatarea timpului
 const formatTime = (date: Date) => {
   return new Intl.DateTimeFormat('ro-RO', {
     hour: '2-digit',
@@ -165,14 +151,12 @@ const formatTime = (date: Date) => {
   }).format(date);
 };
 
-// Funcție pentru scroll la ultimul mesaj
 const scrollToBottom = () => {
   if (messagesContainer.value) {
     messagesContainer.value.scrollTop = messagesContainer.value.scrollHeight;
   }
 };
 
-// Adăugăm un mesaj de bun venit când se deschide chat-ul
 onMounted(() => {
   messages.value.push({
     text: 'Bună! Sunt asistentul TravelS. Cu ce te pot ajuta?',
