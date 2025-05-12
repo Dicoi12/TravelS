@@ -15,39 +15,46 @@
     :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
     @hide="closeDialog()"
   >
-    <div class="flex justify-content-center flex-column">
-      <label for="name">Nume</label>
-      <InputText v-model="eventStore.selectedEvent.name" label="Nume" />
-    </div>
-    <div class="flex justify-content-center flex-column">
-      <label for="city">Oraș</label>
-      <InputText v-model="eventStore.selectedEvent.city" label="Oraș" />
-    </div>
-    <div class="flex justify-content-center flex-column">
+  <div class="flex justify-content-center flex-column">
+    <label for="name">Nume</label>
+    <InputText v-model="eventStore.selectedEvent.name" label="Nume" />
+  </div>
+  <div class="flex justify-content-center flex-column">
+    <label for="city">Oraș</label>
+    <InputText v-model="eventStore.selectedEvent.city" label="Oraș" />
+  </div>
+  <div class="flex justify-content-center flex-column">
       <label for="country">Țară</label>
-      <InputText v-model="eventStore.selectedEvent.country" label="Țară" value="România" />
+      <InputText v-model="eventStore.selectedEvent.country" label="Țară" />
     </div>
     <div class="flex justify-content-center flex-column">
       <label for="description">Descriere</label>
       <InputText
-        v-model="eventStore.selectedEvent.description"
-        label="Descriere"
+      v-model="eventStore.selectedEvent.description"
+      label="Descriere"
       />
     </div>
     <div class="flex justify-content-center flex-column">
       <label for="description">Latitudine</label>
       <InputNumber
-        v-model="eventStore.selectedEvent.latitude"
-        label="Latitudine"
+      v-model="eventStore.selectedEvent.latitude"
+      label="Latitudine"
       />
     </div>
     <div class="flex justify-content-center flex-column">
       <label for="description">Longitudine</label>
       <InputNumber
-        v-model="eventStore.selectedEvent.longitude"
-        label="Longitudine"
+      v-model="eventStore.selectedEvent.longitude"
+      label="Longitudine"
       />
     </div>
+    <Map
+      :latitude="eventStore.selectedEvent.latitude ?? 0"
+      :longitude="eventStore.selectedEvent.longitude ?? 0"
+      :isSelectable="true"
+      class="mt-2"
+      @coordinatesSelected="onMapSelect"
+    />
     <div class="flex justify-content-center flex-column">
       <label for="description">Data început</label>
       <Calendar v-model="eventStore.selectedEvent.startDate" label="Data" />
@@ -56,15 +63,6 @@
       <label for="description">Data sfârșit</label>
       <Calendar v-model="eventStore.selectedEvent.endDate" label="Data" />
     </div>
-
-    <Map
-      :latitude="eventStore.selectedEvent.latitude"
-      :longitude="eventStore.selectedEvent.longitude"
-      class="mt-2"
-      v-if="
-        eventStore.selectedEvent.latitude && eventStore.selectedEvent.longitude
-      "
-    />
     <div class="flex justify-content-end mt-2">
       <Button
         icon="pi pi-plus"
@@ -98,6 +96,11 @@ const updateEvent = async () => {
 };
 function closeDialog() {
   emits("onClose");
+}
+
+function onMapSelect({ latitude, longitude }: { latitude: number, longitude: number }) {
+  eventStore.selectedEvent.latitude = latitude;
+  eventStore.selectedEvent.longitude = longitude;
 }
 
 watch(

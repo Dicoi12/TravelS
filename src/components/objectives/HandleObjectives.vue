@@ -11,11 +11,11 @@
     :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
     @hide="closeDialog()"
   >
-    <div class="flex justify-content-center flex-column">
-      <label for="name">Nume</label>
-      <InputText
-        v-model="objectivesStore.selectedObjective.name"
-        label="Nume"
+  <div class="flex justify-content-center flex-column">
+    <label for="name">Nume</label>
+    <InputText
+    v-model="objectivesStore.selectedObjective.name"
+    label="Nume"
       />
     </div>
     <div class="flex justify-content-center flex-column">
@@ -26,52 +26,50 @@
         :options="useObjectiveTypeStore().objectiveTypes"
         option-value="id"
         option-label="name"
-      />
-    </div>
-    <div class="flex justify-content-center flex-column">
+        />
+      </div>
+      <div class="flex justify-content-center flex-column">
       <label for="city">Oraș</label>
       <InputText
-        v-model="objectivesStore.selectedObjective.city"
+      v-model="objectivesStore.selectedObjective.city"
         label="Oraș"
       />
     </div>
     <div class="flex justify-content-center flex-column">
       <label for="description">Descriere</label>
       <InputText
-        v-model="objectivesStore.selectedObjective.description"
-        label="Descriere"
+      v-model="objectivesStore.selectedObjective.description"
+      label="Descriere"
+      />
+    </div>
+    <div class="flex justify-content-center flex-column">
+      <label for="description">Durata</label>
+      <InputNumber
+      v-model="objectivesStore.selectedObjective.duration"
+      label="Durata"
       />
     </div>
     <div class="flex justify-content-center flex-column">
       <label for="description">Latitudine</label>
       <InputNumber
-        v-model="objectivesStore.selectedObjective.latitude"
-        label="Latitudine"
+      v-model="objectivesStore.selectedObjective.latitude"
+      label="Latitudine"
       />
     </div>
     <div class="flex justify-content-center flex-column">
       <label for="description">Longitudine</label>
       <InputNumber
-        v-model="objectivesStore.selectedObjective.longitude"
+      v-model="objectivesStore.selectedObjective.longitude"
         label="Longitudine"
+        />
+      </div>
+      <Map
+        :latitude="objectivesStore.selectedObjective.latitude ?? 0"
+        :longitude="objectivesStore.selectedObjective.longitude ?? 0"
+        :isSelectable="true"
+        class="mt-2"
+        @coordinatesSelected="onMapSelect"
       />
-    </div>
-     <div class="flex justify-content-center flex-column">
-      <label for="description">Durata</label>
-      <InputNumber
-        v-model="objectivesStore.selectedObjective.duration"
-        label="Durata"
-      />
-    </div>
-    <Map
-      :latitude="objectivesStore.selectedObjective.latitude"
-      :longitude="objectivesStore.selectedObjective.longitude"
-      class="mt-2"
-      v-if="
-        objectivesStore.selectedObjective.latitude &&
-        objectivesStore.selectedObjective.longitude
-      "
-    />
     <div class="flex justify-content-end mt-2">
       <Button
         icon="pi pi-plus"
@@ -116,6 +114,11 @@ const updateObjective = async () => {
 };
 function closeDialog() {
   emits("onClose");
+}
+
+function onMapSelect({ latitude, longitude }: { latitude: number, longitude: number }) {
+  objectivesStore.selectedObjective.latitude = latitude;
+  objectivesStore.selectedObjective.longitude = longitude;
 }
 
 watch(

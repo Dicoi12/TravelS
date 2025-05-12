@@ -1,6 +1,5 @@
 <template>
   <div class="layout">
-    <!-- Include NavBar aici pentru a fi afișat pe toate paginile -->
     <NavBar v-if="appStore.onMainPage == false" />
 
     <div class="content">
@@ -11,7 +10,6 @@
       </router-view>
     </div>
 
-    <!-- Adăugăm ChatBot-ul -->
     <ChatBot />
   </div>
 </template>

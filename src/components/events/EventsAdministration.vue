@@ -71,7 +71,7 @@
       <template #body="slotProps">
         <div class="flex gap-3">
           <i class="pi pi-pencil" @click="handleEditEvent(slotProps.data)"></i>
-          <i class="pi pi-trash" @click="deleteEvent(slotProps.data.id)"></i>
+          <i class="pi pi-trash" @click="confirmDelete(slotProps.data.id)"></i>
           <i
             class="pi pi-image"
             @click="
@@ -121,6 +121,23 @@
     />
     <PhotoGalleria :images="getImageSrc()" :onAdministration="true" @refresh="showGallery = false;eventStore.getEvents()" />
   </Dialog>
+  <Dialog
+    v-model:visible="showDeleteDialog"
+    :modal="true"
+    header="Confirmare ștergere"
+    :style="{ width: '30rem' }"
+  >
+    <div class="flex align-items-center justify-content-center">
+      <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem" />
+      <span>Sunteți sigur că doriți să ștergeți acest eveniment?</span>
+    </div>
+    <template #footer>
+      <div class="flex justify-content-end gap-2">
+        <Button label="Nu" icon="pi pi-times" @click="showDeleteDialog = false" class="p-button-text" />
+        <Button label="Da" icon="pi pi-check" @click="deleteEvent()" class="p-button-danger" />
+      </div>
+    </template>
+  </Dialog>
 </template>
 <script setup lang="ts">
 import { useEventsStore } from "../../stores/eventStore";
@@ -133,14 +150,27 @@ const eventStore = useEventsStore();
 const editingRows = ref();
 const showEditDialog = ref(false);
 const showGallery = ref(false);
+const showDeleteDialog = ref(false);
+const eventToDelete = ref<number | null>(null);
 
 function handleEditEvent(event: IEvent) {
   eventStore.selectedEvent = event;
   showEditDialog.value = true;
 }
-function deleteEvent(id: number) {
-  eventStore.deleteEvent(id);
+
+function confirmDelete(id: number) {
+  eventToDelete.value = id;
+  showDeleteDialog.value = true;
 }
+
+function deleteEvent() {
+  if (eventToDelete.value) {
+    eventStore.deleteEvent(eventToDelete.value);
+    showDeleteDialog.value = false;
+    eventToDelete.value = null;
+  }
+}
+
 function getEventSearch() {
   eventStore.getEvents();
 }

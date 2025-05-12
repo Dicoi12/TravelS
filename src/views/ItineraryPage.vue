@@ -1,7 +1,7 @@
 <template>
   <div class="itinerary-page">
     <div class="page-header">
-      <h1>Itinerare</h1>
+      <h1 style="color: #FFFFFF;">Itinerarii</h1>
       <Button 
         label="Creează itinerar nou" 
         icon="pi pi-plus" 
@@ -22,7 +22,6 @@
     </div>
 
     <div class="itineraries-grid">
-      <!-- Grid de itinerarii -->
       <div v-for="itinerary in itineraryStore.itineraries" 
            :key="itinerary.id" 
            class="itinerary-preview-card"
@@ -58,7 +57,6 @@
       </div>
     </div>
 
-    <!-- Modal cu detalii complete -->
     <div v-if="selectedItinerary" class="modal-overlay" @click="selectedItinerary = null">
       <div class="modal-content" @click.stop>
         <button class="close-button" @click="selectedItinerary = null">&times;</button>
@@ -165,7 +163,7 @@ const navigateToDetail = (id: string) => {
 
 const onItineraryCreated = async () => {
   showWizard.value = false
-  await itineraryStore.getItineraries() // Reîncarcă lista de itinerare
+  await itineraryStore.getItineraries() 
 }
 
 const getPreviewImage = (detail: any) => {
@@ -175,7 +173,7 @@ const getPreviewImage = (detail: any) => {
   if (detail.event && detail.event.images.length > 0) {
     return detail.event.images[0]
   }
-  return '/placeholder-image.jpg' // Imagine placeholder pentru cazul în care nu există imagini
+  return '/placeholder-image.jpg'
 }
 
 const getDetailImages = (detail: any) => {

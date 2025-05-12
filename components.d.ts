@@ -43,6 +43,7 @@ declare module 'vue' {
     Rating: typeof import('primevue/rating')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    Steps: typeof import('primevue/steps')['default']
     Textarea: typeof import('primevue/textarea')['default']
   }
 }

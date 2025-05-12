@@ -1,5 +1,8 @@
 <template>
   <div class="chat-container">
+    <div v-if="hasUnreadMessages && !isOpen" class="notification-badge">
+      {{ unreadMessagesCount }}
+    </div>
     <button class="chat-button" @click="toggleChat">
       <i class="pi pi-comments"></i>
     </button>
@@ -56,11 +59,13 @@
 <script setup lang="ts">
 import { ref, onMounted, nextTick } from 'vue';
 import { useToast } from "primevue/usetoast";
+import { useChatStore } from '../stores/chatStore';
 
 interface ChatMessage {
   text: string;
   isUser: boolean;
   timestamp: Date;
+  isRead?: boolean;
 }
 
 interface ChatHistoryItem {
@@ -68,15 +73,28 @@ interface ChatHistoryItem {
   content: string;
 }
 
+const chatStore = useChatStore();
 const isOpen = ref(false);
 const messages = ref<ChatMessage[]>([]);
 const newMessage = ref('');
 const messagesContainer = ref<HTMLElement | null>(null);
 const toast = useToast();
 const isLoading = ref(false);
+const hasUnreadMessages = ref(false);
+const unreadMessagesCount = ref(0);
 
 const toggleChat = () => {
   isOpen.value = !isOpen.value;
+  if (isOpen.value) {
+    markMessagesAsRead();
+  }
+};
+
+const markMessagesAsRead = () => {
+  messages.value.forEach((msg: ChatMessage) => msg.isRead = true);
+  hasUnreadMessages.value = false;
+  unreadMessagesCount.value = 0;
+  chatStore.updateMessages(messages.value);
 };
 
 const getChatHistory = (): ChatHistoryItem[] => {
@@ -92,7 +110,8 @@ const sendMessage = async () => {
   const userMessage: ChatMessage = {
     text: newMessage.value,
     isUser: true,
-    timestamp: new Date()
+    timestamp: new Date(),
+    isRead: true
   };
   messages.value.push(userMessage);
   
@@ -125,9 +144,17 @@ const sendMessage = async () => {
     const botMessage: ChatMessage = {
       text: data.response,
       isUser: false,
-      timestamp: new Date()
+      timestamp: new Date(),
+      isRead: isOpen.value
     };
     messages.value.push(botMessage);
+    
+    if (!isOpen.value) {
+      hasUnreadMessages.value = true;
+      unreadMessagesCount.value++;
+    }
+    
+    chatStore.updateMessages(messages.value);
     
   } catch (error) {
     console.error('Eroare:', error);
@@ -158,11 +185,22 @@ const scrollToBottom = () => {
 };
 
 onMounted(() => {
-  messages.value.push({
-    text: 'Bună! Sunt asistentul TravelS. Cu ce te pot ajuta?',
-    isUser: false,
-    timestamp: new Date()
-  });
+  const savedMessages = chatStore.getMessages();
+  if (savedMessages.length > 0) {
+    messages.value = savedMessages;
+    const unreadCount = savedMessages.filter(msg => !msg.isRead).length;
+    if (unreadCount > 0) {
+      hasUnreadMessages.value = true;
+      unreadMessagesCount.value = unreadCount;
+    }
+  } else {
+    messages.value.push({
+      text: 'Bună! Sunt asistentul TravelS. Cu ce te pot ajuta?',
+      isUser: false,
+      timestamp: new Date(),
+      isRead: true
+    });
+  }
 });
 </script>
 
@@ -360,5 +398,34 @@ onMounted(() => {
 .send-button:disabled {
   background-color: #cccccc;
   cursor: not-allowed;
+}
+
+.notification-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background-color: #ff4444;
+  color: white;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: bold;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 </style> 
