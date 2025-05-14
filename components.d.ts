@@ -7,6 +7,7 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    Badge: typeof import('primevue/badge')['default']
     Button: typeof import('primevue/button')['default']
     Calendar: typeof import('primevue/calendar')['default']
     ChatBot: typeof import('./src/components/ChatBot.vue')['default']
@@ -43,6 +44,8 @@ declare module 'vue' {
     Rating: typeof import('primevue/rating')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    ScrollPanel: typeof import('primevue/scrollpanel')['default']
+    SelectButton: typeof import('primevue/selectbutton')['default']
     Steps: typeof import('primevue/steps')['default']
     Textarea: typeof import('primevue/textarea')['default']
   }
