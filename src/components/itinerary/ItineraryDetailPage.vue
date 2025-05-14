@@ -1,8 +1,6 @@
 <template>
   <div class="objective-detail-container">
    
-
-    <!-- Secțiunea de detalii -->
     <div class="details-section">
       <h1>{{ itinerary?.name }}</h1>
 
@@ -18,7 +16,6 @@
         <p>{{ itinerary?.description }}</p>
       </div>
 
-      <!-- Locații -->
       <div class="locations-section">
         <h2>Locații</h2>
         <div v-for="detail in sortedDetails(itinerary?.itineraryDetails)" 
@@ -30,7 +27,6 @@
           </div>
 
           <div class="location-content">
-            <!-- Carusel pentru imagini -->
             <div class="location-images" v-if="getDetailImages(detail).length > 0">
               <PhotoCarousel
                 :photos="getDetailImages(detail)"
@@ -42,7 +38,6 @@
                 {{ detail.descriere }}
               </p>
 
-              <!-- Informații pentru obiective -->
               <template v-if="detail.objective">
                 <div class="info-grid">
                   <div class="info-item" v-if="detail.objective.name">
@@ -74,7 +69,6 @@
                     <a :href="detail.objective.website" target="_blank">{{ detail.objective.website }}</a>
                   </div>
                 </div>
-                <!-- Harta pentru obiectiv -->
                 <div class="mini-map-container" v-if="detail.objective.latitude && detail.objective.longitude">
                   <iframe
                     width="100%"
@@ -87,7 +81,6 @@
                 </div>
               </template>
 
-              <!-- Informații pentru evenimente -->
               <template v-if="detail.event">
                 <div class="info-grid">
                   <div class="info-item" v-if="detail.event.name">
@@ -111,7 +104,6 @@
                     {{ formatDate(detail.event.startDate) }} - {{ formatDate(detail.event.endDate) }}
                   </div>
                 </div>
-                <!-- Harta pentru eveniment -->
                 <div class="mini-map-container" v-if="detail.event.latitude && detail.event.longitude">
                   <iframe
                     width="100%"

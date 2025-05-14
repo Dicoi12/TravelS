@@ -134,10 +134,9 @@
       <div class="recommended-objectives" v-if="recommendedObjectives.length > 0">
         <h2>Obiective Recomandate</h2>
         <div class="recommended-grid">
-          <div v-for="obj in recommendedObjectives" :key="obj.id" class="recommended-item" @click="() => { 
-        
-            router.push(`/objectives/${obj.id}`);
-            router.go(0);
+          <div v-for="obj in recommendedObjectives" :key="obj.id" class="recommended-item" @click="async () => { 
+            await router.push(`/objectives/${obj.id}`);
+            await scrollToTop();
           }">
             <img :src="obj.firstImageUrl || ''" :alt="obj.name" class="recommended-image" />
             <div class="recommended-info">
@@ -163,7 +162,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onBeforeMount, watch } from "vue";
+import { ref, onBeforeMount, watch, nextTick } from "vue";
 import { useRoute } from "vue-router";
 import { RecommendedObjectiveDto, useObjectivesStore } from "../../stores/objectivesStore";
 import { useReviewsStore } from "../../stores/reviewsStore";
@@ -269,6 +268,23 @@ async function submitReview() {
     idObjective: parseInt(route.params.id as string),
   };
 }
+
+const scrollToTop = async () => {
+  await nextTick();
+  const scrollOptions: ScrollToOptions = {
+    top: 0,
+    left: 0,
+    behavior: 'smooth' as ScrollBehavior
+  };
+  
+  try {
+    window.scrollTo(scrollOptions);
+    document.documentElement.scrollTo(scrollOptions);
+    document.body.scrollTo(scrollOptions);
+  } catch (error) {
+    console.error('Eroare la scroll:', error);
+  }
+};
 
 </script>
 
