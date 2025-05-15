@@ -25,12 +25,12 @@
 
       <div class="flex justify-content-center flex-column">
         <label for="startDate">Data început</label>
-        <Calendar v-model="localItinerary.startDate" dateFormat="dd/mm/yy" />
+        <Calendar v-model="localItinerary.dataStart" dateFormat="dd/mm/yy" />
       </div>
 
       <div class="flex justify-content-center flex-column">
         <label for="endDate">Data sfârșit</label>
-        <Calendar v-model="localItinerary.endDate" dateFormat="dd/mm/yy" />
+        <Calendar v-model="localItinerary.dataStop" dateFormat="dd/mm/yy" />
       </div>
 
       <div class="card">
@@ -172,8 +172,8 @@ const localItinerary = ref<IItinerary>({
   id: 0,
   name: "",
   description: "",
-  startDate: new Date(),
-  endDate: new Date(),
+  dataStart: new Date(),
+  dataStop: new Date(),
   itineraryDetails: [],
 });
 
@@ -183,6 +183,9 @@ const isEditMode = computed(
 
 function addNewDetail() {
   const newDetail: IItineraryDetail = {
+    id: 0,
+    idItinerary: itineraryStore.selectedItinerary.id,
+    images: [],
     name: "",
     descriere: "",
     visitOrder: localItinerary.value.itineraryDetails.length + 1,
@@ -357,8 +360,8 @@ watch(
         id: 0,
         name: "",
         description: "",
-        startDate: new Date(),
-        endDate: new Date(),
+        dataStart: new Date(),
+        dataStop: new Date(),
         itineraryDetails: [],
       };
     }

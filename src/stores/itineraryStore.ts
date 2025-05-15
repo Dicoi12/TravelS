@@ -14,8 +14,8 @@ export const useItineraryStore = defineStore("itineraryStore", {
         id: 0,
         name: "",
         description: "",
-        startDate: new Date(),
-        endDate: new Date(),
+        dataStart: new Date(),
+        dataStop: new Date(),
         itineraryDetails: []
       },
       itineraries: [],
@@ -37,8 +37,8 @@ export const useItineraryStore = defineStore("itineraryStore", {
       try {
         const itineraryDto = {
           ...this.selectedItinerary,
-          startDate: this.selectedItinerary.startDate?.toISOString(),
-          endDate: this.selectedItinerary.endDate?.toISOString(),
+          dataStart: this.selectedItinerary.dataStart?.toISOString(),
+          dataStop: this.selectedItinerary.dataStop?.toISOString(),
           itineraryDetails: this.selectedItinerary.itineraryDetails.map(detail => ({
             name: detail.name,
             descriere: detail.descriere,
@@ -71,8 +71,8 @@ export const useItineraryStore = defineStore("itineraryStore", {
       try {
         const itineraryDto = {
           ...this.selectedItinerary,
-          startDate: this.selectedItinerary.startDate?.toISOString(),
-          endDate: this.selectedItinerary.endDate?.toISOString()
+          dataStart: this.selectedItinerary.dataStart?.toISOString(),
+          dataStop: this.selectedItinerary.dataStop?.toISOString()
         };
 
         const data = await fetchApi(
@@ -158,8 +158,8 @@ export const useItineraryStore = defineStore("itineraryStore", {
         id: 0,
         name: "",
         description: "",
-        startDate: new Date(),
-        endDate: new Date(),
+        dataStart: new Date(),
+        dataStop: new Date(),
         itineraryDetails: []
       };
     },
