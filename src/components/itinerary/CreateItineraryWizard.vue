@@ -6,7 +6,6 @@
     </div>
 
     <div class="wizard-content">
-      <!-- Pasul 1: Informații de bază -->
       <div v-if="currentStep === 0" class="step-content">
         <h2 class="step-title">Informații de bază</h2>
         <div class="p-card form-container">
@@ -29,7 +28,6 @@
         </div>
       </div>
 
-      <!-- Pasul 2: Selectarea obiectivelor -->
       <div v-if="currentStep === 1" class="step-content">
         <h2 class="step-title">Selectează obiective și evenimente</h2>
         
@@ -146,7 +144,6 @@
         </div>
       </div>
 
-      <!-- Pasul 3: Programare -->
       <div v-if="currentStep === 2" class="step-content">
         <h2 class="step-title">Programează vizitele</h2>
         <div class="schedule-container">
@@ -204,7 +201,6 @@
         </div>
       </div>
 
-      <!-- Pasul 4: Confirmare -->
       <div v-if="currentStep === 3" class="step-content">
         <h2 class="step-title">Confirmă itinerariul</h2>
         <div class="summary-container p-card">
@@ -290,10 +286,11 @@ interface ItineraryItem {
   name: string;
   city: string;
   images?: string[];
-  visitDate: Date | undefined;
-  duration: number;
+  visitDate?: Date;
+  duration?: number;
   notes?: string;
   type: "objective" | "event";
+  description?: string;
 }
 
 interface Itinerary {
@@ -552,14 +549,13 @@ const emit = defineEmits(["itinerary-created"]);
 
 const saveItinerary = async () => {
   try {
-    // Transformăm datele în formatul corect pentru API
     const itineraryData: IItinerary = {
       id: 0,
       name: itinerary.value.name,
       description: itinerary.value.description,
       idUser: userStore.userData.id,
-      startDate: startDate.value || new Date(),
-      endDate: endDate.value || new Date(),
+      dataStart: startDate.value,
+      dataStop: endDate.value,
       createdAt: new Date(),
       updatedAt: new Date(),
       itineraryDetails: itinerary.value.items.map((item, index) => {
@@ -571,17 +567,16 @@ const saveItinerary = async () => {
         return {
           id: 0,
           name: item.name,
-          descriere:
-            item.type === "objective"
-              ? objective?.description || ""
-              : event?.description || "",
+          descriere: item.type === "objective" 
+            ? objective?.description 
+            : event?.description,
           visitOrder: index + 1,
           idObjective: item.type === "objective" ? item.id : undefined,
           idEvent: item.type === "event" ? item.id : undefined,
           idItinerary: 0,
-          visitDate: item.visitDate,
-          duration: item.duration,
-          notes: item.notes
+          images: item.images || [],
+          date: item.visitDate,
+          EstimatedTime: item.duration,
         } as IItineraryDetail;
       }),
     };

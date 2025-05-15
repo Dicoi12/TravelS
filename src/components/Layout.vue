@@ -10,7 +10,7 @@
       </router-view>
     </div>
 
-    <ChatBot />
+    <ChatBot v-if="userStore.userData.id != null" />
   </div>
 </template>
 
@@ -18,7 +18,9 @@
 import { useApplicationStore } from "../stores/aplicationStateStore";
 import NavBar from "../components/NavBar.vue";
 import ChatBot from "../components/ChatBot.vue";
+import { useUserStore } from "../stores/userStore";
 const appStore = useApplicationStore();
+const userStore = useUserStore();
 </script>
 
 <style scoped>

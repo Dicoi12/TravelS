@@ -1,11 +1,10 @@
 <template>
   <div class="itinerary-page">
     <div class="page-header">
-      <h1 style="color: #FFFFFF;">Itinerarii</h1>
       <Button 
         label="Creează itinerar nou" 
         icon="pi pi-plus" 
-        class="p-button-primary"
+        class="p-button-primary align-self-end"
         @click="showWizard = true" 
       />
     </div>
@@ -206,7 +205,7 @@ const formatDate = (date: string) => {
 
 .page-header {
   display: flex;
-  justify-content: space-between;
+  justify-content: end;
   align-items: center;
   margin-bottom: 2rem;
 }

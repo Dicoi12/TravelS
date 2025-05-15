@@ -78,6 +78,7 @@
       </form>
     </div>
   </div>
+  <Toast group="general"/>
 </template>
 
 <script setup lang="ts">
@@ -85,6 +86,7 @@ import InputText from "primevue/inputtext";
 import { ref } from "vue";
 import { useUserStore } from "../stores/userStore";
 import router from "../router"; 
+import { useToast } from "primevue/usetoast";
 
 const username = ref("");
 const password = ref("");
@@ -95,12 +97,21 @@ const phone = ref("");
 const isRegistering = ref(false);
 
 const userStore = useUserStore();
+const toast = useToast();
 
 async function handleLogin() {
   console.log("Logging in with:", username.value, password.value);
   await userStore.login(username.value, password.value);
-  if (userStore.userData.id) {
+  if (userStore.userData.id != null && userStore.userData.id != 0) {
     router.push("/objectives");
+  } else {
+    toast.add({
+      severity: "error",
+      summary: "Eroare de autentificare",
+      detail: "Numele de utilizator sau parola sunt incorecte",
+      life: 3000,
+      group: "general"
+    });
   }
 }
 
@@ -132,10 +143,16 @@ function toggleForm() {
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-image: url("../assets/background-image.jpg");
+  background-image: url("../assets/local/balea-lac-2692698.jpg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  overflow: hidden;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
 }
 
 .login-card {
@@ -145,7 +162,9 @@ function toggleForm() {
   box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
   backdrop-filter: blur(10px);
   width: 350px;
-  max-width: 100%;
+  max-width: 90vh;
+  max-height: 90vh;
+  overflow-y: auto;
 }
 
 .login-title {

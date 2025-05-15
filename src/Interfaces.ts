@@ -105,39 +105,34 @@ export interface ObjectiveFilterModel {
   minRating: number | null;
 }
 export interface IItineraryDetail {
-  id?: number;
-  name: string;
-  descriere: string;
+  id: number;
   idObjective?: number;
+  objective?: any;
   idEvent?: number;
+  event?: any;
   visitOrder: number;
+  idItinerary: number;
+  images: string[];
+  name: string;
+  descriere?: string;
+  date?: Date;
+  EstimatedTime?: number;
   createdAt?: Date;
   updatedAt?: Date;
-  objective?: IObjective;
-  event?: IEvent;
 }
 
 export interface IItinerary {
-  id?: number;
+  id: number;
   name: string;
   description: string;
-  idUser?: number | null;
+  idUser?: number;
+  user?: any;
+  dataStart?: Date;
+  dataStop?: Date;
   itineraryDetails: IItineraryDetail[];
   createdAt?: Date;
   updatedAt?: Date;
-  startDate: Date;
-  endDate: Date;
 }
-export interface IItineraryDetail {
-  id?: number;
-  name: string;
-  descriere: string;
-  idItinerary?: number;
-  idObjective?: number;
-  idEvent?: number;
-  visitOrder: number;
-}
-
 
 export interface IItineraryPageDTO {
   id: number;

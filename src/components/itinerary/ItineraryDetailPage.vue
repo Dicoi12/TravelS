@@ -9,6 +9,10 @@
           <i class="pi pi-map-marker"></i>
           <span>{{ itinerary?.itineraryDetails?.length }} locații</span>
         </div>
+        <div class="meta-item" v-if="itinerary?.dataStart">
+          <i class="pi pi-calendar"></i>
+          <span>{{ formatDate(itinerary.dataStart) }} - {{ formatDate(itinerary.dataStop) }}</span>
+        </div>
       </div>
 
       <div class="description">
@@ -34,6 +38,17 @@
             </div>
 
             <div class="location-details">
+              <div class="visit-details" v-if="detail.date || detail.EstimatedTime">
+                <div class="info-item" v-if="detail.date">
+                  <i class="pi pi-calendar"></i>
+                  <span>Data vizitei: {{ formatDateTime(detail.date) }}</span>
+                </div>
+                <div class="info-item" v-if="detail.EstimatedTime">
+                  <i class="pi pi-clock"></i>
+                  <span>Timp estimat: {{ detail.EstimatedTime }} ore</span>
+                </div>
+              </div>
+
               <p v-if="detail.descriere" class="detail-description">
                 {{ detail.descriere }}
               </p>
@@ -128,10 +143,11 @@ import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useItineraryStore } from '../../stores/itineraryStore'
 import PhotoCarousel from '../PhotoCarousel.vue'
+import { IItinerary, IItineraryDetail } from '../../Interfaces'
 
 const route = useRoute()
 const itineraryStore = useItineraryStore()
-const itinerary = ref<any>(null)
+const itinerary = ref<IItinerary | null>(null)
 
 onMounted(async () => {
   const itineraryId = route.params.id
@@ -139,22 +155,12 @@ onMounted(async () => {
   itinerary.value = itineraryStore.selectedItinerary
 })
 
-const getDetailImages = (detail: any) => {
-  if (detail?.objective?.images?.length > 0) {
-    return detail.objective.images
-  }
-  if (detail?.event?.images?.length > 0) {
-    return detail.event.images
-  }
-  return []
-}
-
-const sortedDetails = (details: any[] | undefined) => {
+const sortedDetails = (details: IItineraryDetail[] | undefined) => {
   if (!details) return [];
   return [...details].sort((a, b) => a.visitOrder - b.visitOrder);
 }
 
-const formatDate = (date: string) => {
+const formatDate = (date: Date | string | undefined) => {
   if (!date || date === '0001-01-01T00:00:00') return ''
   return new Date(date).toLocaleDateString('ro-RO', {
     year: 'numeric',
@@ -162,6 +168,27 @@ const formatDate = (date: string) => {
     day: 'numeric'
   })
 }
+
+const formatDateTime = (date: Date | string | undefined) => {
+  if (!date || date === '0001-01-01T00:00:00') return ''
+  return new Date(date).toLocaleDateString('ro-RO', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  })
+}
+
+const getDetailImages = (detail: IItineraryDetail): string[] => {
+  if (detail.objective?.images?.length > 0) {
+    return detail.objective.images;
+  }
+  if (detail.event?.images?.length > 0) {
+    return detail.event.images;
+  }
+  return [];
+};
 </script>
 
 <style scoped>
@@ -240,6 +267,13 @@ const formatDate = (date: string) => {
 
 .location-details {
   margin-top: 1rem;
+}
+
+.visit-details {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
 }
 
 .info-grid {
