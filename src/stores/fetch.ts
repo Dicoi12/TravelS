@@ -41,6 +41,7 @@ const fetchApi = async (
 
   const headers: Record<string, string> = {};
   if (!isFormData) headers["Content-Type"] = "application/json";
+  headers["Ngrok-Skip-Browser-Warning"] = "true";
 
   const options: RequestInit = {
     method,
