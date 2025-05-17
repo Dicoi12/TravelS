@@ -1,5 +1,4 @@
-const BASE_URL = "https://localhost:7100/api";
-
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 /**
  * Funcția pentru a construi query params dintr-un obiect payload.
  *
