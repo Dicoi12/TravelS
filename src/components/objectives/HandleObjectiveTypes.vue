@@ -12,7 +12,7 @@
     @hide="closeDialog()"
   >
     <div class="flex justify-content-center flex-column">
-      <label for="name">Nume</label>
+      <label for="name">Nume</label> 
       <InputText
         v-model="objectiveTypeStore.selectedObjectiveType.name"
         label="Nume"
