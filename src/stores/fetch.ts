@@ -1,5 +1,4 @@
 const BASE_URL = "https://localhost:7100/api";
-
 /**
  * Funcția pentru a construi query params dintr-un obiect payload.
  *
@@ -42,6 +41,7 @@ const fetchApi = async (
 
   const headers: Record<string, string> = {};
   if (!isFormData) headers["Content-Type"] = "application/json";
+  headers["Ngrok-Skip-Browser-Warning"] = "true";
 
   const options: RequestInit = {
     method,

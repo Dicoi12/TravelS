@@ -10,9 +10,17 @@
     <div v-if="isOpen" class="chat-window">
       <div class="chat-header">
         <h3>Asistent TravelS</h3>
-        <button class="close-button" @click="toggleChat">
-          <i class="pi pi-times"></i>
-        </button>
+        <div class="header-actions">
+          <button class="action-button" @click="startNewChat" title="Chat nou">
+            <i class="pi pi-plus"></i>
+          </button>
+          <button class="action-button" @click="clearChatHistory" title="Șterge istoricul">
+            <i class="pi pi-trash"></i>
+          </button>
+          <button class="close-button" @click="toggleChat">
+            <i class="pi pi-times"></i>
+          </button>
+        </div>
       </div>
 
       <div class="chat-messages" ref="messagesContainer">
@@ -184,6 +192,25 @@ const scrollToBottom = () => {
   }
 };
 
+const startNewChat = () => {
+  messages.value = [{
+    text: 'Bună! Sunt asistentul TravelS. Cu ce te pot ajuta?',
+    isUser: false,
+    timestamp: new Date(),
+    isRead: true
+  }];
+  chatStore.updateMessages(messages.value);
+  hasUnreadMessages.value = false;
+  unreadMessagesCount.value = 0;
+};
+
+const clearChatHistory = () => {
+  messages.value = [];
+  chatStore.updateMessages(messages.value);
+  hasUnreadMessages.value = false;
+  unreadMessagesCount.value = 0;
+};
+
 onMounted(() => {
   const savedMessages = chatStore.getMessages();
   if (savedMessages.length > 0) {
@@ -255,6 +282,27 @@ onMounted(() => {
 .chat-header h3 {
   margin: 0;
   font-size: 1.2rem;
+}
+
+.header-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.action-button {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 4px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.action-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
 .close-button {
