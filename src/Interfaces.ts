@@ -26,6 +26,7 @@ export interface IObjective extends BaseAuditEntity {
   images: string[];
   distance?: number;
   medieReview?: number;
+  formattedDistance?: string;
   duration?: number;
 }
 export interface IObjectivesStore {

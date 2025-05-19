@@ -74,6 +74,7 @@
                 style="color: gold"
               ></i>
               <span>({{ item.medieReview?.toFixed(1) ?? 0 }}/5)</span>
+              <span>{{ item.formattedDistance }}</span>
             </div>
           </div>
           <Button class="favorite-button">
