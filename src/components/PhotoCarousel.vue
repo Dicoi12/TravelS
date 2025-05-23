@@ -47,7 +47,7 @@ defineProps({
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 400px;
+  height: 600px;
 }
 
 .carousel-image {

@@ -50,7 +50,7 @@
                 style="color: gold"
               >
               </i>
-              <span>({{ objective?.rating }}/5)</span>
+              <span>({{ (objective?.medieReview ?? 0).toFixed(1) ?? 0 }}/5)</span>
             </span>
           </div>
           <div class="info-item" v-if="objective?.website">
@@ -267,6 +267,13 @@ async function submitReview() {
     idUser: userStore.userData.id ?? 1,
     idObjective: parseInt(route.params.id as string),
   };
+  toast.add({
+    severity: "success",
+    summary: "Succes",
+    detail: "Reviewul a fost adaugat cu succes!",
+    group: "w",
+    life: 5000,
+  });
 }
 
 const scrollToTop = async () => {

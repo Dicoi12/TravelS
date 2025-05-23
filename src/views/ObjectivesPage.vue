@@ -1,43 +1,87 @@
 <template>
   <div>
-    <div class="filter-bar">
-      <InputText
-        v-model="objectiveStore.filter.name"
-        placeholder="Caută obiectiv"
-        class="filter-input"
-      />
-      <Dropdown
-        v-model="objectiveStore.filter.typeId"
-        :options="useObjectiveTypeStore().objectiveTypes"
-        placeholder="Tip obiectiv"
-        class="filter-input"
-        optionLabel="name"
-        showClear 
-        optionValue="id"
-      />
-      <InputNumber
-        v-model="objectiveStore.filter.minRating"
-        :min="0"
-        :max="5"
-        placeholder="Rating minim"
-        class="filter-input"
-      />
-      <InputNumber
-        v-model="objectiveStore.filter.maxDistance"
-        :min="1"
-        placeholder="Distanță maximă (km)"
-        class="filter-input"
-      />
+    <div class="flex justify-content-between mt-4">
+    <h1 class="text-white">Obiective populare: </h1>
+    <div class="filter-header">
       <Button
-        label="Aplică filtre"
+        label="Filtre"
         icon="pi pi-filter"
-        @click="objectiveStore.getLocalObjectives"
+        @click="showFilterDialog = true"
+        class="p-button-rounded"
       />
     </div>
+    </div>
+    <Dialog
+      v-model:visible="showFilterDialog"
+      header="Filtre Obiective"
+      :style="{ width: '50vw' }"
+      :modal="true"
+    >
+      <div class="filter-dialog-content">
+        <div class="filter-group">
+          <label>Caută obiectiv</label>
+          <InputText
+            v-model="objectiveStore.filter.name"
+            placeholder="Caută obiectiv"
+            class="w-full"
+          />
+        </div>
+
+        <div class="filter-group">
+          <label>Tip obiectiv</label>
+          <Dropdown
+            v-model="objectiveStore.filter.typeId"
+            :options="useObjectiveTypeStore().objectiveTypes"
+            placeholder="Tip obiectiv"
+            class="w-full"
+            optionLabel="name"
+            showClear 
+            optionValue="id"
+            filter
+          />
+        </div>
+
+        <div class="filter-group">
+          <label>Rating minim</label>
+          <InputNumber
+            v-model="objectiveStore.filter.minRating"
+            :min="0"
+            :max="5"
+            placeholder="Rating minim"
+            class="w-full"
+          />
+        </div>
+
+        <div class="filter-group">
+          <label>Distanță maximă (km)</label>
+          <InputNumber
+            v-model="objectiveStore.filter.maxDistance"
+            :min="1"
+            placeholder="Distanță maximă"
+            class="w-full"
+          />
+        </div>
+      </div>
+
+      <template #footer>
+        <div class="flex justify-content-end gap-2">
+          <Button
+            label="Resetează"
+            icon="pi pi-filter-slash"
+            @click="resetFilters"
+            class="p-button-outlined"
+          />
+          <Button
+            label="Aplică"
+            icon="pi pi-check"
+            @click="applyFilters"
+            class="p-button-primary"
+          />
+        </div>
+      </template>
+    </Dialog>
+
     <div class="flex justify-content-between">
-      <!-- <h1 class="text-white align-self-start ml-2">
-        Cele mai importante obiective turistice:
-      </h1> -->
       <div class="flex align-items-center gap-2" v-if="!locationAccessGranted">
         <i class="pi pi-map-marker text-white"></i>
         <h2 class="block md:hidden text-white mr-3">
@@ -61,9 +105,14 @@
           <div class="card-details">
             <h3 class="location">{{ item.name }}</h3>
             <div class="flex align-items-center gap-2">
-              <i class="pi pi-map-marker"></i>
+              <i class="pi pi-map"></i>
               <h4>{{item.city}}</h4>
             </div>
+            <div class="flex align-items-center gap-2">
+              <i class="pi pi-map-marker"></i>
+              <span>{{ item.formattedDistance }}</span>
+            </div>
+
             <p>{{ truncateDescription(item.description ?? "") }}</p>
             <div class="stars-container" v-if="item.medieReview">
               <i
@@ -74,7 +123,6 @@
                 style="color: gold"
               ></i>
               <span>({{ item.medieReview?.toFixed(1) ?? 0 }}/5)</span>
-              <span>{{ item.formattedDistance }}</span>
             </div>
           </div>
           <Button class="favorite-button">
@@ -91,6 +139,7 @@ import { ref, onBeforeMount } from "vue";
 import { useObjectivesStore } from "../stores/objectivesStore";
 import { useObjectiveTypeStore } from "../stores/objectiveTypeStore";
 
+const showFilterDialog = ref(false);
 const objectiveStore = useObjectivesStore();
 
 const latitude = ref<number | null>(null);
@@ -138,6 +187,18 @@ onBeforeMount(async () => {
   await objectiveStore.getLocalObjectives();
   await useObjectiveTypeStore().getObjectiveTypes();
 });
+const resetFilters = () => {
+  objectiveStore.filter.typeId = null;
+  objectiveStore.filter.minRating = null;
+  objectiveStore.filter.maxDistance = null;
+  objectiveStore.filter.name = null;
+  objectiveStore.getLocalObjectives();
+};
+
+const applyFilters = () => {
+  objectiveStore.getLocalObjectives();
+  showFilterDialog.value = false;
+};
 </script>
 
 <style scoped>
@@ -168,7 +229,8 @@ onBeforeMount(async () => {
   overflow: hidden;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   background-color: #666666;
-  transition: transform 0.3s ease-in-out;
+  transition: transform 0.1s ease-in-out;
+  cursor: pointer;
 }
 
 .card-container:hover {
@@ -219,18 +281,43 @@ onBeforeMount(async () => {
 .favorite-button:hover .pi-heart {
   color: red;
 }
-.filter-bar {
+.filter-header {
   display: flex;
-  gap: 1rem;
+  justify-content: flex-end;
   margin-bottom: 1rem;
-  align-items: center;
-  background: #333;
-  padding: 1rem;
-  border-radius: 8px;
+  padding: 0.5rem;
 }
 
-.filter-input {
-  flex: 1;
+.filter-dialog-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1rem 0;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.filter-group label {
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+:deep(.p-dialog-header) {
+  background: var(--surface-card);
+  border-bottom: 1px solid var(--surface-border);
+}
+
+:deep(.p-dialog-content) {
+  background: var(--surface-card);
+}
+
+:deep(.p-dialog-footer) {
+  background: var(--surface-card);
+  border-top: 1px solid var(--surface-border);
 }
 
 .stars-container {

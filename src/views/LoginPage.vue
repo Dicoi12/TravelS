@@ -37,7 +37,7 @@
             <InputText
               v-model="newUsername"
               required
-              placeholder="Alege un utilizator"
+              placeholder="Alege un nume de utilizator"
             />
           </div>
           <div class="input-group">
@@ -67,7 +67,7 @@
               placeholder="Introdu numărul tău de telefon"
             />
           </div>
-          <button type="submit" class="login-button">Înregistrează-te</button>
+          <button type="submit" class="login-button" >Înregistrează-te</button>
           <label
             class="my-2 text-white font-xl cursor-pointer"
             @click="toggleForm"
@@ -77,8 +77,8 @@
         </div>
       </form>
     </div>
+    <Toast group="general"/>
   </div>
-  <Toast group="general"/>
 </template>
 
 <script setup lang="ts">
@@ -87,6 +87,7 @@ import { ref } from "vue";
 import { useUserStore } from "../stores/userStore";
 import router from "../router"; 
 import { useToast } from "primevue/usetoast";
+import Toast from "primevue/toast";
 
 const username = ref("");
 const password = ref("");
@@ -104,6 +105,13 @@ async function handleLogin() {
   await userStore.login(username.value, password.value);
   if (userStore.userData.id != null && userStore.userData.id != 0) {
     router.push("/objectives");
+    toast.add({
+      severity: "success",
+      summary: "Autentificare cu succes",
+      detail: "Te-ai autentificat cu succes",
+      life: 3000,
+      group: "general"
+    });
   } else {
     toast.add({
       severity: "error",
@@ -129,6 +137,16 @@ async function handleRegister() {
     email.value,
     phone.value
   );
+  if (resp) {
+    isRegistering.value = false;
+  }
+  toast.add({
+    severity: "success",
+    summary: "Înregistrare cu succes",
+    detail: "Contul a fost înregistrat cu succes",
+    life: 3000,
+    group: "general"
+  });
   console.log(resp);
 }
 
