@@ -38,14 +38,14 @@
             </div>
 
             <div class="location-details">
-              <div class="visit-details" v-if="detail.date || detail.EstimatedTime">
+              <div class="visit-details" v-if="detail.date || detail.estimatedTime">
                 <div class="info-item" v-if="detail.date">
                   <i class="pi pi-calendar"></i>
                   <span>Data vizitei: {{ formatDateTime(detail.date) }}</span>
                 </div>
-                <div class="info-item" v-if="detail.EstimatedTime">
+                <div class="info-item" v-if="detail.estimatedTime">
                   <i class="pi pi-clock"></i>
-                  <span>Timp estimat: {{ detail.EstimatedTime }} ore</span>
+                  <span>Timp estimat: {{ detail.estimatedTime }} ore</span>
                 </div>
               </div>
 

@@ -42,7 +42,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onBeforeMount } from 'vue';
 import { useRoute } from 'vue-router';
 import { useEventsStore } from '../../stores/eventStore';
 
@@ -59,9 +59,9 @@ const formatDate = (date: string | Date) => {
   return new Date(date).toLocaleDateString("ro-RO", options);
 };
 
-onMounted( () => {
+onBeforeMount( async() => {
   const eventId = route.params.id;
-   eventStore.fetchEventById(parseInt(eventId as string));
+   await eventStore.fetchEventById(parseInt(eventId as string));
   event.value = eventStore.selectedEvent;
 });
 </script>
