@@ -577,7 +577,7 @@ const saveItinerary = async () => {
           idItinerary: 0,
           images: item.images || [],
           date: item.visitDate,
-          EstimatedTime: item.duration,
+          estimatedTime: item.duration,
         } as IItineraryDetail;
       }),
     };
@@ -601,6 +601,7 @@ const saveItinerary = async () => {
       detail: "A apărut o eroare la salvarea itinerariului. Vă rugăm să încercați din nou.",
       life: 5000
     });
+    emit("itinerary-created");
   }
 };
 

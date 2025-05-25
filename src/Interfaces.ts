@@ -121,7 +121,7 @@ export interface IItineraryDetail {
   name: string;
   descriere?: string;
   date?: Date;
-  EstimatedTime?: number;
+  estimatedTime?: number;
   createdAt?: Date;
   updatedAt?: Date;
 }

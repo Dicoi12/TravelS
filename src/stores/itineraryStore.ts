@@ -45,7 +45,9 @@ export const useItineraryStore = defineStore("itineraryStore", {
             idItinerary: this.selectedItinerary.id,
             visitOrder: detail.visitOrder,
             idObjective: detail.idObjective || null,
-            idEvent: detail.idEvent || null
+            idEvent: detail.idEvent || null,
+            date: detail.date?.toISOString() || null,
+            estimatedTime: detail.estimatedTime || null,
           }))
         };
 
