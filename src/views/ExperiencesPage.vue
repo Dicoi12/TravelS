@@ -13,22 +13,33 @@
       </div>
       <div class="grid-container fadein animation-duration-1000">
         <div
-          v-for="(item, index) in experienceStore.experiences"
+          v-for="(item, index) in experienceStore.experiences.filter(e => e.isPublic)"
           :key="index"
           class="card-container"
           @click="$router.push(`/experiences/${item.id}`)"
         >
           <div class="card-content text-white">
             <img
-              :src="item.images[0]"
+              :src="item.images?.[0] "
               alt="experience image"
               class="image"
             />
             <div class="card-details">
               <h3 class="location">{{ item.title }}</h3>
-              <p>{{ item.description }}</p>
-              <p><strong>Locație:</strong> {{ item.location }}</p>
-              <p><strong>Dată:</strong> {{ formatDate(item.date) }}</p>
+              <div class="flex align-items-center gap-2">
+                <i class="pi pi-map-marker"></i>
+                <span>{{ item.locationName || `${item.city}, ${item.country}` }}</span>
+              </div>
+              <div v-if="item.rating" class="stars-container">
+                <i
+                  v-for="index in 5"
+                  :key="index"
+                  class="pi"
+                  :class="index <= item.rating ? 'pi-star-fill' : 'pi-star'"
+                  style="color: gold"
+                ></i>
+                <span>({{ item.rating }}/5)</span>
+              </div>
             </div>
             <Button class="favorite-button">
               <i class="pi pi-calendar-plus"></i>
@@ -49,14 +60,6 @@
   const longitude = ref<number | null>(null);
   const locationAccessGranted = ref<boolean>(true);
   
-  const formatDate = (date: string | Date) => {
-    const options: Intl.DateTimeFormatOptions = {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    };
-    return new Date(date).toLocaleDateString("ro-RO", options);
-  };
   
   const getUserLocation = async () => {
     if (navigator.geolocation) {
@@ -114,6 +117,7 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     background-color: #666666;
     transition: transform 0.3s ease-in-out;
+    cursor: pointer;
   }
   
   .card-container:hover {
@@ -163,6 +167,22 @@
   
   .favorite-button:hover .pi-calendar-plus {
     color: lightgreen;
+  }
+  
+  .stars-container {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 8px;
+  }
+  
+  .stars-container i {
+    font-size: 1.2rem;
+  }
+  
+  .stars-container span {
+    margin-left: 8px;
+    font-size: 0.9rem;
   }
   </style>
   

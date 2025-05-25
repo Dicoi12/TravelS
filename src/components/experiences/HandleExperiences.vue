@@ -21,7 +21,7 @@
     </div>
     <div class="flex justify-content-center flex-column">
       <label for="city">Oraș</label>
-      <InputText v-model="experienceStore.selectedExperience.location" label="Oraș" />
+      <InputText v-model="experienceStore.selectedExperience.city" label="Oraș" />
     </div>
     <div class="flex justify-content-center flex-column">
       <label for="description">Descriere</label>

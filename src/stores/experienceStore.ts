@@ -12,9 +12,13 @@ export const useExperienceStore = defineStore("experienceStore", {
       id: 0,
       title: "",
       description: "",
-      location: "",
-      date: new Date(),
+      locationName: "",
       images: [],
+      latitude: 0,
+      longitude: 0,
+      city: "",
+      country: "",
+      isPublic: false,
     },
   }),
   actions: {
@@ -22,7 +26,7 @@ export const useExperienceStore = defineStore("experienceStore", {
       try {
         const response = await fetchApi(`Experience`, "get");
         const result = response;
-        console.log(response)
+        console.log(response);
         if (result) {
           this.experiences = result;
           console.log(this.experiences);
@@ -35,7 +39,7 @@ export const useExperienceStore = defineStore("experienceStore", {
     async getExperienceById(id: number) {
       try {
         const response = await fetchApi(`Experience/${id}`, "get");
-        const result = response ;
+        const result = response;
         this.selectedExperience = result;
       } catch (error) {
         console.error("Error fetching experience by ID:", error);
@@ -54,9 +58,15 @@ export const useExperienceStore = defineStore("experienceStore", {
 
     async updateExperience(experience: IExperience) {
       try {
-        const response = await fetchApi(`Experience/${experience.id}`, "put", experience);
+        const response = await fetchApi(
+          `Experience/${experience.id}`,
+          "put",
+          experience
+        );
         const result = response as IServiceResult;
-        const index = this.experiences.findIndex((e: any) => e.id === experience.id);
+        const index = this.experiences.findIndex(
+          (e: any) => e.id === experience.id
+        );
         if (index !== -1) {
           this.experiences[index] = result.result;
         }
@@ -66,7 +76,7 @@ export const useExperienceStore = defineStore("experienceStore", {
     },
     async deleteExperience(id: number) {
       try {
-        const response = await fetchApi(`Experience/${id}`, "delete" );
+        const response = await fetchApi(`Experience/${id}`, "delete");
         const result = response as IServiceResult;
         return result;
       } catch (error) {
@@ -79,9 +89,13 @@ export const useExperienceStore = defineStore("experienceStore", {
         id: 0,
         title: "",
         description: "",
-        location: "",
-        date: new Date(),
+        locationName: "",
         images: [],
+        latitude: 0,
+        longitude: 0,
+        city: "",
+        country: "",
+        isPublic: false,
       };
     },
   },

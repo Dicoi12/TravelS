@@ -11,18 +11,26 @@
   
         <div class="experience-meta">
           <div class="meta-item">
-            <i class="pi pi-calendar"></i>
-            <span>{{ formatDate(experienceStore.selectedExperience?.date) }}</span>
+            <i class="pi pi-map-marker"></i>
+            <span>{{ experience?.locationName || `${experience?.city}, ${experience?.country}` }}</span>
+          </div>
+          <div class="meta-item" v-if="experience?.rating">
+            <i class="pi pi-star"></i>
+            <span>{{ experience.rating }}/5</span>
           </div>
           <div class="meta-item">
-            <i class="pi pi-map-marker"></i>
-            <span>{{ experienceStore.selectedExperience?.location }}</span>
+            <i class="pi pi-globe"></i>
+            <span>{{ experience?.country }}</span>
+          </div>
+          <div class="meta-item">
+            <i class="pi pi-building"></i>
+            <span>{{ experience?.city }}</span>
           </div>
         </div>
   
         <div class="description">
           <h2>Descriere</h2>
-          <p>{{ experienceStore.selectedExperience?.description }}</p>
+          <p>{{ experience?.description }}</p>
         </div>
   
         <!-- Harta Google Maps -->
@@ -34,8 +42,26 @@
             style="border:0"
             loading="lazy"
             allowfullscreen
-            :src="`https://www.google.com/maps?q=Bucharest&output=embed`"
+            :src="`https://www.google.com/maps?q=${experience?.latitude},${experience?.longitude}&output=embed`"
           ></iframe>
+        </div>
+
+        <div class="additional-info">
+          <h2>Informații adiționale</h2>
+          <div class="info-grid">
+            <div class="info-item">
+              <span class="label">Latitudine:</span>
+              <span class="value">{{ experience?.latitude }}</span>
+            </div>
+            <div class="info-item">
+              <span class="label">Longitudine:</span>
+              <span class="value">{{ experience?.longitude }}</span>
+            </div>
+            <div class="info-item">
+              <span class="label">Status:</span>
+              <span class="value">{{ experience?.isPublic ? 'Public' : 'Privat' }}</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -49,25 +75,7 @@
   const route = useRoute();
   const experienceStore = useExperienceStore();
   const experience = ref();
-  
-  const formatDate = (date: string | Date) => {
-    const options: Intl.DateTimeFormatOptions = {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    };
-    return new Date(date).toLocaleDateString("ro-RO", options);
-  };
-  
-//   function getCoordinates(location: string) {
-//     // Exemplu simplificat: returnăm coordonate fixe pentru locație
-//     // Ideal: utilizarea unui serviciu de geocodare pentru coordonate dinamice
-//     const predefinedCoordinates = {
-//       "București": "44.4268,26.1025",
-//       "Cluj-Napoca": "46.7712,23.6236",
-//     };
-//     return predefinedCoordinates[location] || "0,0";
-//   }
+
   
   onMounted(async () => {
     const experienceId = route.params.id;
@@ -123,8 +131,12 @@
   
   .experience-meta {
     display: flex;
+    flex-wrap: wrap;
     gap: 2rem;
     margin: 1rem 0;
+    padding: 1rem;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
   }
   
   .meta-item {
@@ -133,12 +145,42 @@
     gap: 0.5rem;
   }
   
+  .meta-item i {
+    color: var(--primary-color);
+  }
+  
   .description {
     margin: 2rem 0;
+    line-height: 1.6;
   }
   
   .map-container {
     margin-top: 2rem;
+  }
+  
+  .additional-info {
+    margin-top: 2rem;
+    padding: 1rem;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+  }
+  
+  .info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+  
+  .info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .label {
+    font-weight: bold;
+    color: var(--primary-color);
   }
   
   h1 {
@@ -149,6 +191,7 @@
   h2 {
     font-size: 1.5rem;
     margin-bottom: 1rem;
+    color: var(--primary-color);
   }
   
   @media (max-width: 768px) {
@@ -162,6 +205,11 @@
   
     .details-section {
       padding: 1rem;
+    }
+  
+    .experience-meta {
+      flex-direction: column;
+      gap: 1rem;
     }
   }
   </style>

@@ -69,13 +69,17 @@ export interface IReview extends BaseAuditEntity {
 }
 export interface IExperience extends BaseAuditEntity {
   id: number;
+  name?: string;
   title: string;
   description: string;
-  location: string;
-  date: Date;
+  latitude: number;
+  longitude: number;
+  city?: string;
+  country?: string;
+  locationName?: string;
+  rating?: number;
   images: string[];
-  latitude?: number;
-  longitude?: number;
+  isPublic: boolean;
 }
 export interface IItineraryStore {
   itineraries: IItinerary[]

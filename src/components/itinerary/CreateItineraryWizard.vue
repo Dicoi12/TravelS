@@ -175,6 +175,7 @@
                   :maxDate="endDate || undefined"
                   class="w-full"
                   placeholder="Selectează data și ora"
+                  format="dd/mm/yy"
                 />
               </div>
               <div class="duration-input">
