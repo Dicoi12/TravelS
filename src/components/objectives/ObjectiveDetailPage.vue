@@ -278,6 +278,9 @@ async function submitReview() {
 
 const scrollToTop = async () => {
   await nextTick();
+  // Adăugăm un mic delay pentru a ne asigura că pagina s-a încărcat complet
+  await new Promise(resolve => setTimeout(resolve, 100));
+  
   const scrollOptions: ScrollToOptions = {
     top: 0,
     left: 0,
