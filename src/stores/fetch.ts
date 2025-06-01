@@ -1,4 +1,4 @@
-const BASE_URL = "https://localhost:7100/api";
+const BASE_URL = "https://192.168.0.106:7101/api";
 /**
  * Funcția pentru a construi query params dintr-un obiect payload.
  *
