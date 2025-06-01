@@ -2,7 +2,7 @@
   <div class="create-itinerary-wizard">
     <div class="wizard-header">
       <h1 class="wizard-title">Creează un nou itinerariu</h1>
-      <Steps :model="steps" :readonly="false" :activeIndex="currentStep" />
+      <Steps :model="steps" :readonly="false" v-model:activeIndex="currentStep" />
     </div>
 
     <div class="wizard-content">

@@ -124,7 +124,7 @@
 </template>
 <script setup lang="ts">
 import { useObjectivesStore } from "../../stores/objectivesStore";
-import { ref, onBeforeMount } from "vue";
+import { ref, onBeforeMount, onBeforeUnmount } from "vue";
 onBeforeMount(async () => {
   await objectiveStore.getObjectives();
 });
@@ -154,4 +154,7 @@ function getImageSrc() {
     title: `Imagine ${index + 1}`,
   }));
 }
+onBeforeUnmount(async () => {
+  await objectiveStore.resetFilterData();
+});
 </script>
