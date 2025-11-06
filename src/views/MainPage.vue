@@ -1,6 +1,5 @@
 <template>
     <div class="main-page">
-      <!-- Navbar-ul fix -->
       <nav class="navbar">
         <div class="ml-4 mt-2 logo ">TravelS</div>
         <div class="nav-links">
@@ -12,7 +11,6 @@
         </div>
       </nav>
   
-      <!-- Conținutul paginii -->
       <div class="">
         <div class="content">
           <h1 class="title fadein animation-duration-1000 julee-regular">
@@ -42,11 +40,11 @@
   });
   
   const goToObjectives = () => {
-    router.push('/objectives'); // Înlocuiește cu numele rutei tale pentru pagina "Obiective"
+    router.push('/objectives');
   };
   
   const goToLogin = () => {
-    router.push('/login'); // Înlocuiește cu numele rutei tale pentru pagina de conectare
+    router.push('/login');
   };
   </script>
   

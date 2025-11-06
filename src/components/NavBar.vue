@@ -69,7 +69,7 @@
       </div>
     </div>
 
-    <!-- Meniul pentru mobile - vizibil doar când este deschis -->
+    <!-- mobile -->
     <div 
       v-if="isMobileMenuOpen"
       class="md:hidden flex flex-col bg-black bg-opacity-80"

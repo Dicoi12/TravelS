@@ -1,8 +1,6 @@
 <template>
     <div class="map-container">
-      <!-- Butonul pentru deschidere în Google Maps -->
-      
-      <!-- Harta OpenLayers -->
+    
       <div ref="map" class="map"></div>
       <button class="open-in-maps-button" @click="openInGoogleMaps">
         Deschide în Google Maps

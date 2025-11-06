@@ -294,11 +294,9 @@ async function saveItinerary() {
     saving.value = true;
 
     if (isEditMode.value) {
-      // Actualizare itinerariu existent
       itineraryStore.selectedItinerary = { ...localItinerary.value };
       await itineraryStore.updateItinerary();
 
-      // Actualizare detalii
       for (const detail of localItinerary.value.itineraryDetails) {
         if (detail.id) {
           await itineraryDetailStore.updateItineraryDetail(detail);
@@ -310,11 +308,9 @@ async function saveItinerary() {
         }
       }
     } else {
-      // Adăugare itinerariu nou
       itineraryStore.selectedItinerary = { ...localItinerary.value };
       await itineraryStore.addItinerary();
 
-      // Adăugare detalii pentru noul itinerariu
       for (const detail of localItinerary.value.itineraryDetails) {
         await itineraryDetailStore.addItineraryDetail({
           ...detail,
