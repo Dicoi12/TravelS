@@ -34,7 +34,6 @@
           </div>
         </div>
         
-        <!-- Indicator de încărcare -->
         <div v-if="isLoading" class="message bot-message typing-indicator">
           <div class="typing-dots">
             <span></span>
@@ -44,7 +43,6 @@
         </div>
       </div>
 
-      <!-- Zona de input -->
       <div class="chat-input">
         <InputText 
           v-model="newMessage" 
