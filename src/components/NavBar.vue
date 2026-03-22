@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-transparent">
+  <div class="navbar-wrapper">
     <div class="flex justify-between items-center p-4">
       <div class="flex align-items-center justify-content-between w-full">
         <div
@@ -144,7 +144,6 @@ const currentRoute = computed(() => route.path);
 
 const isMobileMenuOpen = ref(false);
 function toggleMenu() {
-  console.log("toggleMenu");
   isMobileMenuOpen.value = !isMobileMenuOpen.value;
 };
 function closeMenu() {
@@ -152,7 +151,10 @@ function closeMenu() {
 }
 </script>
 <style scoped>
-div {
+.navbar-wrapper {
+  background-color: rgba(36, 53, 43, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   font-family: "Kaushan Script", cursive;
 }
 .navelement {
@@ -177,6 +179,7 @@ div {
   transition: width 0.3s ease;
 }
 
+.navelement:hover::after,
 .active-link::after {
   width: 100%;
 }
