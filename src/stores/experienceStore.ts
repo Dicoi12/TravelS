@@ -59,8 +59,8 @@ export const useExperienceStore = defineStore("experienceStore", {
     async updateExperience(experience: IExperience) {
       try {
         const response = await fetchApi(
-          `Experience/${experience.id}`,
-          "put",
+          `experience`,
+          "PUT",
           experience
         );
         const result = response as IServiceResult;

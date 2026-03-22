@@ -46,19 +46,19 @@ export const useItineraryStore = defineStore("itineraryStore", {
             visitOrder: detail.visitOrder,
             idObjective: detail.idObjective || null,
             idEvent: detail.idEvent || null,
-            date: detail.date?.toISOString() || null,
+            date: detail.date ? new Date(detail.date).toISOString() : null,
             estimatedTime: detail.estimatedTime || null,
           }))
         };
 
         const data = await fetchApi(
-          "Itinerary/AddItineraryAsync",
-          "post",
+          "itinerary/AddItineraryAsync",
+          "POST",
           itineraryDto
         );
-        
+
         const response = data as IServiceResult;
-        if (response.isSuccesful) {
+        if (response.isSuccessful) {
           await this.getItineraries();
           this.selectedItinerary = response.result as IItinerary;
         }
@@ -78,13 +78,13 @@ export const useItineraryStore = defineStore("itineraryStore", {
         };
 
         const data = await fetchApi(
-          "Itinerary/UpdateItineraryAsync",
-          "put",
+          "itinerary/UpdateItineraryAsync",
+          "PUT",
           itineraryDto
         );
-        
+
         const response = data as IServiceResult;
-        if (response.isSuccesful) {
+        if (response.isSuccessful) {
           await this.getItineraries();
         }
         return response;
@@ -104,48 +104,39 @@ export const useItineraryStore = defineStore("itineraryStore", {
 
     async getItineraries() {
       try {
-        const data = await fetchApi(
-          "Itinerary/GetItineraryAsync",
-          "get"
-        );
+        const data = await fetchApi("itinerary/GetItineraryAsync", "GET");
         const response = data as IServiceResult;
         this.itineraries = response.result;
       } catch (error) {
         console.error("Error fetching itineraries:", error);
         this.itineraries = [];
-      }
-    },
-    async getItineraryById(id: string) {
-      try {
-        const data = await fetchApi(
-          `Itinerary/${id}`,
-          "get"
-        );
-        const response = data as IServiceResult;
-        this.selectedItinerary = response.result;
-      } catch (error) {
-        console.error("Error fetching itineraries:", error);
       }
     },
 
-    async getLocalItineraries() {
+    async getMyItineraries() {
       try {
-        const data = await fetchApi(
-          "Itinerary/GetLocalItineraries",
-          "post",
-          this.filter
-        );
+        const data = await fetchApi("itinerary/me", "GET");
         const response = data as IServiceResult;
         this.itineraries = response.result;
       } catch (error) {
-        console.error("Error fetching local itineraries:", error);
+        console.error("Error fetching user itineraries:", error);
         this.itineraries = [];
+      }
+    },
+
+    async getItineraryById(id: string) {
+      try {
+        const data = await fetchApi(`itinerary/${id}`, "GET");
+        const response = data as IServiceResult;
+        this.selectedItinerary = response.result;
+      } catch (error) {
+        console.error("Error fetching itinerary:", error);
       }
     },
 
     async deleteItinerary(id: number) {
       try {
-        const data = await fetchApi(`Itinerary/${id}`, "delete");
+        const data = await fetchApi(`itinerary/${id}`, "DELETE");
         const response = data as IServiceResult;
         await this.getItineraries();
         return response;
@@ -180,7 +171,7 @@ export const useItineraryStore = defineStore("itineraryStore", {
 
     async getById(id: number) {
       try {
-        const data = await fetchApi(`Itinerary/${id}`, "get");
+        const data = await fetchApi(`itinerary/${id}`, "GET");
         const response = data as IServiceResult;
         this.selectedItinerary = response.result;
         return response;

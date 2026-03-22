@@ -10,7 +10,7 @@ export const useReviewsStore = defineStore('reviews', {
     async getByObjectiveId(objectiveId: number) {
       try {
         const response = await fetchApi(`review/objective/${objectiveId}`, 'GET');
-        this.reviews = response;
+        this.reviews = Array.isArray(response) ? response : (response?.result ?? []);
         return this.reviews;
       } catch (error) {
         console.error('Failed to fetch reviews:', error);
