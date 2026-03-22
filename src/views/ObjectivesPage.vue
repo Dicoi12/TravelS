@@ -125,7 +125,7 @@
               <span>({{ item.medieReview?.toFixed(1) ?? 0 }}/5)</span>
             </div>
           </div>
-          <Button class="favorite-button">
+          <Button class="favorite-button" @click.stop>
             <i class="pi pi-heart"></i>
           </Button>
         </div>
@@ -205,36 +205,37 @@ const applyFilters = () => {
 .grid-container {
   display: flex;
   flex-wrap: wrap;
-  gap: 2rem;
-  justify-content: space-around;
+  gap: 1.75rem;
+  justify-content: flex-start;
   max-height: 80vh;
   overflow-y: auto;
-  padding-right: 1rem;
+  padding: 0.5rem 0.5rem 1rem 0.5rem;
   scrollbar-width: thin;
 }
 
 .grid-container::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
 
 .grid-container::-webkit-scrollbar-thumb {
-  background-color: #030303;
+  background-color: rgba(255,255,255,0.2);
   border-radius: 10px;
 }
 
 .card-container {
   position: relative;
   width: 300px;
-  border-radius: 10px;
+  border-radius: 14px;
   overflow: hidden;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  background-color: #666666;
-  transition: transform 0.1s ease-in-out;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+  background-color: #1e2d25;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
   cursor: pointer;
 }
 
 .card-container:hover {
-  transform: scale(1.05);
+  transform: translateY(-6px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.5);
 }
 
 .card-content {
@@ -245,41 +246,46 @@ const applyFilters = () => {
   width: 100%;
   height: 200px;
   object-fit: cover;
-  transition: transform 0.3s ease-in-out;
+  transition: transform 0.4s ease;
 }
 
 .card-container:hover .image {
-  transform: scale(1.1);
+  transform: scale(1.08);
 }
 
 .card-details {
-  padding: 0.5rem;
-  background-color: #666666;
+  padding: 0.85rem;
+  background-color: #1e2d25;
   color: white;
 }
 
 .location {
-  font-size: 1.25rem;
-  font-weight: bold;
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 0.35rem;
 }
 
 .favorite-button {
   position: absolute;
   top: 10px;
   right: 10px;
-  background: transparent;
+  background: rgba(0, 0, 0, 0.45);
   border: none;
   color: white;
-  font-size: 1.5rem;
+  font-size: 1.1rem;
   cursor: pointer;
+  border-radius: 50%;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(4px);
+  transition: background 0.2s, color 0.2s;
 }
 
-.favorite-button .pi-heart {
-  color: white;
-}
-
-.favorite-button:hover .pi-heart {
-  color: red;
+.favorite-button:hover {
+  background: rgba(220, 50, 50, 0.8);
 }
 .filter-header {
   display: flex;

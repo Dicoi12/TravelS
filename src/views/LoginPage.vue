@@ -180,7 +180,7 @@ function toggleForm() {
   box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
   backdrop-filter: blur(10px);
   width: 350px;
-  max-width: 90vh;
+  max-width: 90vw;
   max-height: 90vh;
   overflow-y: auto;
 }
@@ -218,18 +218,20 @@ function toggleForm() {
 .login-button {
   width: 100%;
   padding: 0.75rem;
-  background-color: #4caf50;
+  background-color: #4a7c59;
   color: white;
   font-size: 1rem;
   font-weight: bold;
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: background-color 0.3s, transform 0.2s;
+  margin-bottom: 0.75rem;
 }
 
 .login-button:hover {
-  background-color: #45a049;
+  background-color: #3a6347;
+  transform: translateY(-1px);
 }
 
 .my-2 {
