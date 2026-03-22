@@ -8,35 +8,48 @@ export interface IUserModel extends BaseAuditEntity {
   role: UserRoleEnum;
   email: string | null;
   phone: string | null;
-  hash: string;
-  salt: string;
 }
 export interface BaseAuditEntity {
   createdAt?: Date;
   updatedAt?: Date;
 }
+export interface IObjectiveType extends BaseAuditEntity {
+  id: number;
+  name: string;
+  description: string;
+}
 export interface IObjective extends BaseAuditEntity {
   id: number;
   name: string;
   type?: number;
-  city: string;
+  objectiveType?: IObjectiveType | null;
+  city: string | null;
   description: string | null;
   latitude: number;
   longitude: number;
+  website?: string | null;
+  interval?: string | null;
+  pret?: string | null;
   images: string[];
   distance?: number;
   medieReview?: number;
   formattedDistance?: string;
-  duration?: number;
+  duration?: number | null;
+  reviews?: IReview[];
 }
 export interface IObjectivesStore {
   selectedObjective: IObjective;
   objectives: IObjective[];
 }
-export interface IServiceResult {
-  isSuccesful: boolean;
-  result: any;
-  validationMessage: string[];
+export interface IServiceResult<T = any> {
+  isSuccessful: boolean;
+  result: T;
+  validationMessage: string | null;
+}
+export interface IObjectiveImage {
+  id: number;
+  filePath: string;
+  imageMimeType: string;
 }
 export interface IEvent extends BaseAuditEntity {
   id: number;
@@ -66,6 +79,7 @@ export interface IReview extends BaseAuditEntity {
   objective?: IObjective;
   user?: IUserModel;
   idUser: number;
+  datePosted?: string;
 }
 export interface IExperience extends BaseAuditEntity {
   id: number;
@@ -85,21 +99,16 @@ export interface IItineraryStore {
   itineraries: IItinerary[]
   selectedItinerary: IItinerary
   selectedItineraryDTO: IItineraryDTO
-  search:string
+  search: string
 }
 export interface IItineraryDTO {
   id?: number;
   name: string;
   description: string;
-  objectivesIds: number[];
   idUser?: number;
-  eventsIds: number[];
+  dataStart?: string;
+  dataStop?: string;
   itineraryDetails: IItineraryDetail[];
-}
-export interface IObjectiveType extends BaseAuditEntity {
-  id: number;
-  name: string;
-  description: string;  
 }
 export interface ObjectiveFilterModel {
   latitude: number | null;
@@ -111,17 +120,17 @@ export interface ObjectiveFilterModel {
 }
 export interface IItineraryDetail {
   id: number;
-  idObjective?: number;
-  objective?: any;
-  idEvent?: number;
-  event?: any;
+  idObjective?: number | null;
+  objective?: IObjective | null;
+  idEvent?: number | null;
+  event?: IEvent | null;
   visitOrder: number;
   idItinerary: number;
   images: string[];
   name: string;
-  descriere?: string;
-  date?: Date;
-  estimatedTime?: number;
+  descriere?: string | null;
+  date?: Date | null;
+  estimatedTime?: number | null;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -130,10 +139,9 @@ export interface IItinerary {
   id: number;
   name: string;
   description: string;
-  idUser?: number;
-  user?: any;
-  dataStart?: Date;
-  dataStop?: Date;
+  idUser?: number | null;
+  dataStart?: Date | null;
+  dataStop?: Date | null;
   itineraryDetails: IItineraryDetail[];
   createdAt?: Date;
   updatedAt?: Date;
@@ -143,12 +151,10 @@ export interface IItineraryPageDTO {
   id: number;
   name: string;
   description: string;
-  idUser: number;
+  idUser?: number | null;
+  dataStart?: string | null;
+  dataStop?: string | null;
   itineraryDetails: IItineraryDetail[];
-  createdAt: Date;
-  updatedAt: Date;
-  objectivesIds: number[];
-  eventsIds: number[];
 }
 export interface ItineraryFilterModel {
   latitude: number | null;
@@ -158,4 +164,21 @@ export interface ItineraryFilterModel {
   startDate: Date | null;
   endDate: Date | null;
   minRating: number | null;
+}
+export interface IToken {
+  token: string;
+}
+export interface RecommendedObjectiveDto {
+  id: number;
+  name: string;
+  city: string;
+  firstImageUrl: string | null;
+  averageRating: number | null;
+}
+export interface IPagedResult<T> {
+  items: T[];
+  totalCount: number;
+  page: number;
+  pageSize: number;
+  totalPages: number;
 }

@@ -1,21 +1,6 @@
 import { defineStore } from "pinia";
-import { IUserModel, UserRoleEnum } from "../Interfaces";
+import { IUserModel, IToken } from "../Interfaces";
 import fetchApi from "../stores/fetch";
-
-export interface UserData {
-  id: string;
-  userName: string;
-  email: string;
-  fullName: string;
-  phone: string;
-  location: string;
-  birthDate: Date | null;
-  avatarUrl: string;
-  language: string;
-  theme: 'Light' | 'Dark';
-  createdAt: Date;
-  updatedAt: Date;
-}
 
 export const useUserStore = defineStore("userStore", {
   state: (): {
@@ -29,39 +14,24 @@ export const useUserStore = defineStore("userStore", {
         userName: "",
         email: null,
         phone: null,
-        hash: "",
-        salt: "",
         role: 0,
       },
     };
   },
   actions: {
-    async login(
-      userName: string,
-      password?: string
-    ): Promise<IUserModel | undefined> {
+    async login(userName: string, password?: string) {
       const payload = {
-        UserName: userName,
-        Password: password,
+        userName,
+        password,
       };
       try {
-        const data = await fetchApi("User/Login", "POST", payload);
-        this.userData = data as IUserModel;
-        localStorage.setItem('token', data.id);
-        return data as IUserModel;
+        const data = await fetchApi("user/Login", "POST", payload);
+        const tokenResponse = data as IToken;
+        this.token = tokenResponse.token;
+        localStorage.setItem('token', tokenResponse.token);
+        return tokenResponse;
       } catch (error) {
-        if (userName == "dariusd2" && password == "123") {
-          this.userData = {
-            id: 200,
-            userName: 'dariusd',
-            email: 'wink@ceva.com',
-            phone: '0742123212',
-            hash: "",
-            salt: "",
-            role: UserRoleEnum.Administrator,
-          };
-        }
-        console.error("Error adding objective:", error);
+        console.error("Error logging in:", error);
       }
     },
     async signup(
@@ -71,13 +41,13 @@ export const useUserStore = defineStore("userStore", {
       phone?: string
     ) {
       const payload = {
-        UserName: userName,
-        Password: password,
-        email: email,
-        phone: phone,
+        userName,
+        password,
+        email,
+        phone,
       };
       try {
-        const data = await fetchApi("User/SignUp", "POST", payload);
+        const data = await fetchApi("user/SignUp", "POST", payload);
         return data;
       } catch (error) {
         console.error("Error creating user:", error);
@@ -85,26 +55,24 @@ export const useUserStore = defineStore("userStore", {
     },
     async changePassword(oldPassword: string, newPassword: string) {
       try {
-        let payload = {
+        const payload = {
           userId: this.userData.id,
-          oldPassword: oldPassword,
-          newPassword: newPassword
+          oldPassword,
+          newPassword,
         };
-        const data = await fetchApi("User/ChangePassword", "POST", payload);
-        return data as boolean;
+        const data = await fetchApi("user/ChangePassword", "POST", payload);
+        return data;
       } catch (error) {
-        console.error("Error adding objective:", error);
+        console.error("Error changing password:", error);
       }
-
     },
     logout() {
+      this.token = undefined;
       this.userData = {
         id: 0,
         userName: "",
         email: null,
         phone: null,
-        hash: "",
-        salt: "",
         role: 0,
       };
       localStorage.removeItem('token');

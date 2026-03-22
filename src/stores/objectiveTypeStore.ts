@@ -1,12 +1,12 @@
 import { defineStore } from "pinia";
-import { IServiceResult, IObjectiveType } from "../Interfaces";
+import { IObjectiveType } from "../Interfaces";
 import fetchApi from "../stores/fetch";
 
 export const useObjectiveTypeStore = defineStore("objectiveTypeStore", {
   state: (): {
     selectedObjectiveType: IObjectiveType;
     objectiveTypes: IObjectiveType[];
-    search:string
+    search: string;
   } => {
     return {
       selectedObjectiveType: {
@@ -15,15 +15,17 @@ export const useObjectiveTypeStore = defineStore("objectiveTypeStore", {
         description: "",
       },
       objectiveTypes: [],
-      search:""
+      search: ""
     };
   },
   actions: {
     async addObjectiveType() {
       try {
         const data = await fetchApi(
-          "ObjectiveType?name=" + this.selectedObjectiveType.name + "&description=" + this.selectedObjectiveType.description,
+          "objectivetype",
           "POST",
+          undefined,
+          { name: this.selectedObjectiveType.name, description: this.selectedObjectiveType.description }
         );
         console.log("Added objective type:", data);
       } catch (error) {
@@ -32,9 +34,8 @@ export const useObjectiveTypeStore = defineStore("objectiveTypeStore", {
     },
     async getObjectiveTypes() {
       try {
-        const data = await fetchApi("ObjectiveType", "get");
-        // let response = data;
-        this.objectiveTypes = data
+        const data = await fetchApi("objectivetype", "GET");
+        this.objectiveTypes = data;
       } catch (error) {
         console.error("Error fetching objective types:", error);
         this.objectiveTypes = [];
@@ -43,7 +44,7 @@ export const useObjectiveTypeStore = defineStore("objectiveTypeStore", {
     async updateObjectiveType(id: number) {
       try {
         const data = await fetchApi(
-          "ObjectiveType/" + id + "?name=" + this.selectedObjectiveType.name + "&description=" + this.selectedObjectiveType.description,
+          `objectivetype/${id}`,
           "PUT",
           this.selectedObjectiveType
         );
@@ -54,7 +55,7 @@ export const useObjectiveTypeStore = defineStore("objectiveTypeStore", {
     },
     async deleteObjectiveType(id: number) {
       try {
-        await fetchApi(`ObjectiveType/${id}`, "DELETE");
+        await fetchApi(`objectivetype/${id}`, "DELETE");
         this.getObjectiveTypes();
       } catch (error) {
         console.error("Error deleting objective type:", error);
@@ -62,10 +63,9 @@ export const useObjectiveTypeStore = defineStore("objectiveTypeStore", {
     },
     async getById(id: number) {
       try {
-        const data = await fetchApi(`ObjectiveType/${id}`, "get");
-        let response = data as IServiceResult;
-        this.selectedObjectiveType = response.result;
-        return response.result;
+        const data = await fetchApi(`objectivetype/${id}`, "GET");
+        this.selectedObjectiveType = data as IObjectiveType;
+        return data as IObjectiveType;
       } catch (error) {
         console.error("Error fetching objective type by id:", error);
         return null;
